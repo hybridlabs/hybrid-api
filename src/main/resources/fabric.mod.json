@@ -1,0 +1,45 @@
+{
+    "schemaVersion": 1,
+    "id": "nexus",
+    "version": "${version}",
+    "name": "Nexus",
+    "description": "",
+    "authors": [
+        "Hybrid Labs"
+    ],
+    "contact": {
+        "homepage": "https://hybridlabs.dev/nexus",
+        "sources": "https://github.com/hybridlabs/nexus",
+        "issues": "https://github.com/hybridlabs/nexus/issues"
+    },
+    "license": "ARR",
+    "icon": "assets/nexus/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            {
+                "value": "dev.hybridlabs.nexus.Nexus",
+                "adapter": "kotlin"
+            }
+        ],
+        "client": [
+            {
+                "value": "dev.hybridlabs.nexus.client.NexusClient",
+                "adapter": "kotlin"
+            }
+        ]
+    },
+    "mixins": [
+        "nexus.mixins.json",
+        {
+            "config": "nexus.client.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "accessWidener": "nexus.accesswidener",
+    "depends": {
+        "minecraft": "~1.20.1",
+        "fabric-api": "*",
+        "fabric-language-kotlin": "*"
+    }
+}
