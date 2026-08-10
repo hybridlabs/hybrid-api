@@ -1,0 +1,13 @@
+{
+  "values": [
+    {
+      "id": "#hapi:hapi_deep_oceans",
+      "required": false
+    },
+    {
+      "id": "#hapi:all_trenches",
+      "required": false
+    },
+    "#minecraft:is_deep_ocean"
+  ]
+}

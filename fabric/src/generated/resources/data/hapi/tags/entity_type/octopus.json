@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:octopus",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:umbrella_octopus",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:vampire_squid",
+      "required": false
+    },
+    {
+      "id": "spawn:octopus",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:mimic_octopus",
+      "required": false
+    }
+  ]
+}

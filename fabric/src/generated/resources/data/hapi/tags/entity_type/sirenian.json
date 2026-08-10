@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:dugong",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:manatee",
+      "required": false
+    },
+    {
+      "id": "spawn:sea_cow",
+      "required": false
+    }
+  ]
+}

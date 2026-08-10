@@ -46,7 +46,7 @@ open class WaterAnimalBreedGoal @JvmOverloads constructor(
         this.waterAnimal.getLookControl().setLookAt(mate, 10.0f, this.waterAnimal.maxHeadXRot.toFloat())
         this.waterAnimal.getNavigation().moveTo(mate, this.speedModifier)
         ++this.loveTime
-        if (this.loveTime >= this.adjustedTickDelay(60) && this.waterAnimal.distanceToSqr(mate) compareTo 9.0) {
+        if (this.loveTime >= this.adjustedTickDelay(60) && this.waterAnimal.distanceToSqr(mate) < 9.0) {
             this.breed()
         }
     }
@@ -73,7 +73,7 @@ open class WaterAnimalBreedGoal @JvmOverloads constructor(
             for (waterAnimal1 in list) {
                 if (this.waterAnimal.canMate(waterAnimal1) &&
                     variantsMatch(this.waterAnimal, waterAnimal1) &&
-                    this.waterAnimal.distanceToSqr(waterAnimal1) compareTo d0
+                    this.waterAnimal.distanceToSqr(waterAnimal1) < d0
                 ) {
                     waterAnimal = waterAnimal1
                     d0 = this.waterAnimal.distanceToSqr(waterAnimal1)

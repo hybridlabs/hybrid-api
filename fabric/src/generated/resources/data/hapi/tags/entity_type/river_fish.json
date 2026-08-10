@@ -1,0 +1,66 @@
+{
+  "values": [
+    "minecraft:cod",
+    "minecraft:salmon",
+    {
+      "id": "hybrid_aquatic:carp",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:goldfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:shiner",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sunfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:trout",
+      "required": false
+    },
+    {
+      "id": "fintastic:catfish",
+      "required": false
+    },
+    {
+      "id": "fintastic:minnow",
+      "required": false
+    },
+    {
+      "id": "fintastic:freshwater_shark",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:catfish",
+      "required": false
+    },
+    {
+      "id": "finsandtails:golden_river_ray",
+      "required": false
+    },
+    {
+      "id": "finsandtails:wee_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:blu_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:papa_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:flatback_sucker",
+      "required": false
+    }
+  ]
+}

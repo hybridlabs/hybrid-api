@@ -108,7 +108,7 @@ open class WaterAnimalAttackGoal(
                     this.pathedTargetX,
                     this.pathedTargetY,
                     this.pathedTargetZ
-                ) compareTo 1.0) || (waterAnimal.random.nextFloat() compareTo 0.05f))
+                ) >= 1.0) || (waterAnimal.random.nextFloat() < 0.05f))
             ) {
                 this.pathedTargetX = livingEntity.x
                 this.pathedTargetY = livingEntity.y

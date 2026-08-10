@@ -1,0 +1,104 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:ratfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tripod_fish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:blobfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:stingray",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:triggerfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:trevally",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:needlefish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:trout",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:rockfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sea_bass",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:lionfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:parrotfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:wrasse",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:moray_eel",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:john_dory",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:lantern_shark",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:angelfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:hogfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:parrotfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:ray",
+      "required": false
+    },
+    {
+      "id": "bountiful_critters:stingray",
+      "required": false
+    },
+    {
+      "id": "fintastic:featherback",
+      "required": false
+    },
+    {
+      "id": "fintastic:freshwater_shark",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:blobfish",
+      "required": false
+    },
+    {
+      "id": "alexscaves:tripodfish",
+      "required": false
+    }
+  ]
+}

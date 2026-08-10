@@ -1,18 +1,10 @@
 package dev.hybridlabs.hapi.platform.services;
 
-import dev.hybridlabs.hapi.platform.registration.RegistryObject;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 public interface PlatformHelper {
@@ -56,21 +48,4 @@ public interface PlatformHelper {
             int highlightColor);
 
     Path getConfigDir();
-
-    <T extends Mob> void registerSpawnPlacement(
-            RegistryObject<EntityType<T>> entityType,
-            SpawnPlacementType decoratorType,
-            Heightmap.Types heightMapType,
-            SpawnPlacements.SpawnPredicate<T> decoratorPredicate);
-
-    <T extends LivingEntity> void registerAttributes(@NotNull String id, EntityType<T> entityType,
-                                                     Callable<AttributeSupplier.Builder> attributeContainer);
-
-    Attribute getReachAttribute();
-
-    MobCategory getHybridMobCategoryByName(String name);
-
-    Item createBlockItem(Block block, Item.Properties properties);
-
-    void sendHookToServer(int entityId, ItemStack entityData);
 }

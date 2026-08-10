@@ -84,7 +84,7 @@ class WaterAnimalGrazeGoal(
             pos.z + 0.5
         )
 
-        if (distance compareTo 2.0) {
+        if (distance > 2.0) {
             return
         }
 

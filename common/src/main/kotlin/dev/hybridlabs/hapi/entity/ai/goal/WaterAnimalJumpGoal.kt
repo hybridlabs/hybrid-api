@@ -1,16 +1,13 @@
 package dev.hybridlabs.hapi.entity.ai.goal
 
 import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
-
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.goal.JumpGoal
-import kotlin.compareTo
 import kotlin.math.abs
 import kotlin.math.atan2
-import kotlin.math.sqrt
 
 @Suppress("DEPRECATION")
 class WaterAnimalJumpGoal(
@@ -23,7 +20,7 @@ class WaterAnimalJumpGoal(
     private var inWater = false
 
     private fun jumpVelocity(): Double {
-        return sqrt(0.16 * jumpHeight)
+        return kotlin.math.sqrt(0.16 * jumpHeight)
     }
 
     override fun canUse(): Boolean {
@@ -64,7 +61,7 @@ class WaterAnimalJumpGoal(
 
     override fun canContinueToUse(): Boolean {
         val d = waterAnimal.deltaMovement.y
-        return (!(d * d compareTo 0.029999999329447746) || waterAnimal.xRot == 0.0f || !(abs(waterAnimal.xRot) compareTo 10.0f) || !waterAnimal.isInWater) && !waterAnimal.onGround()
+        return (!(d * d < 0.029999999329447746) || waterAnimal.xRot == 0.0f || !(abs(waterAnimal.xRot) < 10.0f) || !waterAnimal.isInWater) && !waterAnimal.onGround()
     }
 
     override fun isInterruptable(): Boolean {
@@ -99,9 +96,9 @@ class WaterAnimalJumpGoal(
             waterAnimal.playSound(SoundEvents.DOLPHIN_JUMP, 1.0f, 1.0f)
         }
         val vec3d = waterAnimal.deltaMovement
-        if (vec3d.y * vec3d.y compareTo 0.029999999329447746 && waterAnimal.xRot != 0.0f) {
+        if (vec3d.y * vec3d.y < 0.029999999329447746 && waterAnimal.xRot != 0.0f) {
             waterAnimal.xRot = Mth.rotLerp(0.2f, waterAnimal.xRot, 0.0f)
-        } else if (vec3d.length() compareTo 9.999999747378752E-6) {
+        } else if (vec3d.length() > 9.999999747378752E-6) {
             val d = vec3d.length()
             val e = atan2(-vec3d.y, d) * 57.2957763671875
             waterAnimal.xRot = e.toFloat()

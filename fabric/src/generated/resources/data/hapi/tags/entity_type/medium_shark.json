@@ -1,0 +1,36 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:frilled_shark",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:hammerhead_shark",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:thresher_shark",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sixgill_shark",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sleeper_shark",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:goblin_shark",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:frilled_shark",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:hammerhead_shark",
+      "required": false
+    }
+  ]
+}

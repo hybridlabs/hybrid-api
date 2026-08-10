@@ -1,11 +1,9 @@
 package dev.hybridlabs.hapi.entity.ai.goal
 
 import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
-
-.Companion.MAX_HUNGER
+import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal.Companion.MAX_HUNGER
 import net.minecraft.world.entity.ai.goal.Goal
 import kotlin.collections.plusAssign
-import kotlin.compareTo
 import kotlin.text.compareTo
 
 class PassiveFeedingGoal(
@@ -13,13 +11,13 @@ class PassiveFeedingGoal(
 ) : Goal() {
 
     override fun canUse(): Boolean {
-        if (waterAnimal.hunger compareTo 0 ||
+        if (waterAnimal.hunger > 0 ||
             !waterAnimal.isInWaterOrBubble ||
             waterAnimal.level().getNearestPlayer(waterAnimal, 32.0) == null) {
             return false
         }
 
-        return this.waterAnimal.hunger compareTo 0
+        return this.waterAnimal.hunger <= 0
     }
 
     override fun start() {
@@ -31,10 +29,10 @@ class PassiveFeedingGoal(
     }
 
     override fun canContinueToUse(): Boolean {
-        return waterAnimal.hunger.compareTo(MAX_HUNGER)
+        return waterAnimal.hunger <= MAX_HUNGER
     }
 
     override fun tick() {
-        waterAnimal.hunger plusAssign 1
+        waterAnimal.hunger += 1
     }
 }

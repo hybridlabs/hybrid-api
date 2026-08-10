@@ -35,7 +35,7 @@
         ],
         "client": [
             {
-                "value": "dev.hybridlabs.hapi.HybridAPIClient",
+                "value": "dev.hybridlabs.hapi.HAPIClient",
                 "adapter": "kotlin"
             }
         ],
@@ -55,17 +55,6 @@
         "java": ">=21",
         "fabric-language-kotlin": "*",
         "fabric-api": ">=0.116",
-        "geckolib": ">=4.8.3",
-        "lithostitched": ">=1.5.0",
-        "biolith": "*",
-        "trinkets": ">=3.10.0"
-    },
-
-    "custom": {
-        "loom:injected_interfaces": {
-            "net/minecraft/class_1657": [
-                "dev/hybridlabs/aquatic/access/CustomPlayerEntityData"
-            ]
-        }
+        "geckolib": ">=4.8.3"
     }
 }

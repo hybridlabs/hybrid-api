@@ -1,0 +1,36 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:tuna",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:mahi",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:opah",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:ocean_sunfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:barracuda",
+      "required": false
+    },
+    {
+      "id": "spawn:sunfish",
+      "required": false
+    },
+    {
+      "id": "spawn:tuna",
+      "required": false
+    },
+    {
+      "id": "spawn:barracuda",
+      "required": false
+    }
+  ]
+}

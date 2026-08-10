@@ -92,7 +92,7 @@ class BoidGoal(
 
     fun random(): Vec3 {
         val velocity = fish.deltaMovement
-        if (velocity.length() compareTo maxSpeed * 0.001) {
+        if (velocity.length() < maxSpeed * 0.001) {
             val yaw = (fish.random.nextGaussian() * 40) - 20
             val pitch = (fish.random.nextGaussian() * 2) - 1
             return Vec3.directionFromRotation(pitch.toFloat(), yaw.toFloat()).scale(0.1)

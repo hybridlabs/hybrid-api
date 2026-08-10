@@ -1,0 +1,88 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:african_butterflyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:danio",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:discus",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:corydora",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:golden_dorado",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:gourami",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cichlid",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:piranha",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:pleco",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tetra",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tiger_barb",
+      "required": false
+    },
+    {
+      "id": "fintastic:catfish",
+      "required": false
+    },
+    {
+      "id": "fintastic:minnow",
+      "required": false
+    },
+    {
+      "id": "fintastic:freshwater_shark",
+      "required": false
+    },
+    {
+      "id": "fintastic:arapaima",
+      "required": false
+    },
+    {
+      "id": "fintastic:pleco",
+      "required": false
+    },
+    {
+      "id": "fintastic:guppy",
+      "required": false
+    },
+    {
+      "id": "bountiful_critters:neon_tetra",
+      "required": false
+    },
+    {
+      "id": "finsandtails:pea_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:vibra_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:flatback_sucker",
+      "required": false
+    }
+  ]
+}

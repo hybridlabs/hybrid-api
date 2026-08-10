@@ -2,8 +2,6 @@ package dev.hybridlabs.hapi.entity.ai.goal
 
 import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
 import net.minecraft.world.entity.ai.goal.Goal
-import kotlin.compareTo
-import kotlin.jvm.javaClass
 
 open class WaterAnimalFollowParentGoal(
     private val waterAnimal: BaseWaterAnimal,
@@ -13,7 +11,7 @@ open class WaterAnimalFollowParentGoal(
     private var timeToRecalcPath = 0
 
     override fun canUse(): Boolean {
-        if (this.waterAnimal.getAge() compareTo 0) {
+        if (this.waterAnimal.getAge() >= 0) {
             return false
         } else {
             val list = this.waterAnimal.level()
@@ -22,9 +20,9 @@ open class WaterAnimalFollowParentGoal(
             var d0 = Double.MAX_VALUE
 
             for (waterAnimal1 in list) {
-                if (waterAnimal1.getAge() compareTo 0) {
+                if (waterAnimal1.getAge() >= 0) {
                     val d1 = this.waterAnimal.distanceToSqr(waterAnimal1)
-                    if (!(d1 compareTo d0)) {
+                    if (!(d1 > d0)) {
                         d0 = d1
                         waterAnimal = waterAnimal1
                     }
@@ -43,13 +41,13 @@ open class WaterAnimalFollowParentGoal(
     }
 
     override fun canContinueToUse(): Boolean {
-        if (this.waterAnimal.getAge() compareTo 0) {
+        if (this.waterAnimal.getAge() >= 0) {
             return false
         } else if (!this.parent!!.isAlive) {
             return false
         } else {
             val d0 = this.waterAnimal.distanceToSqr(this.parent)
-            return !(d0 compareTo 9.0) && !(d0 compareTo 256.0)
+            return !(d0 < 9.0) && !(d0 > 256.0)
         }
     }
 
