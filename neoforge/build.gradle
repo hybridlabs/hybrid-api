@@ -1,0 +1,82 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+    id 'org.jetbrains.kotlin.jvm'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+}
+
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+
+    sourceSets {
+        main.kotlin.srcDirs = ['src/main/java', 'src/main/kotlin']
+    }
+
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+        }
+        data {
+            data()
+            programArguments.addAll '--mod', 'fish_n_ships', '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath(),
+                    '--existing', file("../fabric/src/generated/resources").getAbsolutePath()
+        }
+        server {
+            server()
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven/"
+    }
+    mavenCentral()
+}
+sourceSets.main.resources.srcDirs += 'src/generated/resources'
+
+configurations.create('fabricDatagen')
+dependencies {
+    fabricDatagen project(path: ':fabric', configuration: 'datagenOutput')
+}
+
+processResources {
+    from configurations.fabricDatagen.singleFile
+}
+
+dependencies {
+    compileOnly project(":common")
+    implementation 'org.jetbrains:annotations:25.0.0'
+    implementation "thedarkcolour:kotlinforforge-neoforge:${kotlin_for_forge_version}"
+}
+
+compileKotlin {
+    source(project(":common").sourceSets.main.allSource)
+    inputs.file "../gradle.properties"
+}

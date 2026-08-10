@@ -1,0 +1,74 @@
+plugins {
+    id 'multiloader-common'
+    id 'net.neoforged.moddev'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+neoForge {
+    neoFormVersion = neo_form_version
+    // Automatically enable AccessTransformers if the file exists
+    def at = file("src/main/resources/'META-INF/accesstransformer.cfg")
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+}
+
+repositories {
+    maven {
+        name = "Minecraft Forge"
+        url = "https://maven.minecraftforge.net/"
+    }
+    mavenCentral()
+}
+
+configurations{
+    commonJava
+}
+
+configurations.create('commonJavaOut')
+dependencies {
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0"))
+    implementation 'org.jetbrains:annotations:25.0.0'
+
+    //We load the Forge version of any included mod dependencies
+    commonJavaOut files("src/main/java/")
+}
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'kotlin'
+
+
+    repositories {
+        mavenCentral()
+    }
+
+    compileKotlin {
+        source(project(":common").sourceSets.main.allSource)
+        inputs.file "../gradle.properties"
+    }
+}
