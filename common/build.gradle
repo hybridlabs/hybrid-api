@@ -19,6 +19,11 @@ neoForge {
 
 repositories {
     maven {
+        name = "Geckolib"
+        url  = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+    }
+
+    maven {
         name = "Minecraft Forge"
         url = "https://maven.minecraftforge.net/"
     }
@@ -37,6 +42,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:25.0.0'
 
     //We load the Forge version of any included mod dependencies
+    implementation "software.bernie.geckolib:geckolib-neoforge-$geckolib_version"
     commonJavaOut files("src/main/java/")
 }
 

@@ -54,6 +54,10 @@ repositories {
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
     maven {
+        name = "Geckolib"
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+    }
+    maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven/"
     }
@@ -73,6 +77,7 @@ processResources {
 dependencies {
     compileOnly project(":common")
     implementation 'org.jetbrains:annotations:25.0.0'
+    implementation "thedarkcolour:kotlinforforge-neoforge:${kotlin_for_forge_version}"
     implementation "thedarkcolour:kotlinforforge-neoforge:${kotlin_for_forge_version}"
 }
 
