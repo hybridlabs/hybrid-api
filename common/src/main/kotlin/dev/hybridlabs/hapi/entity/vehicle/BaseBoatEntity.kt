@@ -32,6 +32,12 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.Shapes
+import software.bernie.geckolib.animatable.GeoEntity
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animation.AnimationController
+import software.bernie.geckolib.constant.DefaultAnimations
+import software.bernie.geckolib.util.GeckoLibUtil
 import kotlin.math.max
 import kotlin.math.sin
 
@@ -39,7 +45,9 @@ abstract class BaseBoatEntity(
     type: EntityType<out BaseBoatEntity>,
     world: Level,
 ) :
-    Entity(type, world), Leashable {
+    Entity(type, world), Leashable,
+    GeoEntity {
+    private val animCache = GeckoLibUtil.createInstanceCache(this)
 
     private var isAboveBubbleColumn = false
     private var bubbleColumnDirectionIsDown = false
@@ -186,6 +194,26 @@ abstract class BaseBoatEntity(
             )
             this.gameEvent(GameEvent.SPLASH, this.controllingPassenger)
         }
+    }
+
+    override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
+        controllers.add(
+            AnimationController(this, "Boat Controller", 4) { state ->
+                when {
+                    isInWater -> {
+                        state.setAndContinue(DefaultAnimations.IDLE)
+                    }
+
+                    else -> {
+                        state.setAndContinue(DefaultAnimations.IDLE)
+                    }
+                }
+            }
+        )
+    }
+
+    override fun getAnimatableInstanceCache(): AnimatableInstanceCache? {
+        return animCache
     }
 
     override fun tick() {
