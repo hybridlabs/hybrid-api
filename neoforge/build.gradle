@@ -77,7 +77,7 @@ processResources {
 dependencies {
     compileOnly project(":common")
     implementation 'org.jetbrains:annotations:25.0.0'
-    implementation "thedarkcolour:kotlinforforge-neoforge:${kotlin_for_forge_version}"
+    implementation "software.bernie.geckolib:geckolib-neoforge-$geckolib_version"
     implementation "thedarkcolour:kotlinforforge-neoforge:${kotlin_for_forge_version}"
 }
 
