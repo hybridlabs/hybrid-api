@@ -1,9 +1,9 @@
 {
     "schemaVersion": 1,
-    "id": "hybrid_aquatic",
+    "id": "${mod_id}",
     "version": "${version}",
 
-    "name": "Hybrid Aquatic",
+    "name": "${mod_name}",
     "description": "${description}",
 
     "authors": [
