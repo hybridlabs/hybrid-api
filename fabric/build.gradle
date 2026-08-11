@@ -35,14 +35,14 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
     }
 
-    implementation project(":common")
+    compileOnly project(":common")
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation "net.fabricmc:fabric-language-kotlin:$fabric_kotlin_version+kotlin.$kotlin_version"
     implementation 'org.jetbrains:annotations:25.0.0'
 
     //We still have to load the loader-specific version of any mods included in common
-    modImplementation "software.bernie.geckolib:geckolib-fabric-$geckolib_version"
+    modCompileOnly "software.bernie.geckolib:geckolib-fabric-$geckolib_version"
 }
 
 // Set up datagen and export the output to be consumed by other projects
