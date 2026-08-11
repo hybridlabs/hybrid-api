@@ -40,12 +40,4 @@ public interface PlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
-
-    <T extends Mob> Supplier<SpawnEggItem> registerSpawnEggItem(
-            @NotNull String name,
-            Supplier<EntityType<T>> entityType,
-            int backgroundColor,
-            int highlightColor);
-
-    Path getConfigDir();
 }
