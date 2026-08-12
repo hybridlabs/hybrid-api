@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:raw_lobster_tail",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cooked_lobster_tail",
+      "required": false
+    }
+  ]
+}

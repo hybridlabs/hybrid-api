@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:pufferfish",
+    {
+      "id": "hybrid_aquatic:blowfish",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:raw_fish_meat",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cooked_fish_meat",
+      "required": false
+    }
+  ]
+}

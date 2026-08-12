@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:raw_shrimp",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cooked_shrimp",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:raw_crayfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cooked_crayfish",
+      "required": false
+    }
+  ]
+}
