@@ -66,13 +66,14 @@ loom {
         //commonKotlinOut project(path: ':common', configuration: 'commonKotlinOut')
         //commonJavaOut project(path: ':common', configuration: 'commonJavaOut')
     }
+
     if(file("src/main/resources/${mod_id}.accesswidener").exists()) {
         accessWidenerPath.set(file("src/main/resources/${mod_id}.accesswidener"))
     }
+
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
     }
-
 
     compileKotlin {
         source(project(":common").sourceSets.main.allSource)

@@ -30,8 +30,9 @@ repositories {
     mavenCentral()
 }
 
-configurations{
+configurations {
     commonJava
+    commonKotlinOut
 }
 
 configurations.create('commonJavaOut')
