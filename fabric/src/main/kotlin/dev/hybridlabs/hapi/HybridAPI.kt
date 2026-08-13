@@ -10,8 +10,6 @@ import net.fabricmc.api.ModInitializer
 
 object HybridAPI : ModInitializer {
 
-    private val logger = Constants.LOGGER
-
     @Suppress("UnusedExpression")
     override fun onInitialize() {
         CommonClass.init()
