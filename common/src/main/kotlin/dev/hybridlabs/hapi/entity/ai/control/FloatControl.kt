@@ -1,7 +1,7 @@
 package dev.hybridlabs.hapi.entity.ai.control
 
 
-import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max

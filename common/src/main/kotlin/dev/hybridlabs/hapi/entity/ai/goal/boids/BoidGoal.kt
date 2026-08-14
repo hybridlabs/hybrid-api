@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.ai.goal.boids
 
-import dev.hybridlabs.hapi.entity.water.base.BaseFishEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseFishEntity
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
@@ -9,7 +9,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.phys.Vec3
 import java.util.function.Predicate
-import kotlin.compareTo
 
 class BoidGoal(
     private val fish: BaseFishEntity,

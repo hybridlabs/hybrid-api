@@ -1,7 +1,7 @@
 package dev.hybridlabs.hapi.entity.ai.goal
 
 import com.mojang.datafixers.DataFixUtils
-import dev.hybridlabs.hapi.entity.water.base.BaseSchoolingFishEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseSchoolingFishEntity
 import net.minecraft.world.entity.ai.goal.Goal
 import java.util.function.Predicate
 

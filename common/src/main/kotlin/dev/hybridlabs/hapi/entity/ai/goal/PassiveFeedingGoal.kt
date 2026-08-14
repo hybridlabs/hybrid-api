@@ -1,10 +1,8 @@
 package dev.hybridlabs.hapi.entity.ai.goal
 
-import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
-import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal.Companion.MAX_HUNGER
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal.Companion.MAX_HUNGER
 import net.minecraft.world.entity.ai.goal.Goal
-import kotlin.collections.plusAssign
-import kotlin.text.compareTo
 
 class PassiveFeedingGoal(
     private val waterAnimal: BaseWaterAnimal

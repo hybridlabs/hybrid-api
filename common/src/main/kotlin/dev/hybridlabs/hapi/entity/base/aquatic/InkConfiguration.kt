@@ -1,4 +1,4 @@
-package dev.hybridlabs.hapi.entity.water.base
+package dev.hybridlabs.hapi.entity.base.aquatic
 
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes

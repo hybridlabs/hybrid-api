@@ -1,4 +1,4 @@
-package dev.hybridlabs.hapi.entity.water.base
+package dev.hybridlabs.hapi.entity.base.aquatic
 
 import dev.hybridlabs.hapi.world.WorldHelper
 import net.minecraft.core.BlockPos

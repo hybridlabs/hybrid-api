@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.ai.goal
 
-import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.VariantHolder
 import net.minecraft.world.entity.ai.goal.Goal

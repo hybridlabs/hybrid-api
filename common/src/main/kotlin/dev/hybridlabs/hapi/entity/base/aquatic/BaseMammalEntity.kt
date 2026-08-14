@@ -1,4 +1,4 @@
-package dev.hybridlabs.hapi.entity.water.base
+package dev.hybridlabs.hapi.entity.base.aquatic
 
 import dev.hybridlabs.hapi.entity.ai.control.FloatControl
 import dev.hybridlabs.hapi.entity.ai.goal.WaterAnimalFollowParentGoal

@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.client.model.entity
 
-import dev.hybridlabs.hapi.entity.water.base.BaseFishEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseFishEntity
 import net.minecraft.client.model.geom.PartNames
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth

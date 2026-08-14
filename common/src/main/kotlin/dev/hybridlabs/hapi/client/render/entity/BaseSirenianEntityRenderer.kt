@@ -1,8 +1,8 @@
 package dev.hybridlabs.hapi.client.render.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
-import dev.hybridlabs.hapi.entity.water.base.BaseSirenianEntity
-import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseSirenianEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import software.bernie.geckolib.model.GeoModel

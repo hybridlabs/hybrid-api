@@ -1,4 +1,4 @@
-package dev.hybridlabs.hapi.entity.vehicle
+package dev.hybridlabs.hapi.entity.base.vehicle
 
 import net.minecraft.BlockUtil
 import net.minecraft.core.BlockPos

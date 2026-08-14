@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.client.model.entity
 
-import dev.hybridlabs.hapi.entity.water.base.BaseJellyfishEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseJellyfishEntity
 import net.minecraft.resources.ResourceLocation
 import software.bernie.geckolib.model.GeoModel
 

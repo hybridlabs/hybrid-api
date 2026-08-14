@@ -3,8 +3,8 @@ package dev.hybridlabs.hapi.client.render.entity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
-import dev.hybridlabs.hapi.entity.water.base.BaseFishEntity
-import dev.hybridlabs.hapi.entity.water.base.BaseWaterAnimal
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseFishEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context
 import net.minecraft.world.item.ItemDisplayContext
