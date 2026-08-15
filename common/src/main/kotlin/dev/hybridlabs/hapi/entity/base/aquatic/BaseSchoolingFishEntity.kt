@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.base.aquatic
 
-import dev.hybridlabs.hapi.entity.ai.goal.FishFollowGroupLeaderGoal
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.FishFollowGroupLeaderGoal
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.VariantHolder

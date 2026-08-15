@@ -1,8 +1,8 @@
 package dev.hybridlabs.hapi.entity.base.aquatic
 
-import dev.hybridlabs.hapi.entity.ai.goal.AvoidEntityInWaterGoal
-import dev.hybridlabs.hapi.entity.ai.goal.FollowGlowingEntityGoal
-import dev.hybridlabs.hapi.entity.ai.goal.WaterAnimalAttackGoal
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.AvoidEntityInWaterGoal
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.FollowGlowingEntityGoal
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.WaterAnimalAttackGoal
 import dev.hybridlabs.hapi.world.WorldHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel

@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.base.aquatic
 
-import dev.hybridlabs.hapi.entity.ai.goal.boids.StayInWaterGoal
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.boids.StayInWaterGoal
 import dev.hybridlabs.hapi.world.WorldHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel

@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.base.aquatic
 
-import dev.hybridlabs.hapi.entity.ai.goal.WaterAnimalSitGoal
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.WaterAnimalSitGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.EntityDataAccessor
