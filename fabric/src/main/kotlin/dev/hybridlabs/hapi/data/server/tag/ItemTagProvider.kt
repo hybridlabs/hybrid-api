@@ -19,5 +19,14 @@ class ItemTagProvider(output: FabricDataOutput, registriesFuture: CompletableFut
 
         getOrCreateTagBuilder(HAPIItemTags.GLOWSLIME)
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "glowslime"))
+
+        getOrCreateTagBuilder(HAPIItemTags.DRIFTWOOD_LOG)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_log"))
+
+        getOrCreateTagBuilder(HAPIItemTags.DRIFTWOOD_PLANKS)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_planks"))
+
+        getOrCreateTagBuilder(HAPIItemTags.DRIFTWOOD_SLAB)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_slab"))
     }
 }
