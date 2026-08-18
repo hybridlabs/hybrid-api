@@ -1,0 +1,69 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "hybrid_aquatic:crown_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:barrel_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:blue_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:big_red_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cepheidae_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cosmic_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:comb_jelly",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:firework_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:lions_mane_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:mauve_stinger",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:moon_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:nomura_jellyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sea_nettle",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:box_jellyfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:jellyfish",
+      "required": false
+    },
+    {
+      "id": "alexmobs:comb_jelly",
+      "required": false
+    }
+  ]
+}

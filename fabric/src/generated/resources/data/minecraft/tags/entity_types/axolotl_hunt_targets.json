@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "hybrid_aquatic:tetra",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:danio",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tiger_barb",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:betta",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cichlid",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:discus",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:corydora",
+      "required": false
+    }
+  ]
+}

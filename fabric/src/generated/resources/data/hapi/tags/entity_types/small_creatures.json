@@ -1,0 +1,276 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:salmon",
+    "minecraft:cod",
+    "minecraft:tropical_fish",
+    {
+      "id": "hybrid_aquatic:clownfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:garden_eel",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:pleco",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:shiner",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sunfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:carp",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:goldfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:pearlfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:snailfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:boxfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cichlid",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:flashlight_fish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:mackerel",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:herring",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:barreleye",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:betta",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tetra",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:danio",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tiger_barb",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:surgeonfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:discus",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:corydora",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:damselfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:gourami",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cuttlefish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:african_butterflyfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:flying_fish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:squirrelfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:stonefish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:pupfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:clownfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:basslet",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:boxfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:goby",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:tang",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:pipefish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:seahorse",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:dwarf_angelfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:butterflyfish",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:moorish_idol",
+      "required": false
+    },
+    {
+      "id": "bountiful_critters:angelfish",
+      "required": false
+    },
+    {
+      "id": "bountiful_critters:flounder",
+      "required": false
+    },
+    {
+      "id": "bountiful_critters:neon_tetra",
+      "required": false
+    },
+    {
+      "id": "bountiful_critters:barreleye",
+      "required": false
+    },
+    {
+      "id": "fintastic:gourami",
+      "required": false
+    },
+    {
+      "id": "fintastic:guppy",
+      "required": false
+    },
+    {
+      "id": "fintastic:minnow",
+      "required": false
+    },
+    {
+      "id": "fintastic:moony",
+      "required": false
+    },
+    {
+      "id": "fintastic:pleco",
+      "required": false
+    },
+    {
+      "id": "spawn:angler_fish",
+      "required": false
+    },
+    {
+      "id": "spawn:seahorse",
+      "required": false
+    },
+    {
+      "id": "spawn:herring",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:mudskipper",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:devils_hole_pupfish",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:flying_fish",
+      "required": false
+    },
+    {
+      "id": "alexscaves:lanternfish",
+      "required": false
+    },
+    {
+      "id": "babyfat:ranchu",
+      "required": false
+    },
+    {
+      "id": "bettas:betta_fish",
+      "required": false
+    },
+    {
+      "id": "finsandtails:golden_river_ray",
+      "required": false
+    },
+    {
+      "id": "finsandtails:high_finned_blue",
+      "required": false
+    },
+    {
+      "id": "finsandtails:ornate_bugfish",
+      "required": false
+    },
+    {
+      "id": "finsandtails:teal_arrowfish",
+      "required": false
+    },
+    {
+      "id": "finsandtails:wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:pea_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:blu_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:vibra_wee",
+      "required": false
+    },
+    {
+      "id": "finsandtails:papa_wee",
+      "required": false
+    }
+  ]
+}

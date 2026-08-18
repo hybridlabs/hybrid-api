@@ -66,7 +66,7 @@ public class CommonClass {
 			RegistrationProvider.get(BuiltInRegistries.MENU, MOD_ID);
 
     public static ResourceLocation locate(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+        return new ResourceLocation(MOD_ID, path);
     }
 
     public static void init() {

@@ -1,0 +1,49 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "hybrid_aquatic:sea_slug",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sea_cucumber",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sea_urchin",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:starfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:scalyfoot_snail",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sea_angel",
+      "required": false
+    },
+    {
+      "id": "spawn:clam",
+      "required": false
+    },
+    {
+      "id": "wonderoussea:marine_flatworm",
+      "required": false
+    },
+    {
+      "id": "wonderoussea:blue_glaucus",
+      "required": false
+    },
+    {
+      "id": "finsandtails:river_pebble_snail",
+      "required": false
+    },
+    {
+      "id": "finsandtails:phantom_nudibranch",
+      "required": false
+    }
+  ]
+}

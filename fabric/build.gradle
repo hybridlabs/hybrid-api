@@ -1,7 +1,6 @@
 plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
-    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
     id "org.jetbrains.kotlin.jvm"
 }
 
@@ -48,6 +47,7 @@ dependencies {
 configurations {
     datagenOutput
 }
+
 fabricApi {
     configureDataGeneration {
         outputDirectory = file("src/generated/resources")
@@ -61,21 +61,16 @@ fabricApi {
 
 
 loom {
-    dependencies {
-        //commonKotlinOut project(path: ':common', configuration: 'commonKotlinOut')
-        //commonJavaOut project(path: ':common', configuration: 'commonJavaOut')
-    }
-
-    if(file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(file("src/main/resources/${mod_id}.accesswidener"))
-    }
-
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
+    var accessWidenerFile = file("src/main/resources/${mod_id}.accesswidener")
+    if (accessWidenerFile.exists()) {
+        accessWidenerPath.set(accessWidenerFile)
+    } else {
+        println "No access widener exists!"
     }
 
     compileKotlin {
         source(project(":common").sourceSets.main.allSource)
+        source(sourceSets.main.allSource)
         inputs.file "../gradle.properties"
     }
 

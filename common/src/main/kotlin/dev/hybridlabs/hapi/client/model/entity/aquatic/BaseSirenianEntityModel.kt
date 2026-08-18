@@ -4,7 +4,7 @@ import dev.hybridlabs.hapi.entity.base.aquatic.BaseSirenianEntity
 import net.minecraft.client.model.geom.PartNames
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.core.animation.AnimationState
 import software.bernie.geckolib.model.GeoModel
 import kotlin.math.abs
 
@@ -16,11 +16,11 @@ abstract class BaseSirenianEntityModel<T : BaseSirenianEntity>(
 
     override fun getModelResource(animatable: T): ResourceLocation {
         return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
             namespace,
             "geo/mammal/$id/baby_$id.geo.json")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
             namespace,
             "geo/mammal/$id/$id.geo.json")
         }
@@ -28,24 +28,24 @@ abstract class BaseSirenianEntityModel<T : BaseSirenianEntity>(
 
     override fun getTextureResource(animatable: T): ResourceLocation {
         return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
             namespace,
             "textures/entity/mammal/$id/baby_$id.png")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
             namespace,
             "textures/entity/mammal/$id/$id.png")
         }
     }
 
     override fun getAnimationResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "animations/entity/mammal/$id/$id.animation.json")
     }
 
     fun getLayerTextureResource(layer: String): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/mammal/$id/layers/${id}_$layer.png")
     }

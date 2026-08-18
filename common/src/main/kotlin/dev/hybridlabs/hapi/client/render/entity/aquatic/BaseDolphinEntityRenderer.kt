@@ -93,7 +93,10 @@ open class BaseDolphinEntityRenderer<T : BaseDolphinEntity>(
         partialTick: Float,
         packedLight: Int,
         packedOverlay: Int,
-        colour: Int
+        red: Float,
+        green: Float,
+        blue: Float,
+        alpha: Float,
     ) {
         super.preRender(
             poseStack,
@@ -105,7 +108,10 @@ open class BaseDolphinEntityRenderer<T : BaseDolphinEntity>(
             partialTick,
             packedLight,
             packedOverlay,
-            1
+            red,
+            green,
+            blue,
+            alpha
         )
 
         this.mainHandItem = animatable.mainHandItem

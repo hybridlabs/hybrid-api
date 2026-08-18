@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#hapi:octopus",
+    "#hapi:squid",
+    {
+      "id": "hybrid_aquatic:nautilus",
+      "required": false
+    }
+  ]
+}

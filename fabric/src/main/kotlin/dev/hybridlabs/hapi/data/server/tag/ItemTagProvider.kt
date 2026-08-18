@@ -12,21 +12,21 @@ class ItemTagProvider(output: FabricDataOutput, registriesFuture: CompletableFut
     override fun addTags(arg: HolderLookup.Provider) {
 
         getOrCreateTagBuilder(HAPIItemTags.CORAL_CHUNK)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "coral_chunk"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "coral_chunk"))
 
         getOrCreateTagBuilder(HAPIItemTags.SHARK_TOOTH)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "shark_tooth"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "shark_tooth"))
 
         getOrCreateTagBuilder(HAPIItemTags.GLOWSLIME)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "glowslime"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "glowslime"))
 
         getOrCreateTagBuilder(HAPIItemTags.DRIFTWOOD_LOG)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_log"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "driftwood_log"))
 
         getOrCreateTagBuilder(HAPIItemTags.DRIFTWOOD_PLANKS)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_planks"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "driftwood_planks"))
 
         getOrCreateTagBuilder(HAPIItemTags.DRIFTWOOD_SLAB)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_slab"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "driftwood_slab"))
     }
 }

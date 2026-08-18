@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "#hapi:crab",
+    "#hapi:lobster",
+    "#hapi:shrimp",
+    {
+      "id": "hybrid_aquatic:giant_isopod",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:triops",
+      "required": false
+    },
+    {
+      "id": "fintastic:daphnia",
+      "required": false
+    }
+  ]
+}

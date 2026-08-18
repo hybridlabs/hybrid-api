@@ -4,7 +4,7 @@ import dev.hybridlabs.hapi.entity.base.aquatic.BaseCephalopodEntity
 import net.minecraft.client.model.geom.PartNames
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.core.animation.AnimationState
 import software.bernie.geckolib.model.GeoModel
 
 @Suppress("OVERRIDE_DEPRECATION")
@@ -14,21 +14,21 @@ abstract class BaseCephalopodEntityModel<T : BaseCephalopodEntity>(
 ) : GeoModel<T>() {
 
     override fun getModelResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "geo/cephalopod/$id/$id.geo.json"
         )
     }
 
     override fun getTextureResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/cephalopod/$id/$id.png"
         )
     }
 
     override fun getAnimationResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "animations/entity/cephalopod/$id/$id.animation.json"
         )

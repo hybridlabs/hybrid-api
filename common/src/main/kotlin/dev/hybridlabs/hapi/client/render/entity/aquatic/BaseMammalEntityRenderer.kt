@@ -102,7 +102,10 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity>(
         partialTick: Float,
         packedLight: Int,
         packedOverlay: Int,
-        colour: Int
+        red: Float,
+        green: Float,
+        blue: Float,
+        alpha: Float,
     ) {
         super.preRender(
             poseStack,
@@ -114,7 +117,10 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity>(
             partialTick,
             packedLight,
             packedOverlay,
-            1
+            red,
+            green,
+            blue,
+            alpha
         )
 
         this.mainHandItem = animatable.mainHandItem

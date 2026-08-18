@@ -28,8 +28,7 @@ open class BaseJellyfishEntityRenderer<T : BaseJellyfishEntity>(
         poseStack: PoseStack,
         ageInTicks: Float,
         rotationYaw: Float,
-        partialTick: Float,
-        nativeScale: Float
+        partialTick: Float
     ) {
         val i = Mth.lerp(partialTick, jellyfishEntity.prevTiltAngle, jellyfishEntity.tiltAngle)
         poseStack.translate(0.0f, 0.25f, 0.0f)

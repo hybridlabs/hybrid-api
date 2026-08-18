@@ -24,13 +24,13 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation
 import net.minecraft.world.entity.monster.Monster.isDarkEnoughToSpawn
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
-import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.BlockPathTypes
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
 import software.bernie.geckolib.constant.DefaultAnimations
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.core.animation.AnimatableManager
+import software.bernie.geckolib.core.animation.AnimationController
 import software.bernie.geckolib.util.GeckoLibUtil
 
 @Suppress("LeakingThis", "UNUSED_PARAMETER")
@@ -40,9 +40,9 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     open val inkConfig: InkConfiguration? = null
 
     override fun createNavigation(level: Level): PathNavigation {
-        setPathfindingMalus(PathType.WATER, 0.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(BlockPathTypes.WATER, 0.0f)
+        setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 16.0f)
+        setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0f)
 
         moveControl = SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, false)
         lookControl = SmoothSwimmingLookControl(this, 10)
@@ -61,9 +61,9 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     }
 
     //#region Data
-    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        super.defineSynchedData(builder)
-        builder.define(ATTEMPT_ATTACK, false)
+    override fun defineSynchedData() {
+        super.defineSynchedData()
+        entityData.define(ATTEMPT_ATTACK, false)
     }
 
     override fun addAdditionalSaveData(compound: CompoundTag) {
@@ -79,10 +79,11 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
         spawnReason: MobSpawnType,
-        entityData: SpawnGroupData?
+        entityData: SpawnGroupData?,
+        entityNbt: CompoundTag?
     ): SpawnGroupData? {
         this.xRot = 0.0f
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData)
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt)
     }
 
     override fun getBreedOffspring(p0: ServerLevel, p1: AgeableMob): AgeableMob? {
@@ -248,8 +249,9 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
             return !cephalopod.fromFishingNet && super.canUse()
         }
 
-        override fun checkAndPerformAttack(target: LivingEntity) {
-            if (canPerformAttack(target)){
+        override fun checkAndPerformAttack(target: LivingEntity, squaredDistance: Double) {
+            val d = getAttackReachSqr(target)
+            if (squaredDistance <= d && this.isTimeToAttack) {
                 resetAttackCooldown()
                 mob.doHurtTarget(target)
                 cephalopod.isSprinting = true
@@ -257,10 +259,10 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
 
                 if (target.health <= 0)
                     cephalopod.hunger = MAX_HUNGER
+
                 cephalopod.health = cephalopod.maxHealth
             }
         }
-
 
         override fun start() {
             super.start()

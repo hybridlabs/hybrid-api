@@ -1,12 +1,9 @@
 package dev.hybridlabs.hapi.item
 
 import dev.hybridlabs.hapi.tag.HAPIItemTags
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Tier
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.level.block.Block
 import java.util.function.Supplier
 
 enum class HAPIToolMaterials(
@@ -19,19 +16,22 @@ enum class HAPIToolMaterials(
 ) :
     Tier {
     SEASHELL(
-        1, 131, 4.0f, 1.0f, 22,
-        Supplier<Ingredient> { Ingredient.of(Items.NAUTILUS_SHELL) }) {
-        override fun getIncorrectBlocksForDrops(): TagKey<Block?> {
-            return BlockTags.INCORRECT_FOR_IRON_TOOL
-        }
-    },
+        1,
+        131,
+        4.0f,
+        1.0f,
+        22,
+        Supplier<Ingredient> { Ingredient.of(Items.NAUTILUS_SHELL) }
+    ),
+
     CORAL(
-        2, 250, 6.0f, 2.0f, 14,
-        Supplier<Ingredient> { Ingredient.of(HAPIItemTags.CORAL_CHUNK) }) {
-        override fun getIncorrectBlocksForDrops(): TagKey<Block?> {
-            return BlockTags.INCORRECT_FOR_IRON_TOOL
-        }
-    };
+        2,
+        250,
+        6.0f,
+        2.0f,
+        14,
+        Supplier<Ingredient> { Ingredient.of(HAPIItemTags.CORAL_CHUNK) }
+    );
 
     override fun getUses(): Int {
         return this.itemDurability
@@ -43,6 +43,10 @@ enum class HAPIToolMaterials(
 
     override fun getAttackDamageBonus(): Float {
         return this.attackDamage
+    }
+
+    override fun getLevel(): Int {
+        return this.miningLevel
     }
 
     override fun getEnchantmentValue(): Int {

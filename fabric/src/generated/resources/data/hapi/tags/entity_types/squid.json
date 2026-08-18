@@ -1,0 +1,35 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:squid",
+    "minecraft:glow_squid",
+    {
+      "id": "hybrid_aquatic:arrow_squid",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cuttlefish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:firefly_squid",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:colossal_squid",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:giant_squid",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:giant_squid",
+      "required": false
+    },
+    {
+      "id": "finsandtails:night_light_squid",
+      "required": false
+    }
+  ]
+}

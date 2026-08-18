@@ -11,25 +11,25 @@ abstract class BaseCrustaceanEntityModel<T : BaseCrustaceanEntity>(
 ) : GeoModel<T>() {
 
     override fun getModelResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "geo/crustacean/$id/$id.geo.json")
     }
 
     override fun getTextureResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/crustacean/$id/$id.png")
     }
 
     override fun getAnimationResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "animations/entity/crustacean/$id/$id.animation.json")
     }
 
     fun getLayerTextureResource(layer: String): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/crustacean/$id/layers/${id}_$layer.png")
     }

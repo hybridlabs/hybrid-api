@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pufferfish",
+    {
+      "id": "hybrid_aquatic:stonefish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:lionfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:blowfish",
+      "required": false
+    }
+  ]
+}

@@ -35,15 +35,15 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.BlockPathTypes
 import net.minecraft.world.phys.Vec3
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationController.AnimationStateHandler
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
 import software.bernie.geckolib.constant.DefaultAnimations
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.core.animation.AnimatableManager
+import software.bernie.geckolib.core.animation.AnimationController
+import software.bernie.geckolib.core.animation.AnimationController.AnimationStateHandler
+import software.bernie.geckolib.core.animation.AnimationState
+import software.bernie.geckolib.core.`object`.PlayState
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
 
@@ -53,9 +53,9 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
     private val factory = GeckoLibUtil.createInstanceCache(this)
 
     override fun createNavigation(level: Level): PathNavigation {
-        setPathfindingMalus(PathType.WATER, 0.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(BlockPathTypes.WATER, 0.0f)
+        setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 16.0f)
+        setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0f)
 
         moveControl = SmoothSwimmingMoveControl(this, 60, 6, 0.02F, 0.1F, false)
         lookControl = SmoothSwimmingLookControl(this, 15)
@@ -91,10 +91,10 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
         this.entityData.set(HAS_SEA_LETTUCE, gotFish)
     }
 
-    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        super.defineSynchedData(builder)
-        builder.define(CLAM_POS, BlockPos.ZERO)
-        builder.define(HAS_SEA_LETTUCE, false)
+    override fun defineSynchedData() {
+        super.defineSynchedData()
+        entityData.define(CLAM_POS, BlockPos.ZERO)
+        entityData.define(HAS_SEA_LETTUCE, false)
     }
 
     override fun addAdditionalSaveData(compound: CompoundTag) {
@@ -163,6 +163,7 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
         difficulty: DifficultyInstance,
         spawnReason: MobSpawnType,
         entityData: SpawnGroupData?,
+        entityNbt: CompoundTag?
     ): SpawnGroupData? {
         this.airSupply = this.maxAirSupply
         this.yRot = 0.0f
@@ -171,7 +172,7 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
             this.setAge(-6000)
         }
 
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData)
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt)
     }
 
     override fun getBreedOffspring(p0: ServerLevel, p1: AgeableMob): AgeableMob? {

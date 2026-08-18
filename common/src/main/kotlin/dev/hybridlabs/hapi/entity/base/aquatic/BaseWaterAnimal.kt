@@ -26,10 +26,10 @@ import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
-import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.BlockPathTypes
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animation.RawAnimation
+import software.bernie.geckolib.core.animation.RawAnimation
 import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
@@ -53,9 +53,9 @@ abstract class BaseWaterAnimal protected constructor(
     }
 
     override fun createNavigation(level: Level): PathNavigation {
-        setPathfindingMalus(PathType.WATER, 0.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(BlockPathTypes.WATER, 0.0f)
+        setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 16.0f)
+        setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0f)
 
         return WaterBoundPathNavigation(this, level)
     }
@@ -258,7 +258,7 @@ abstract class BaseWaterAnimal protected constructor(
         }
     }
 
-    override fun getBaseExperienceReward(): Int {
+    override fun getExperienceReward(): Int {
         return 1 + this.level().random.nextInt(3)
     }
     //#endregion
@@ -345,17 +345,17 @@ abstract class BaseWaterAnimal protected constructor(
         setPerformingTrick(false)
     }
 
-    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        super.defineSynchedData(builder)
-        builder.define(SIZE, 0)
-        builder.define(HUNGER, MAX_HUNGER)
-        builder.define(MOISTNESS, getMaxMoistness())
-        builder.define(SITTING, false)
-        builder.define(FEEDING, false)
-        builder.define(GRAZING, false)
-        builder.define(DIGGING, false)
-        builder.define(PERFORMING, false)
-        builder.define(ATTEMPT_ATTACK, false)
+    override fun defineSynchedData() {
+        super.defineSynchedData()
+        entityData.define(SIZE, 0)
+        entityData.define(HUNGER, MAX_HUNGER)
+        entityData.define(MOISTNESS, getMaxMoistness())
+        entityData.define(SITTING, false)
+        entityData.define(FEEDING, false)
+        entityData.define(GRAZING, false)
+        entityData.define(DIGGING, false)
+        entityData.define(PERFORMING, false)
+        entityData.define(ATTEMPT_ATTACK, false)
     }
 
     override fun addAdditionalSaveData(compound: CompoundTag) {
@@ -483,10 +483,11 @@ abstract class BaseWaterAnimal protected constructor(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
         spawnReason: MobSpawnType,
-        entityData: SpawnGroupData?
+        entityData: SpawnGroupData?,
+        entityNbt: CompoundTag?,
     ): SpawnGroupData? {
         this.size = this.random.nextIntBetweenInclusive(getMinSize(), getMaxSize())
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData)
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt)
     }
 
     fun finalizeSpawnChildFromBreeding(level: ServerLevel, waterAnimal: BaseWaterAnimal) {
@@ -555,7 +556,7 @@ abstract class BaseWaterAnimal protected constructor(
     }
     //#endregion
 
-    override fun canBeLeashed(): Boolean {
+    override fun canBeLeashed(player: Player): Boolean {
         return false
     }
 

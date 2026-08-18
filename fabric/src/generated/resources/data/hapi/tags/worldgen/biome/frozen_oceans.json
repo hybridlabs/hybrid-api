@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "minecraft:frozen_ocean",
     "minecraft:deep_frozen_ocean",

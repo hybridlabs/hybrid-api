@@ -4,7 +4,7 @@ import dev.hybridlabs.hapi.entity.base.aquatic.BaseSharkEntity
 import net.minecraft.client.model.geom.PartNames
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.core.animation.AnimationState
 import software.bernie.geckolib.model.GeoModel
 import kotlin.math.abs
 
@@ -15,25 +15,25 @@ abstract class BaseSharkEntityModel<T : BaseSharkEntity>(
 ) : GeoModel<T>() {
 
     override fun getModelResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "geo/shark/$id/$id.geo.json")
     }
 
     override fun getTextureResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/shark/$id/$id.png")
     }
 
     override fun getAnimationResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "animations/entity/shark/$id/$id.animation.json")
     }
 
     fun getLayerTextureResource(layer: String): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/shark/$id/layers/${id}_$layer.png")
     }

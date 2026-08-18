@@ -3,7 +3,7 @@ package dev.hybridlabs.hapi.client.model.entity.flying
 import dev.hybridlabs.hapi.entity.base.flying.BaseFlyingAnimal
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.core.animation.AnimationState
 import software.bernie.geckolib.constant.DataTickets
 import software.bernie.geckolib.model.GeoModel
 
@@ -15,11 +15,11 @@ abstract class BaseFlyingAnimalEntityModel<T : BaseFlyingAnimal>(
 
     override fun getModelResource(animatable: T): ResourceLocation {
         return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
                 namespace,
                 "geo/entity/$id/baby_$id.geo.json")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
                 namespace,
                 "geo/entity/$id/$id.geo.json")
         }
@@ -27,11 +27,11 @@ abstract class BaseFlyingAnimalEntityModel<T : BaseFlyingAnimal>(
 
     override fun getTextureResource(animatable: T): ResourceLocation {
         return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
                 namespace,
                 "textures/entity/$id/baby_$id.png")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
                 namespace,
                 "textures/entity/$id/$id.png")
         }
@@ -39,11 +39,11 @@ abstract class BaseFlyingAnimalEntityModel<T : BaseFlyingAnimal>(
 
     override fun getAnimationResource(animatable: T): ResourceLocation {
         return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
                 namespace,
                 "animations/entity/$id/baby_$id.animation.json")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation(
                 namespace,
                 "animations/entity/$id/$id.animation.json")
         }

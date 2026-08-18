@@ -1,12 +1,5 @@
 package dev.hybridlabs.hapi.platform.services;
 
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.SpawnEggItem;
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.function.Supplier;
-
 public interface PlatformHelper {
 
     /**

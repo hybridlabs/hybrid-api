@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#hapi:small_shark",
+    "#hapi:medium_shark",
+    "#hapi:large_shark"
+  ]
+}

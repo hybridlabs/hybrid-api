@@ -12,14 +12,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
-import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntitySelector
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.Leashable
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.MoverType
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.animal.WaterAnimal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
@@ -33,10 +26,10 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.Shapes
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
 import software.bernie.geckolib.constant.DefaultAnimations
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.core.animation.AnimatableManager
+import software.bernie.geckolib.core.animation.AnimationController
 import software.bernie.geckolib.util.GeckoLibUtil
 import kotlin.math.max
 import kotlin.math.sin
@@ -45,7 +38,7 @@ abstract class BaseBoatEntity(
     type: EntityType<out BaseBoatEntity>,
     world: Level,
 ) :
-    Entity(type, world), Leashable,
+    Entity(type, world),
     GeoEntity {
     private val animCache = GeckoLibUtil.createInstanceCache(this)
 
@@ -72,45 +65,43 @@ abstract class BaseBoatEntity(
 
     var status: Status? = null
     private var oldStatus: Status? = null
-    private var leashData: Leashable.LeashData? = null
 
     init {
         noCulling = true
     }
 
-    override fun getLeashData(): Leashable.LeashData? {
-        return this.leashData
+    override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
+        controllers.add(
+            AnimationController(this, "Boat Controller", 4) { state ->
+                when {
+                    isInWater -> {
+                        state.setAndContinue(DefaultAnimations.IDLE)
+                    }
+
+                    else -> {
+                        state.setAndContinue(DefaultAnimations.IDLE)
+                    }
+                }
+            }
+        )
     }
 
-    override fun setLeashData(leashData: Leashable.LeashData?) {
-        this.leashData = leashData
+    override fun getAnimatableInstanceCache(): AnimatableInstanceCache? {
+        return animCache
     }
 
-    public override fun getLeashOffset(): Vec3 {
-        return Vec3(0.0, (0.88f * this.eyeHeight).toDouble(), (this.bbWidth * 0.64f).toDouble())
-    }
-
-    override fun elasticRangeLeashBehaviour(leashHolder: Entity, distance: Float) {
-        val vec3 = leashHolder.position().subtract(this.position()).normalize().scale(distance.toDouble() - 6.0)
-        val vec31 = this.deltaMovement
-        val flag = vec31.dot(vec3) > 0.0
-        this.deltaMovement = vec31.add(vec3.scale(if (flag) 0.15 else 0.2))
-    }
-
-    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        builder.define(DATA_ID_HURT, 0)
-        builder.define(DATA_ID_HURTDIR, 1)
-        builder.define(DATA_ID_DAMAGE, 0.0f)
-        builder.define(DATA_ID_BUBBLE_TIME, 0)
+    override fun defineSynchedData() {
+        this.entityData.define(DATA_ID_HURT, 0)
+        this.entityData.define(DATA_ID_HURTDIR, 1)
+        this.entityData.define(DATA_ID_DAMAGE, 0.0f)
+        this.entityData.define(DATA_ID_BUBBLE_TIME, 0)
     }
 
     override fun addAdditionalSaveData(tag: CompoundTag) {
         tag.putFloat("Damage", getDamage())
-        this.writeLeashData(tag, this.leashData)
     }
 
     override fun readAdditionalSaveData(tag: CompoundTag) {
-        this.leashData = this.readLeashData(tag)
         setDamage(tag.getFloat("Damage"))
     }
 
@@ -130,6 +121,10 @@ abstract class BaseBoatEntity(
         return this.entityData.get(DATA_ID_HURT) as Int
     }
 
+    override fun getEyeHeight(pose: Pose, size: EntityDimensions): Float {
+        return size.height
+    }
+
     override fun getMovementEmission(): MovementEmission {
         return MovementEmission.EVENTS
     }
@@ -144,23 +139,6 @@ abstract class BaseBoatEntity(
 
     override fun isPushable(): Boolean {
         return true
-    }
-
-    override fun interact(player: Player, hand: InteractionHand): InteractionResult {
-        val interactionresult = super.interact(player, hand)
-        return if (interactionresult != InteractionResult.PASS) {
-            interactionresult
-        } else if (player.isSecondaryUseActive) {
-            InteractionResult.PASS
-        } else if (this.outOfControlTicks < 60.0f) {
-            if (!this.level().isClientSide) {
-                if (player.startRiding(this)) InteractionResult.CONSUME else InteractionResult.PASS
-            } else {
-                InteractionResult.SUCCESS
-            }
-        } else {
-            InteractionResult.PASS
-        }
     }
 
     override fun onAboveBubbleCol(downwards: Boolean) {
@@ -194,26 +172,6 @@ abstract class BaseBoatEntity(
             )
             this.gameEvent(GameEvent.SPLASH, this.controllingPassenger)
         }
-    }
-
-    override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
-        controllers.add(
-            AnimationController(this, "Boat Controller", 4) { state ->
-                when {
-                    isInWater -> {
-                        state.setAndContinue(DefaultAnimations.IDLE)
-                    }
-
-                    else -> {
-                        state.setAndContinue(DefaultAnimations.IDLE)
-                    }
-                }
-            }
-        )
-    }
-
-    override fun getAnimatableInstanceCache(): AnimatableInstanceCache? {
-        return animCache
     }
 
     override fun tick() {
@@ -343,12 +301,20 @@ abstract class BaseBoatEntity(
         return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, portal))
     }
 
-    override fun lerpTo(x: Double, y: Double, z: Double, pitch: Float, xRot: Float, posRotationIncrements: Int) {
+    override fun lerpTo(
+        x: Double,
+        y: Double,
+        z: Double,
+        yaw: Float,
+        pitch: Float,
+        posRotationIncrements: Int,
+        teleport: Boolean,
+    ) {
         this.lerpX = x
         this.lerpY = y
         this.lerpZ = z
-        this.lerpYRot = pitch.toDouble()
-        this.lerpXRot = xRot.toDouble()
+        this.lerpYRot = yaw.toDouble()
+        this.lerpXRot = pitch.toDouble()
         this.lerpSteps = 10
     }
 
@@ -383,7 +349,7 @@ abstract class BaseBoatEntity(
         if (this.oldStatus == Status.IN_AIR && this.status != Status.IN_AIR && this.status != Status.ON_LAND) {
             this.waterLevel = this.getY(1.0)
             val targetY: Double = this.waterLevelAbove - this.bbHeight + 0.101
-            if (this.level().noCollision(this, this.boundingBox.move(0.0, targetY - this.y, 0.0))) {
+            if (this.level().noCollision(this, this.boundingBox.move(0.0, targetY - this.getY(), 0.0))) {
                 this.setPos(this.x, targetY, this.z)
                 this.deltaMovement = this.deltaMovement.multiply(1.0, 0.0, 1.0)
                 this.lastYd = 0.0
@@ -404,7 +370,7 @@ abstract class BaseBoatEntity(
                 invFriction = 0.9f
             } else if (this.status == Status.ON_LAND) {
                 invFriction = this.landFriction
-                if (this.controllingPassenger is Player) {
+                if (this.getControllingPassenger() is Player) {
                     this.landFriction /= 2.0f
                 }
             }
@@ -612,7 +578,7 @@ abstract class BaseBoatEntity(
 
     private var bubbleTime: Int
         get() = this.entityData.get(DATA_ID_BUBBLE_TIME) as Int
-        set(bubbleTime) {
+        private set(bubbleTime) {
             this.entityData.set(DATA_ID_BUBBLE_TIME, bubbleTime)
         }
 

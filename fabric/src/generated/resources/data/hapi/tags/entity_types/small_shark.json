@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "hybrid_aquatic:lantern_shark",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:hound_shark",
+      "required": false
+    },
+    {
+      "id": "rainbowreef:small_shark",
+      "required": false
+    }
+  ]
+}

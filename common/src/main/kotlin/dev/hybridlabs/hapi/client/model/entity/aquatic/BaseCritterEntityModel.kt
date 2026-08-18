@@ -11,25 +11,25 @@ abstract class BaseCritterEntityModel<T : BaseCritterEntity>(
 ) : GeoModel<T>() {
 
     override fun getModelResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "geo/critter/$id/$id.geo.json")
     }
 
     override fun getTextureResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/critter/$id/$id.png")
     }
 
     override fun getAnimationResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "animations/entity/critter/$id/$id.animation.json")
     }
 
     open fun getLayerTextureResource(layer: String): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+        return ResourceLocation(
             namespace,
             "textures/entity/critter/$id/layers/${id}_$layer.png")
     }

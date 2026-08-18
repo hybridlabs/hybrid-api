@@ -12,12 +12,12 @@ class BlockTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
     override fun addTags(arg: HolderLookup.Provider) {
 
         getOrCreateTagBuilder(HAPIBlockTags.DRIFTWOOD_LOG)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_log"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "driftwood_log"))
 
         getOrCreateTagBuilder(HAPIBlockTags.DRIFTWOOD_PLANKS)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_planks"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "driftwood_planks"))
 
         getOrCreateTagBuilder(HAPIBlockTags.DRIFTWOOD_SLAB)
-            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "driftwood_slab"))
+            .addOptional(ResourceLocation("hybrid_aquatic", "driftwood_slab"))
     }
 }
