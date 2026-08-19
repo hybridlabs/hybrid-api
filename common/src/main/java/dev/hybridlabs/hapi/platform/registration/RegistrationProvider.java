@@ -1,6 +1,7 @@
 package dev.hybridlabs.hapi.platform.registration;
 
 import dev.hybridlabs.hapi.platform.Services;
+
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
@@ -65,7 +66,7 @@ public interface RegistrationProvider<T> {
      * @return a wrapper containing the lazy registered object. <strong>Calling {@link
      * RegistryObject#get() get} too early on the wrapper might result in crashes!</strong>
      */
-    <I extends T>RegistryObject<I> register(String name, Supplier<? extends I> supplier);
+    <I extends T> RegistryObject<I> register(String name, Supplier<? extends I> supplier);
 
     /**
      * Gets all the objects currently registered.

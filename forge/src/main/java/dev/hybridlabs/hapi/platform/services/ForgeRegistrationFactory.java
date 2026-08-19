@@ -2,6 +2,7 @@ package dev.hybridlabs.hapi.platform.services;
 
 import dev.hybridlabs.hapi.platform.registration.RegistrationProvider;
 import dev.hybridlabs.hapi.platform.registration.RegistryObject;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

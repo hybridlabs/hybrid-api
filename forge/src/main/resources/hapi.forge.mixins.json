@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "dev.hybridlabs.hapi.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8.5",
+  "refmap": "fantastic_fishery.refmap.json",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
