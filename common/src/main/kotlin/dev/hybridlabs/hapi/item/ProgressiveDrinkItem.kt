@@ -2,6 +2,8 @@ package dev.hybridlabs.hapi.item
 
 import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -36,6 +38,14 @@ class ProgressiveDrinkItem(
     }
 
     override fun getUseDuration(stack: ItemStack): Int = 32
+
+    override fun getDrinkingSound(): SoundEvent {
+        return SoundEvents.GENERIC_DRINK
+    }
+
+    override fun getEatingSound(): SoundEvent {
+        return SoundEvents.GENERIC_DRINK
+    }
 
     override fun getUseAnimation(stack: ItemStack): UseAnim = UseAnim.DRINK
 
