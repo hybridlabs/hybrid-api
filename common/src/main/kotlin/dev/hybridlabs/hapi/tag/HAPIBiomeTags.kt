@@ -10,6 +10,7 @@ object HAPIBiomeTags {
     //#region Compatibility Biome Tags
     // rainbow reef
     val RR_WARM_OCEANS = TagKey.create(Registries.BIOME, ResourceLocation("rainbow_reef", "warm_oceans"))
+
     //fintastic
     val MOONY_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation("fintastic", "moony_biomes"))
     val PLECO_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation("fintastic", "pleco_biomes"))
