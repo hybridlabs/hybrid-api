@@ -45,7 +45,7 @@ class CreatureNetItem(settings: Properties) : Item(settings) {
             val entityName = optionalEntity.get().description ?: return
             lines.add(
                 Component.translatable(
-                    "item.hybrid_aquatic.creature_net.description",
+                    "item.hapi.creature_net.description",
                     entityName
                 )
             )
