@@ -125,43 +125,43 @@
       "required": false
     },
     {
-      "id": "rainbowreef:clownfish",
+      "id": "rainbow_reef:clownfish",
       "required": false
     },
     {
-      "id": "rainbowreef:basslet",
+      "id": "rainbow_reef:basslet",
       "required": false
     },
     {
-      "id": "rainbowreef:boxfish",
+      "id": "rainbow_reef:boxfish",
       "required": false
     },
     {
-      "id": "rainbowreef:goby",
+      "id": "rainbow_reef:goby",
       "required": false
     },
     {
-      "id": "rainbowreef:tang",
+      "id": "rainbow_reef:tang",
       "required": false
     },
     {
-      "id": "rainbowreef:pipefish",
+      "id": "rainbow_reef:pipefish",
       "required": false
     },
     {
-      "id": "rainbowreef:seahorse",
+      "id": "rainbow_reef:seahorse",
       "required": false
     },
     {
-      "id": "rainbowreef:dwarf_angelfish",
+      "id": "rainbow_reef:dwarf_angelfish",
       "required": false
     },
     {
-      "id": "rainbowreef:butterflyfish",
+      "id": "rainbow_reef:butterflyfish",
       "required": false
     },
     {
-      "id": "rainbowreef:moorish_idol",
+      "id": "rainbow_reef:moorish_idol",
       "required": false
     },
     {

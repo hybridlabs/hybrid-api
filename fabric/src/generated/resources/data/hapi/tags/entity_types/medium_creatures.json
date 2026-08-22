@@ -66,19 +66,19 @@
       "required": false
     },
     {
-      "id": "rainbowreef:angelfish",
+      "id": "rainbow_reef:angelfish",
       "required": false
     },
     {
-      "id": "rainbowreef:hogfish",
+      "id": "rainbow_reef:hogfish",
       "required": false
     },
     {
-      "id": "rainbowreef:parrotfish",
+      "id": "rainbow_reef:parrotfish",
       "required": false
     },
     {
-      "id": "rainbowreef:ray",
+      "id": "rainbow_reef:ray",
       "required": false
     },
     {
