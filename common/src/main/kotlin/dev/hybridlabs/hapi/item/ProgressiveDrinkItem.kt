@@ -11,7 +11,7 @@ import net.minecraft.world.item.*
 import net.minecraft.world.level.Level
 import kotlin.let
 
-class ProgressiveFoodItem(
+class ProgressiveDrinkItem(
     properties: Properties,
     private val nextItem: () -> Item?
 ) : Item(properties) {
@@ -37,7 +37,7 @@ class ProgressiveFoodItem(
 
     override fun getUseDuration(stack: ItemStack): Int = 32
 
-    override fun getUseAnimation(stack: ItemStack): UseAnim = UseAnim.EAT
+    override fun getUseAnimation(stack: ItemStack): UseAnim = UseAnim.DRINK
 
     override fun use(
         level: Level,
