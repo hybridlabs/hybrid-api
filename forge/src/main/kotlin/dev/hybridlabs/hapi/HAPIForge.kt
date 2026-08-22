@@ -1,5 +1,6 @@
 package dev.hybridlabs.hapi
 
+import dev.hybridlabs.hapi.item.HAPIItems
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
@@ -19,6 +20,8 @@ object HAPIForge {
 
     init {
         CommonClass.init()
+
+        HAPIItems
 
         runForDist(
             clientTarget = {

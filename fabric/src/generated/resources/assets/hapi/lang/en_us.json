@@ -1,0 +1,6 @@
+{
+  "item.hapi.creature_net": "Creature Net",
+  "item.hapi.creature_net.description": "Stored Entity: %s",
+  "item.hapi.creature_net.function": "Lets you catch and move aquatic creatures",
+  "item.hapi.creature_net.properties": "Placed creatures become passive and don't despawn"
+}

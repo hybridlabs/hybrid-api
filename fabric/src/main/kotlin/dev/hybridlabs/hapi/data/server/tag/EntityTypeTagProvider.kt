@@ -667,8 +667,34 @@ class EntityTypeTagProvider(output: FabricDataOutput, registriesFuture: Completa
             )
         //#endregion
 
+        getOrCreateTagBuilder(HAPIEntityTags.LANDFOWL)
+            .add(EntityType.CHICKEN)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "rooster"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "turkey"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "guinea_fowl"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "peacock"))
+
+        getOrCreateTagBuilder(HAPIEntityTags.WATERFOWL)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "duck"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "goose"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "swan"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "puffin"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "seagull"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "pelican"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "albatross"))
+
+        getOrCreateTagBuilder(HAPIEntityTags.RATITE)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "ostrich"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "kiwi"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "cassowary"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "rhea"))
+
+        getOrCreateTagBuilder(HAPIEntityTags.SONGBIRD)
+            .add(EntityType.PARROT)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_birds", "jay"))
+
         //#region Fishing Net Implementation
-        getOrCreateTagBuilder(HAPIEntityTags.CAN_USE_FISHING_NET_ON)
+        getOrCreateTagBuilder(HAPIEntityTags.NET_CATCHABLE)
             .addTag(HAPIEntityTags.ALL_FISH)
             .addTag(HAPIEntityTags.ALL_SHARKS)
             .addTag(HAPIEntityTags.ALL_CRUSTACEANS)
@@ -678,6 +704,10 @@ class EntityTypeTagProvider(output: FabricDataOutput, registriesFuture: Completa
             .addTag(HAPIEntityTags.ALL_JELLYFISH)
             .addTag(HAPIEntityTags.ALL_CRITTERS)
             .addTag(HAPIEntityTags.TURTLE)
+            .addTag(HAPIEntityTags.LANDFOWL)
+            .addTag(HAPIEntityTags.WATERFOWL)
+            .addTag(HAPIEntityTags.RATITE)
+            .addTag(HAPIEntityTags.SONGBIRD)
         //#endregion
     }
 }

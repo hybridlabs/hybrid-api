@@ -49,6 +49,7 @@ open class BaseFlyingAnimal(
     var inLove = 0
     private var loveCause: UUID? = null
     private val factory = GeckoLibUtil.createInstanceCache(this)
+    var fromCreatureNet = false
     var isClipped: Boolean = false
 
      override fun createNavigation(level: Level): PathNavigation {
@@ -184,6 +185,7 @@ open class BaseFlyingAnimal(
 
     override fun addAdditionalSaveData(compound: CompoundTag) {
         super.addAdditionalSaveData(compound)
+        compound.putBoolean("FromCreatureNet", fromCreatureNet)
         compound.putInt("InLove", this.inLove)
 
         if (this.loveCause != null) {
@@ -193,6 +195,7 @@ open class BaseFlyingAnimal(
 
     override fun readAdditionalSaveData(compound: CompoundTag) {
         super.readAdditionalSaveData(compound)
+        fromCreatureNet = compound.getBoolean("FromCreatureNet")
         this.inLove = compound.getInt("InLove")
         this.loveCause = if (compound.hasUUID("LoveCause")) compound.getUUID("LoveCause") else null
     }
@@ -320,6 +323,7 @@ open class BaseFlyingAnimal(
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
         return !isPersistenceRequired &&
+                !this.fromCreatureNet &&
                 !this.hasCustomName()
     }
 

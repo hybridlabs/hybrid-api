@@ -189,7 +189,7 @@ open class BaseJellyfishEntity(
     override fun playerTouch(player: Player) {
         super.playerTouch(player)
 
-        if (player is ServerPlayer && isVenomous && !player.isPassenger && !this.fromFishingNet) {
+        if (player is ServerPlayer && isVenomous && !player.isPassenger && !this.fromCreatureNet) {
             player.hurt(this.damageSources().mobAttack(this), 1.0f)
             player.addEffect(MobEffectInstance(MobEffects.POISON, 100, venomLevel), this)
         }

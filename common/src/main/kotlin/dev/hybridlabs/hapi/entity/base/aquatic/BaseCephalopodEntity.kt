@@ -246,7 +246,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     internal class CephalopodAttackGoal(private val cephalopod: BaseCephalopodEntity) :
         MeleeAttackGoal(cephalopod, 1.0, true) {
         override fun canUse(): Boolean {
-            return !cephalopod.fromFishingNet && super.canUse()
+            return !cephalopod.fromCreatureNet && super.canUse()
         }
 
         override fun checkAndPerformAttack(target: LivingEntity, squaredDistance: Double) {

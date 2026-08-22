@@ -1,0 +1,21 @@
+{
+  "values": [
+    "minecraft:chicken",
+    {
+      "id": "hybrid_birds:rooster",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:turkey",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:guinea_fowl",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:peacock",
+      "required": false
+    }
+  ]
+}

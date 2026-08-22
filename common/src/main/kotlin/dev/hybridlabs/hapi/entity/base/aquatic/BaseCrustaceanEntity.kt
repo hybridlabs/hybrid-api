@@ -134,7 +134,7 @@ open class BaseCrustaceanEntity(
     }
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
-        return !fromFishingNet && !hasCustomName()
+        return !fromCreatureNet && !hasCustomName()
     }
     //#endregion
 

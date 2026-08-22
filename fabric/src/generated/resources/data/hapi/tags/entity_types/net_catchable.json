@@ -9,6 +9,10 @@
     "#hapi:all_amphibians",
     "#hapi:all_jellyfish",
     "#hapi:all_critters",
-    "#hapi:turtle"
+    "#hapi:turtle",
+    "#hapi:landfowl",
+    "#hapi:waterfowl",
+    "#hapi:ratite",
+    "#hapi:songbird"
   ]
 }

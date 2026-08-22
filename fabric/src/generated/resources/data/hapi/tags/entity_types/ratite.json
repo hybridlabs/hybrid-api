@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "hybrid_birds:ostrich",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:kiwi",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:cassowary",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:rhea",
+      "required": false
+    }
+  ]
+}

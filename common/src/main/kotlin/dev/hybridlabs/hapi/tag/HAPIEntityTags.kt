@@ -6,7 +6,9 @@ import net.minecraft.world.entity.EntityType
 import dev.hybridlabs.hapi.CommonClass
 
 object HAPIEntityTags {
-    //#region Food Chain tags
+
+    //#region Aquatic Tags
+    // Food Chain tags
     val BAIT_FISH = create("bait_fish")
     val SMALL_CREATURES = create("small_creatures")
     val MEDIUM_CREATURES = create("medium_creatures")
@@ -15,19 +17,19 @@ object HAPIEntityTags {
     val TOXIC_ANIMALS = create("toxic_animals")
     val OTTER_PREY = create("otter_prey")
 
-    //#region Crustacean Tags
+    // Crustacean Tags
     val ALL_CRUSTACEANS = create("all_crustaceans")
     val CRAB = create("crab")
     val LOBSTER = create("lobster")
     val SHRIMP = create("shrimp")
     val KRILL = create("krill")
 
-    //#region Cephalopod Tags
+    // Cephalopod Tags
     val ALL_CEPHALOPODS = create("all_cephalopods")
     val OCTOPUS = create("octopus")
     val SQUID = create("squid")
 
-    //#region Fish Tags
+    // Fish Tags
     val ALL_FISH = create("all_fish")
     val RAY = create("ray")
     val REEF_FISH = create("reef_fish")
@@ -38,26 +40,34 @@ object HAPIEntityTags {
     val SWAMP_FISH = create("swamp_fish")
     val MANGROVE_FISH = create("mangrove_fish")
 
-    //#region Shark Tags
+    // Shark Tags
     val ALL_SHARKS = create("all_sharks")
     val SMALL_SHARK = create("small_shark")
     val MEDIUM_SHARK = create("medium_shark")
     val LARGE_SHARK = create("large_shark")
 
-    //#region Mammal Tags
+    // Mammal Tags
     val ALL_MAMMALS = create("all_mammals")
     val SIRENIAN = create("sirenian")
     val SEAL = create("seal")
     val DOLPHIN = create("dolphin")
     val WHALE = create("whale")
 
-    //#region Misc Creature Tags
+    // Misc Creature Tags
     val TURTLE = create("turtle")
     val ALL_AMPHIBIANS = create("all_amphibians")
     val ALL_CRITTERS = create("all_critters")
     val ALL_JELLYFISH = create("all_jellyfish")
 
-    val CAN_USE_FISHING_NET_ON = create("can_use_fishing_net_on")
+    //#endregion
+
+    //#region Bird Tags
+    val LANDFOWL = create("landfowl")
+    val WATERFOWL = create("waterfowl")
+    val SONGBIRD = create("songbird")
+    val RATITE = create("ratite")
+
+    val NET_CATCHABLE = create("net_catchable")
 
     private fun create(id: String): TagKey<EntityType<*>> {
         return TagKey.create(Registries.ENTITY_TYPE, CommonClass.locate(id))

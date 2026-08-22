@@ -33,7 +33,7 @@ open class WaterAnimalAttackGoal(
     }
 
     override fun canUse(): Boolean {
-        if (waterAnimal.fromFishingNet) {
+        if (waterAnimal.fromCreatureNet) {
             return false
         }
 
