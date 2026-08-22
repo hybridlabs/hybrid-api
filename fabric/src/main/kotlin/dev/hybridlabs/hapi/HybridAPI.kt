@@ -1,5 +1,6 @@
 package dev.hybridlabs.hapi
 
+import dev.hybridlabs.hapi.item.HAPIItems
 import dev.hybridlabs.hapi.tag.HAPIBiomeTags
 import dev.hybridlabs.hapi.tag.HAPIBlockTags
 import dev.hybridlabs.hapi.tag.HAPIEntityTags
@@ -20,5 +21,7 @@ object HybridAPI : ModInitializer {
         HAPIInstrumentTags
         HAPIItemTags
         HAPIPaintingTags
+
+        HAPIItems
     }
 }

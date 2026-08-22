@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "id": "hybrid_birds:duck",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:goose",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:swan",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:puffin",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:seagull",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:pelican",
+      "required": false
+    },
+    {
+      "id": "hybrid_birds:albatross",
+      "required": false
+    }
+  ]
+}

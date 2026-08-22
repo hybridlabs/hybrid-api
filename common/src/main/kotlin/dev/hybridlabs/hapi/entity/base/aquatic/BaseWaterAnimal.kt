@@ -44,7 +44,7 @@ abstract class BaseWaterAnimal protected constructor(
     private var ticksSinceEaten = 0
     var prevRoll: Float = 0f
     var currentRoll: Float = 0.0f
-    var fromFishingNet = false
+    var fromCreatureNet = false
 
     open fun getTargetConfig(): MobTargetConfiguration? = null
 
@@ -70,7 +70,7 @@ abstract class BaseWaterAnimal protected constructor(
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
         return !isPersistenceRequired &&
-                !this.fromFishingNet &&
+                !this.fromCreatureNet &&
                 !this.hasCustomName()
     }
 
@@ -363,7 +363,7 @@ abstract class BaseWaterAnimal protected constructor(
         compound.putInt(SIZE_KEY, size)
         compound.putInt(HUNGER_KEY, hunger)
         compound.putInt(MOISTNESS_KEY, moistness)
-        compound.putBoolean("FromFishingNet", fromFishingNet)
+        compound.putBoolean("FromFishingNet", fromCreatureNet)
         compound.putInt("InLove", this.inLove)
         compound.putInt("AttackTick", this.attackTick)
         compound.putBoolean("Sitting", isSitting())
@@ -382,7 +382,7 @@ abstract class BaseWaterAnimal protected constructor(
         size = compound.getInt(SIZE_KEY)
         hunger = compound.getInt(HUNGER_KEY)
         moistness = compound.getInt(MOISTNESS_KEY)
-        fromFishingNet = compound.getBoolean("FromFishingNet")
+        fromCreatureNet = compound.getBoolean("FromFishingNet")
         this.inLove = compound.getInt("InLove")
         this.loveCause = if (compound.hasUUID("LoveCause")) compound.getUUID("LoveCause") else null
         this.attackTick = compound.getInt("AttackTick")

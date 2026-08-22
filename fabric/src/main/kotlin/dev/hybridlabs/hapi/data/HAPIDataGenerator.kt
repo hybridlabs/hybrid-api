@@ -12,6 +12,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistrySetBuilder
 import dev.hybridlabs.hapi.Constants
+import dev.hybridlabs.hapi.data.client.LanguageProvider
+import dev.hybridlabs.hapi.data.server.RecipeProvider
 
 object HAPIDataGenerator : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(generator: FabricDataGenerator) {
@@ -23,6 +25,8 @@ object HAPIDataGenerator : DataGeneratorEntrypoint {
         pack.addProvider(::InstrumentTagProvider)
         pack.addProvider(::EntityTypeTagProvider)
         pack.addProvider(::FluidTagProvider)
+        pack.addProvider(::LanguageProvider)
+        pack.addProvider(::RecipeProvider)
     }
 
     override fun buildRegistry(registryBuilder: RegistrySetBuilder) {
