@@ -15,7 +15,7 @@
     "I  "
   ],
   "result": {
-    "count": 1,
-    "id": "hapi:creature_net"
-  }
+    "item": "hapi:creature_net"
+  },
+  "show_notification": true
 }

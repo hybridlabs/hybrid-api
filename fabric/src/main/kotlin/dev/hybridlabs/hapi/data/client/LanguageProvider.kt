@@ -6,8 +6,8 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.core.HolderLookup
 import java.util.concurrent.CompletableFuture
 
-class LanguageProvider( output: FabricDataOutput, lookupProvider: CompletableFuture<HolderLookup.Provider>) : FabricLanguageProvider(output,lookupProvider) {
-    override fun generateTranslations(lookupProvider: HolderLookup.Provider, builder: TranslationBuilder) {
+class LanguageProvider(output: FabricDataOutput) : FabricLanguageProvider(output) {
+    override fun generateTranslations(builder: TranslationBuilder) {
         // item group
         mapOf(
             HAPIItems.CREATURE_NET.get() to "Creature Net",

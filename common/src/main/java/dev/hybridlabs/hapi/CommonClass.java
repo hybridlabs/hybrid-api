@@ -1,7 +1,10 @@
 package dev.hybridlabs.hapi;
 
 import dev.hybridlabs.hapi.platform.Services;
+import dev.hybridlabs.hapi.platform.registration.RegistrationProvider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 
 import static dev.hybridlabs.hapi.Constants.MOD_ID;
 
@@ -12,7 +15,10 @@ import static dev.hybridlabs.hapi.Constants.MOD_ID;
 // compatible with all supported mod loaders.
 public class CommonClass {
 
-   public static void init() {
+    public static final RegistrationProvider<Item> ITEMS =
+            RegistrationProvider.get(BuiltInRegistries.ITEM, MOD_ID);
+
+    public static void init() {
         Constants.LOGGER.info(
                 "Hello from Common init on {}! we are currently in a {} environment!",
                 Services.PLATFORM.getPlatformName(),
