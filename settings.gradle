@@ -27,6 +27,7 @@ pluginManagement {
         id 'fabric-loom' version "$loom_version" apply false
         id 'net.neoforged.moddev' version "$moddev_version" apply false
         id 'me.modmuss50.mod-publish-plugin' version "$mod_publish_version" apply false
+        id 'org.jetbrains.changelog' version "$changelog_version" apply false
     }
 }
 
