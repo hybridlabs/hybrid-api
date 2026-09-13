@@ -2,6 +2,7 @@ plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev.legacyforge'
     id 'org.jetbrains.kotlin.jvm'
+    id 'me.modmuss50.mod-publish-plugin'
 }
 
 // This config will copy the output of Fabric's runDatagen task into
@@ -109,4 +110,8 @@ jar {
 compileKotlin {
     source(project(":common").sourceSets.main.allSource)
     inputs.file "../gradle.properties"
+}
+
+publishMods.platforms.configureEach {
+    requires 'kotlin-for-forge', 'geckolib'
 }
