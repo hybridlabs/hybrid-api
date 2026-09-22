@@ -546,6 +546,19 @@ abstract class BaseWaterAnimal protected constructor(
         return level.isUnobstructed(this)
     }
 
+    /**
+     * Vanilla derives the render distance from the cube root of the bounding box volume, which culls
+     * small aquatic mobs at roughly 15 blocks. Apply a floor so they stay visible at a sensible
+     * distance regardless of how small their hitbox is.
+     */
+    override fun shouldRenderAtSqrDistance(distanceSquared: Double): Boolean {
+        var size = boundingBox.size
+        if (size.isNaN()) size = 1.0
+
+        val renderDistance = size.coerceAtLeast(MIN_RENDER_SIZE) * 64.0 * getViewScale()
+        return distanceSquared < renderDistance * renderDistance
+    }
+
     //#region SFX
     override fun getAmbientSoundInterval(): Int {
         return 120
@@ -621,6 +634,9 @@ abstract class BaseWaterAnimal protected constructor(
     }
 
     companion object {
+        /** Lower bound on the bounding box size used for render culling, giving ~48 blocks. */
+        private const val MIN_RENDER_SIZE = 0.75
+
         val SIZE: EntityDataAccessor<Int> =
             SynchedEntityData.defineId(BaseWaterAnimal::class.java, EntityDataSerializers.INT)
         val HUNGER: EntityDataAccessor<Int> =
