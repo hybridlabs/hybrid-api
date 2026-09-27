@@ -70,6 +70,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
     }
 
     //#region Moistness & Air
+    var seekSurfaceCooldown = 0
+
     override fun handleAirSupply(air: Int) {
         if (isInWaterOrBubble) {
             airSupply = maxAirSupply
@@ -179,6 +181,12 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
 
     override fun tick() {
         super.tick()
+
+        seekSurfaceCooldown = if (this.isUnderWater) {
+            (seekSurfaceCooldown - 1).coerceAtLeast(0)
+        } else {
+            900
+        }
 
         if (this.isUnderWater) {
             moistness = getMaxMoistness()
