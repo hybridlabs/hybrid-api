@@ -77,6 +77,12 @@ abstract class BaseWaterAnimal protected constructor(
     override fun tick() {
         super.tick()
 
+        seekSurfaceCooldown = if (this.isUnderWater) {
+            (seekSurfaceCooldown - 1).coerceAtLeast(0)
+        } else {
+            900
+        }
+
         prevRoll = currentRoll
 
         if (hunger > 0) hunger -= 1
@@ -573,6 +579,8 @@ abstract class BaseWaterAnimal protected constructor(
     }
 
     //#region Properties
+    var seekSurfaceCooldown = 0
+
     protected open fun getMinSize(): Int {
         return -5
     }
