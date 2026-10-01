@@ -435,6 +435,8 @@ abstract class BaseWaterAnimal protected constructor(
         if (!player.abilities.instabuild) {
             stack.shrink(1)
         }
+
+        this.setPersistenceRequired()
     }
 
     open fun canFallInLove(): Boolean {
