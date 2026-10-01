@@ -406,20 +406,20 @@ abstract class BaseWaterAnimal protected constructor(
 
     public override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         val itemstack = player.getItemInHand(hand)
+
         if (this.isFood(itemstack)) {
+            this.setPersistenceRequired()
             val i = this.getAge()
 
             if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.setInLove(player)
-                this.setPersistenceRequired()
                 return InteractionResult.SUCCESS
             }
 
             if (this.isBaby) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true)
-                this.setPersistenceRequired()
                 return InteractionResult.sidedSuccess(this.level().isClientSide)
             }
 
