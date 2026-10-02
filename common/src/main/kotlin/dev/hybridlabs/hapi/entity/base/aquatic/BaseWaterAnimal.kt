@@ -55,7 +55,7 @@ abstract class BaseWaterAnimal protected constructor(
     override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(BlockPathTypes.WATER, 0.0f)
         setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathTyp.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0f)
 
         return WaterBoundPathNavigation(this, level)
     }
