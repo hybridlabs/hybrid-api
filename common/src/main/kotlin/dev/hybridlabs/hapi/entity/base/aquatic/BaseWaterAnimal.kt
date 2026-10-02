@@ -463,6 +463,7 @@ abstract class BaseWaterAnimal protected constructor(
         val baby = this.getBreedOffspring(level, mate) ?: return
 
         this.setPersistenceRequired()
+        mate.setPersistenceRequired()
         baby.setPersistenceRequired()
         baby.isBaby = true
         baby.moveTo(this.x, this.y, this.z, 0.0f, 0.0f)
