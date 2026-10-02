@@ -23,7 +23,7 @@ class WaterAnimalPerformTrickGoal(
 
     override fun start() {
         trickTime = 40
-        waterAnimal.startPerfomingTrick()
+        waterAnimal.startPerformingTrick()
         trickCooldown = this.waterAnimal.tickCount + (10 * 20 + this.waterAnimal.getRandom().nextInt(10) * 20)
     }
 

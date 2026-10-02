@@ -30,7 +30,7 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animation.RawAnimation
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseWaterAnimal protected constructor(
@@ -178,11 +178,11 @@ abstract class BaseWaterAnimal protected constructor(
     }
 
     override fun canTakeItem(itemstack: ItemStack): Boolean {
-        val equipmentslot = getEquipmentSlotForItem(itemstack)
-        return if (!this.getItemBySlot(equipmentslot).isEmpty) {
+        val equipmentSlot = getEquipmentSlotForItem(itemstack)
+        return if (!this.getItemBySlot(equipmentSlot).isEmpty) {
             false
         } else {
-            equipmentslot == EquipmentSlot.MAINHAND && super.canTakeItem(itemstack)
+            equipmentSlot == EquipmentSlot.MAINHAND && super.canTakeItem(itemstack)
         }
     }
 
@@ -343,7 +343,7 @@ abstract class BaseWaterAnimal protected constructor(
         entityData.set(PERFORMING, performing)
     }
 
-    fun startPerfomingTrick() {
+    fun startPerformingTrick() {
         setPerformingTrick(true)
     }
 
@@ -414,12 +414,14 @@ abstract class BaseWaterAnimal protected constructor(
             if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.setInLove(player)
+                this.setPersistenceRequired()
                 return InteractionResult.SUCCESS
             }
 
             if (this.isBaby) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true)
+                this.setPersistenceRequired()
                 return InteractionResult.sidedSuccess(this.level().isClientSide)
             }
 
@@ -474,6 +476,7 @@ abstract class BaseWaterAnimal protected constructor(
         val baby = this.getBreedOffspring(level, mate) ?: return
 
         this.setPersistenceRequired()
+        mate.setPersistenceRequired()
         baby.setPersistenceRequired()
         baby.isBaby = true
         baby.moveTo(this.x, this.y, this.z, 0.0f, 0.0f)
@@ -494,7 +497,7 @@ abstract class BaseWaterAnimal protected constructor(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
         spawnReason: MobSpawnType,
-        entityData: SpawnGroupData?
+        entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         this.size = this.random.nextIntBetweenInclusive(getMinSize(), getMaxSize())
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData)
