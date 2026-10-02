@@ -70,7 +70,6 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
     }
 
     //#region Moistness & Air
-    var seekSurfaceCooldown = 0
 
     override fun handleAirSupply(air: Int) {
         if (isInWaterOrBubble) {

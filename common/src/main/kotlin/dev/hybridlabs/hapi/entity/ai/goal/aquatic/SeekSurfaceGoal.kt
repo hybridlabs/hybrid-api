@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.ai.goal.aquatic
 
-import dev.hybridlabs.hapi.entity.base.aquatic.BaseFishEntity
+import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.MoverType
@@ -9,7 +9,7 @@ import net.minecraft.world.level.LevelReader
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-class SeekSurfaceGoal(private val mob: BaseFishEntity) : Goal() {
+class SeekSurfaceGoal(private val mob: BaseWaterAnimal) : Goal() {
     init {
         this.flags = EnumSet.of<Flag?>(Flag.MOVE, Flag.LOOK)
     }
