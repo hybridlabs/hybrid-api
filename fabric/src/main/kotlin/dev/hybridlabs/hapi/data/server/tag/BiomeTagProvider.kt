@@ -246,8 +246,30 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "tropical_rainforest_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "tropical_river"))
 
+        getOrCreateTagBuilder(HAPIBiomeTags.FORESTED_RIVERS)
+            .add(
+                Biomes.FOREST,
+                Biomes.WINDSWEPT_FOREST,
+                Biomes.BIRCH_FOREST,
+                Biomes.OLD_GROWTH_BIRCH_FOREST,
+            )
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "forested_river"))
+
+        getOrCreateTagBuilder(HAPIBiomeTags.FLORAL_RIVERS)
+            .add(
+                Biomes.FLOWER_FOREST
+            )
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "floral_river"))
+
+        getOrCreateTagBuilder(HAPIBiomeTags.BLACKWATER_RIVERS)
+            .add(
+                Biomes.DARK_FOREST
+            )
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "blackwater_river"))
+
         getOrCreateTagBuilder(HAPIBiomeTags.COLD_RIVERS)
             .add(Biomes.FROZEN_RIVER)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "cold_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("riverredux", "gravelly_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("regions_unexplored", "cold_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "arctic_river"))

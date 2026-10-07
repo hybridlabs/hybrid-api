@@ -2,6 +2,10 @@
   "values": [
     "minecraft:frozen_river",
     {
+      "id": "hybrid_aquatic:cold_river",
+      "required": false
+    },
+    {
       "id": "riverredux:gravelly_river",
       "required": false
     },

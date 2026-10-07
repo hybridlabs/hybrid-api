@@ -1,0 +1,12 @@
+{
+  "values": [
+    "minecraft:forest",
+    "minecraft:windswept_forest",
+    "minecraft:birch_forest",
+    "minecraft:old_growth_birch_forest",
+    {
+      "id": "hybrid_aquatic:forested_river",
+      "required": false
+    }
+  ]
+}

@@ -67,6 +67,9 @@ object HAPIBiomeTags {
     //#region River Tags
     val RIVERS = create("rivers")
     val TROPICAL_RIVERS = create("tropical_rivers")
+    val FLORAL_RIVERS = create("floral_rivers")
+    val FORESTED_RIVERS = create("forested_rivers")
+    val BLACKWATER_RIVERS = create("blackwater_rivers")
     val COLD_RIVERS = create("cold_rivers")
 
     //#region Misc Biome Tags

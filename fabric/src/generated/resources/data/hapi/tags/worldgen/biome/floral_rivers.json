@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:flower_forest",
+    {
+      "id": "hybrid_aquatic:floral_river",
+      "required": false
+    }
+  ]
+}
