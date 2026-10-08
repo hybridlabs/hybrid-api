@@ -24,6 +24,38 @@
     {
       "id": "still_life:mediterranean_river",
       "required": false
+    },
+    {
+      "id": "hybrid_aquatic:tropical_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:forested_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:blackwater_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:floral_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:exotic_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:exotic_desert_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:exotic_badlands_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cold_river",
+      "required": false
     }
   ]
 }

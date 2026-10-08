@@ -235,6 +235,14 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "temperate_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "warm_temperate_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "mediterranean_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "tropical_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "forested_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "blackwater_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "floral_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_badlands_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "cold_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.TROPICAL_RIVERS)
             .addOptional(ResourceLocation.fromNamespaceAndPath("wythers", "jungle_river"))
@@ -266,6 +274,33 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
                 Biomes.DARK_FOREST
             )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "blackwater_river"))
+
+        getOrCreateTagBuilder(HAPIBiomeTags.EXOTIC_RIVERS)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
+
+        getOrCreateTagBuilder(HAPIBiomeTags.SAVANNA_RIVERS)
+            .add(
+                Biomes.SAVANNA,
+                Biomes.SAVANNA_PLATEAU,
+                Biomes.WINDSWEPT_SAVANNA,
+            )
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_river"))
+
+        getOrCreateTagBuilder(HAPIBiomeTags.DESERT_RIVERS)
+            .add(
+                Biomes.DESERT
+            )
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
+
+
+        getOrCreateTagBuilder(HAPIBiomeTags.BADLANDS_RIVERS)
+            .add(
+                Biomes.BADLANDS,
+                Biomes.ERODED_BADLANDS,
+                Biomes.WOODED_BADLANDS,
+            )
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_badlands_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.COLD_RIVERS)
             .add(Biomes.FROZEN_RIVER)
