@@ -32,6 +32,7 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
             .forceAddTag(BiomeTags.IS_DEEP_OCEAN)
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "sulfuric_caves"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "tropical_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "blackwater_river"))
 
         getOrCreateTagBuilder(BiomeTags.IS_OCEAN)
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "seagrass_bed"))
@@ -255,51 +256,26 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "tropical_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.FORESTED_RIVERS)
-            .add(
-                Biomes.FOREST,
-                Biomes.WINDSWEPT_FOREST,
-                Biomes.BIRCH_FOREST,
-                Biomes.OLD_GROWTH_BIRCH_FOREST,
-            )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "forested_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.FLORAL_RIVERS)
-            .add(
-                Biomes.FLOWER_FOREST
-            )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "floral_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.BLACKWATER_RIVERS)
-            .add(
-                Biomes.DARK_FOREST
-            )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "blackwater_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.EXOTIC_RIVERS)
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_badlands_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.SAVANNA_RIVERS)
-            .add(
-                Biomes.SAVANNA,
-                Biomes.SAVANNA_PLATEAU,
-                Biomes.WINDSWEPT_SAVANNA,
-            )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.DESERT_RIVERS)
-            .add(
-                Biomes.DESERT
-            )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
 
-
         getOrCreateTagBuilder(HAPIBiomeTags.BADLANDS_RIVERS)
-            .add(
-                Biomes.BADLANDS,
-                Biomes.ERODED_BADLANDS,
-                Biomes.WOODED_BADLANDS,
-            )
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_badlands_river"))
 
         getOrCreateTagBuilder(HAPIBiomeTags.COLD_RIVERS)
@@ -313,6 +289,9 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
         //#endregion
 
         //#region Misc Biome Tags
+        getOrCreateTagBuilder(HAPIBiomeTags.LUSH_DESERT)
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "lush_desert"))
+
         getOrCreateTagBuilder(HAPIBiomeTags.JUNGLE)
             .forceAddTag(BiomeTags.IS_JUNGLE)
             .addOptional(ResourceLocation.fromNamespaceAndPath("regions_unexplored", "eucalyptus_forest"))

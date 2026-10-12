@@ -77,6 +77,7 @@ object HAPIBiomeTags {
     val COLD_RIVERS = create("cold_rivers")
 
     //#region Misc Biome Tags
+    val LUSH_DESERT = create("lush_desert")
     val JUNGLE = create("jungle")
     val CHERRY = create("cherry")
     val CAVES = create("caves")

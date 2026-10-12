@@ -8,6 +8,10 @@
     {
       "id": "hybrid_aquatic:tropical_river",
       "required": false
+    },
+    {
+      "id": "hybrid_aquatic:blackwater_river",
+      "required": false
     }
   ]
 }

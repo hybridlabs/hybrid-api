@@ -1,6 +1,5 @@
 {
   "values": [
-    "minecraft:desert",
     {
       "id": "hybrid_aquatic:exotic_desert_river",
       "required": false
