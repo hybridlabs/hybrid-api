@@ -1,11 +1,11 @@
 package dev.hybridlabs.hapi.entity.base.aquatic
 
 import dev.hybridlabs.hapi.entity.ai.goal.aquatic.FishFollowGroupLeaderGoal
+import java.util.stream.Stream
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.VariantHolder
 import net.minecraft.world.level.Level
-import java.util.stream.Stream
 
 @Suppress("NAME_SHADOWING")
 open class BaseSchoolingFishEntity(type: EntityType<out BaseFishEntity>, world: Level) :
@@ -111,5 +111,10 @@ open class BaseSchoolingFishEntity(type: EntityType<out BaseFishEntity>, world: 
             .forEach { fishx ->
                 fishx!!.joinGroupOf(this)
             }
+    }
+
+    override fun push(entity: Entity) {
+        if (entity is BaseSchoolingFishEntity) return
+        super.push(entity)
     }
 }
