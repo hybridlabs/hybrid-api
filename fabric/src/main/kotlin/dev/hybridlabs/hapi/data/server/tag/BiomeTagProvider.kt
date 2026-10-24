@@ -58,6 +58,12 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
 
         getOrCreateTagBuilder(BiomeTags.IS_RIVER)
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "tropical_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_badlands_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "cold_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "forested_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "floral_river"))
         //#endregion
 
         //#region Arctic Ocean Tags
@@ -254,6 +260,9 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "steppe_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("still_life", "tropical_rainforest_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "tropical_river"))
+
+        getOrCreateTagBuilder(HAPIBiomeTags.PLAINS_RIVERS)
+            .add(Biomes.RIVER)
 
         getOrCreateTagBuilder(HAPIBiomeTags.FORESTED_RIVERS)
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "forested_river"))

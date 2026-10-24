@@ -69,6 +69,7 @@ object HAPIBiomeTags {
     val TROPICAL_RIVERS = create("tropical_rivers")
     val FLORAL_RIVERS = create("floral_rivers")
     val FORESTED_RIVERS = create("forested_rivers")
+    val PLAINS_RIVERS = create("plains_rivers")
     val BLACKWATER_RIVERS = create("blackwater_rivers")
     val EXOTIC_RIVERS = create("exotic_rivers")
     val SAVANNA_RIVERS = create("savanna_rivers")
