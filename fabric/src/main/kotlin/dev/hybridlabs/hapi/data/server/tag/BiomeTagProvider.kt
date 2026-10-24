@@ -62,6 +62,7 @@ class BiomeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFu
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_badlands_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "exotic_desert_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "cold_river"))
+            .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "blackwater_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "forested_river"))
             .addOptional(ResourceLocation.fromNamespaceAndPath("hybrid_aquatic", "floral_river"))
         //#endregion
