@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "hybrid_aquatic:cold_river",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cold_estuary",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:cold_trench",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:frozen_trench",
+      "required": false
+    }
+  ]
+}

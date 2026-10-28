@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import dev.hybridlabs.hapi.CommonClass
+import net.minecraft.world.item.Item
 
 object HAPIBiomeTags {
     //#region Compatibility Biome Tags
@@ -91,7 +92,23 @@ object HAPIBiomeTags {
     //#region Misc Tags
     val BOTTLE_SPAWN_BIOMES = create("bottle_spawn_biomes")
 
+    //#region Conventional Tags
+    val IS_OVERWORLD = createConventional("is_overworld")
+    val IS_SANDY = createConventional("is_sandy")
+    val IS_WET = createConventional("is_wet/is_overworld")
+    val IS_HOT = createConventional("is_hot/overworld")
+    val IS_COLD = createConventional("is_cold/overworld")
+    val IS_TEMPERATE = createConventional("is_temperate/overworld")
+    val IS_SHALLOW_OCEAN = createConventional("is_shallow_ocean")
+    val IS_DEEP_OCEAN = createConventional("is_deep_ocean")
+    val IS_AQUATIC = createConventional("is_aquatic")
+    val IS_CAVE = createConventional("is_cave")
+
     private fun create(id: String): TagKey<Biome> {
         return TagKey.create(Registries.BIOME, CommonClass.locate(id))
+    }
+
+    private fun createConventional(id: String): TagKey<Biome> {
+        return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("c", id))
     }
 }

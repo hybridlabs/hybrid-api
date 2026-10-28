@@ -1,5 +1,6 @@
 {
   "values": [
+    "#hapi:all_trenches",
     {
       "id": "hybrid_aquatic:tropical_deep_coral_reef",
       "required": false
