@@ -1,7 +1,7 @@
-package dev.hybridlabs.hapi.entity.ai.goal.flying.boids
+package dev.hybridlabs.hapi.entity.ai.goal.skies.boids
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseFlyingAnimal
-import dev.hybridlabs.hapi.entity.base.flying.BaseFlockingBirdEntity
+import dev.hybridlabs.hapi.entity.base.skies.BaseFlyingAnimal
+import dev.hybridlabs.hapi.entity.base.skies.BaseFlockingBirdEntity
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob

@@ -1,6 +1,6 @@
-package dev.hybridlabs.hapi.entity.base.flying
+package dev.hybridlabs.hapi.entity.base.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseRatiteEntity.Companion.BREEDING_INGREDIENT
+import dev.hybridlabs.hapi.entity.base.skies.BaseRatiteEntity.Companion.BREEDING_INGREDIENT
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent

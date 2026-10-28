@@ -1,6 +1,6 @@
-package dev.hybridlabs.birds.entity.ai.goal
+package dev.hybridlabs.hapi.entity.ai.goal.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseFlyingAnimal
+import dev.hybridlabs.hapi.entity.base.skies.BaseFlyingAnimal
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.ai.targeting.TargetingConditions

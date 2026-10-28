@@ -1,6 +1,6 @@
 package dev.hybridlabs.hapi.entity.ai.control.flying
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseFlyingAnimal
+import dev.hybridlabs.hapi.entity.base.skies.BaseFlyingAnimal
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.FlyingMoveControl

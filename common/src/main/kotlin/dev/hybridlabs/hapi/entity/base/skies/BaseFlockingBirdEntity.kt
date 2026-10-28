@@ -1,4 +1,4 @@
-package dev.hybridlabs.hapi.entity.base.flying
+package dev.hybridlabs.hapi.entity.base.skies
 
 import dev.hybridlabs.hapi.entity.ai.control.flying.SmoothFlyingMoveControl
 import net.minecraft.core.BlockPos

@@ -1,4 +1,4 @@
-package dev.hybridlabs.hapi.entity.base.flying
+package dev.hybridlabs.hapi.entity.base.skies
 
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.ItemTags

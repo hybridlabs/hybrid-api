@@ -1,13 +1,24 @@
-package dev.hybridlabs.hapi.entity.base.flying
+package dev.hybridlabs.hapi.entity.base.skies
 
 import dev.hybridlabs.hapi.entity.ai.control.flying.BirdFloatControl
-import dev.hybridlabs.birds.entity.ai.goal.FlyingAnimalFollowParentGoal
+import dev.hybridlabs.hapi.entity.ai.goal.skies.FlyingAnimalFollowParentGoal
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.tags.FluidTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.ai.goal.*
+import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.ai.control.LookControl
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.PanicGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation
+import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animation.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
@@ -15,17 +26,24 @@ import software.bernie.geckolib.animation.AnimationState
 import software.bernie.geckolib.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 
-@Suppress("LeakingThis", "DEPRECATION")
-open class BaseWadingBirdEntity(
-    type: EntityType<out BaseWadingBirdEntity>,
+@Suppress("LeakingThis")
+open class BaseAquaticBirdEntity(
+    type: EntityType<out BaseAquaticBirdEntity>,
     world: Level
 ) :
     BaseFlyingAnimal(type, world),
     GeoEntity {
 
-    init {
+    override fun createNavigation(level: Level): PathNavigation {
+        setPathfindingMalus(PathType.WATER, 0.0f)
+        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
+        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+
         moveControl = BirdFloatControl(this)
-        navigation = AmphibiousPathNavigation(this, world)
+        navigation = AmphibiousPathNavigation(this, level)
+        lookControl = LookControl(this)
+
+        return AmphibiousPathNavigation(this, level)
     }
 
     override fun registerGoals() {
@@ -40,7 +58,7 @@ open class BaseWadingBirdEntity(
         controllerRegistrar.add(
             AnimationController(
                 this, "Walk/Swim/Fly/Idle", 4
-            ) { state: AnimationState<BaseWadingBirdEntity> ->
+            ) { state: AnimationState<BaseAquaticBirdEntity> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     state.isMoving && isInWater -> state.setAndContinue(DefaultAnimations.SWIM)
@@ -52,28 +70,22 @@ open class BaseWadingBirdEntity(
         )
     }
 
-    override fun isAffectedByFluids(): Boolean {
-        return !onGround()
-    }
-
-    override fun getWaterline(): Float {
-        return 1.4f
-    }
-
-    override fun isInWater(): Boolean {
-        if (!super.isInWater()) return false
-
-        val fluidHeight = this.getFluidHeight(FluidTags.WATER)
-
-        return fluidHeight > (this.getWaterline() - 0.2f)
-    }
-
-    override fun maxUpStep(): Float {
-        return if (!super.isInWater()) 1.75f
-        else 1.25f
-    }
-
     companion object {
         val WATER_IDLE: RawAnimation = RawAnimation.begin().thenPlay("misc.water_idle")
+
+        @Suppress("UNUSED_PARAMETER")
+        fun canAquaticBirdSpawn(
+            type: EntityType<out BaseAquaticBirdEntity>,
+            level: LevelAccessor,
+            spawnReason: MobSpawnType,
+            pos: BlockPos,
+            random: RandomSource,
+        ): Boolean {
+            val mutable = pos.mutable()
+            do {
+                mutable.move(Direction.UP)
+            } while (level.getFluidState(mutable).`is`(FluidTags.WATER))
+            return level.getBlockState(mutable).isAir
+        }
     }
 }

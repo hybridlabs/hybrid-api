@@ -1,6 +1,6 @@
-package dev.hybridlabs.hapi.client.model.entity.flying
+package dev.hybridlabs.hapi.client.model.entity.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseFlyingAnimal
+import dev.hybridlabs.hapi.entity.base.skies.BaseWadingBirdEntity
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import software.bernie.geckolib.animation.AnimationState
@@ -8,7 +8,7 @@ import software.bernie.geckolib.constant.DataTickets
 import software.bernie.geckolib.model.GeoModel
 
 @Suppress("OVERRIDE_DEPRECATION")
-abstract class BaseFlyingAnimalEntityModel<T : BaseFlyingAnimal>(
+abstract class BaseWadingBirdEntityModel<T : BaseWadingBirdEntity>(
     private val namespace: String,
     private val id: String
 ) : GeoModel<T>() {

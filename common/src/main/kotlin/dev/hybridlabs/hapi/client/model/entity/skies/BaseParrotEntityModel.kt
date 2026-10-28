@@ -1,6 +1,6 @@
-package dev.hybridlabs.hapi.client.model.entity.flying
+package dev.hybridlabs.hapi.client.model.entity.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseParrotEntity
+import dev.hybridlabs.hapi.entity.base.skies.BaseParrotEntity
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import software.bernie.geckolib.animation.AnimationState

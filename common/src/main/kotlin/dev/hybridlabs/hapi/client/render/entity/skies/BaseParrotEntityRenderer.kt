@@ -1,6 +1,6 @@
-package dev.hybridlabs.hapi.client.render.entity.flying
+package dev.hybridlabs.hapi.client.render.entity.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseParrotEntity
+import dev.hybridlabs.hapi.entity.base.skies.BaseParrotEntity
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import software.bernie.geckolib.model.GeoModel
 import software.bernie.geckolib.renderer.GeoEntityRenderer

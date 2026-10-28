@@ -1,6 +1,6 @@
-package dev.hybridlabs.hapi.entity.base.flying
+package dev.hybridlabs.hapi.entity.base.skies
 
-import dev.hybridlabs.birds.entity.ai.goal.FlyingAnimalFollowParentGoal
+import dev.hybridlabs.hapi.entity.ai.goal.skies.FlyingAnimalFollowParentGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes

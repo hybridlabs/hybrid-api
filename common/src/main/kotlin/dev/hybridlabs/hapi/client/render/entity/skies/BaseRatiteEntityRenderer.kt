@@ -1,11 +1,11 @@
-package dev.hybridlabs.hapi.client.render.entity.flying
+package dev.hybridlabs.hapi.client.render.entity.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseFlyingAnimal
+import dev.hybridlabs.hapi.entity.base.skies.BaseRatiteEntity
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import software.bernie.geckolib.model.GeoModel
 import software.bernie.geckolib.renderer.GeoEntityRenderer
 
-open class BaseBirdEntityRenderer<T : BaseFlyingAnimal>(
+open class BaseRatiteEntityRenderer<T : BaseRatiteEntity>(
     context: EntityRendererProvider.Context,
     model: GeoModel<T>
 ) : GeoEntityRenderer<T>(context, model) {

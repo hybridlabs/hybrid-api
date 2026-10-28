@@ -1,6 +1,6 @@
-package dev.hybridlabs.hapi.client.model.entity.flying
+package dev.hybridlabs.hapi.client.model.entity.skies
 
-import dev.hybridlabs.hapi.entity.base.flying.BaseWadingBirdEntity
+import dev.hybridlabs.hapi.entity.base.skies.BaseRatiteEntity
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import software.bernie.geckolib.animation.AnimationState
@@ -8,7 +8,7 @@ import software.bernie.geckolib.constant.DataTickets
 import software.bernie.geckolib.model.GeoModel
 
 @Suppress("OVERRIDE_DEPRECATION")
-abstract class BaseWadingBirdEntityModel<T : BaseWadingBirdEntity>(
+abstract class BaseRatiteEntityModel<T: BaseRatiteEntity>(
     private val namespace: String,
     private val id: String
 ) : GeoModel<T>() {
@@ -51,12 +51,20 @@ abstract class BaseWadingBirdEntityModel<T : BaseWadingBirdEntity>(
 
     override fun setCustomAnimations(animatable: T, instanceId: Long, animationState: AnimationState<T>) {
         val head = animationProcessor.getBone("head")
+        val neck = animationProcessor.getBone("neck")
 
         if (head != null) {
             val entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA)
 
             head.rotX = entityData!!.headPitch() * Mth.DEG_TO_RAD
             head.rotY = entityData.netHeadYaw() * Mth.DEG_TO_RAD
+        }
+
+        if (neck != null) {
+            val entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA)
+
+            neck.rotX = (entityData!!.headPitch() * Mth.DEG_TO_RAD) / 2
+            neck.rotY = (entityData.netHeadYaw() * Mth.DEG_TO_RAD) / 2
         }
     }
 }
