@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation
 import net.minecraft.world.entity.ai.navigation.PathNavigation
+import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -44,7 +45,7 @@ open class BaseFlyingAnimal(
     type: EntityType<out BaseFlyingAnimal>,
     world: Level,
 ) :
-    AgeableMob(type, world),
+    Animal(type, world),
     GeoEntity {
     var inLove = 0
     private var loveCause: UUID? = null
@@ -52,7 +53,7 @@ open class BaseFlyingAnimal(
     var fromCreatureNet = false
     var isClipped: Boolean = false
 
-     override fun createNavigation(level: Level): PathNavigation {
+    override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(PathType.WATER, 0.0f)
         setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
         setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
@@ -201,7 +202,7 @@ open class BaseFlyingAnimal(
     }
     //#endregion
 
-    open fun isFood(stack: ItemStack): Boolean {
+    override fun isFood(stack: ItemStack): Boolean {
         return stack.`is`(Items.WHEAT_SEEDS)
     }
 
@@ -229,40 +230,13 @@ open class BaseFlyingAnimal(
         return super.mobInteract(player, hand)
     }
 
-    protected open fun usePlayerItem(player: Player, hand: InteractionHand?, stack: ItemStack) {
-        if (!player.abilities.instabuild) {
-            stack.shrink(1)
-        }
-    }
-
-    open fun canFallInLove(): Boolean {
-        return this.inLove <= 0
-    }
-
-    fun setInLove(player: Player?) {
-        this.inLove = 600
-        if (player != null) {
-            this.loveCause = player.getUUID()
-        }
-
-        this.level().broadcastEntityEvent(this, 18.toByte())
-    }
-
-    fun isInLove(): Boolean {
-        return this.inLove > 0
-    }
-
-    fun resetLove() {
-        this.inLove = 0
-    }
-
-    fun canMate(otherWaterAnimal: BaseFlyingAnimal): Boolean {
-        return if (otherWaterAnimal === this) {
+    fun canMate(otherFlyingAnimal: BaseFlyingAnimal): Boolean {
+        return if (otherFlyingAnimal === this) {
             false
-        } else if (otherWaterAnimal.javaClass != this.javaClass) {
+        } else if (otherFlyingAnimal.javaClass != this.javaClass) {
             false
         } else {
-            this.isInLove() && otherWaterAnimal.isInLove()
+            this.isInLove && otherFlyingAnimal.isInLove
         }
     }
 
@@ -323,8 +297,8 @@ open class BaseFlyingAnimal(
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
         return !isPersistenceRequired &&
-                !this.fromCreatureNet &&
-                !this.hasCustomName()
+            !this.fromCreatureNet &&
+            !this.hasCustomName()
     }
 
     override fun getMaxSpawnClusterSize(): Int {
@@ -365,8 +339,8 @@ open class BaseFlyingAnimal(
             random: RandomSource,
         ): Boolean {
             return isBrightEnoughToSpawn(level, pos) &&
-                    level.getBlockState(pos.below()).isSolid &&
-                    level.canSeeSky(pos)
+                level.getBlockState(pos.below()).isSolid &&
+                level.canSeeSky(pos)
         }
     }
 }
