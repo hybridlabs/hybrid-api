@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
+import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
@@ -26,6 +27,7 @@ import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.BlockPathTypes
 import net.minecraft.world.phys.Vec3
@@ -319,6 +321,21 @@ open class BaseFlyingAnimal(
 
     override fun getAnimatableInstanceCache(): AnimatableInstanceCache {
         return factory
+    }
+
+    override fun finalizeSpawn(
+        world: ServerLevelAccessor,
+        difficulty: DifficultyInstance,
+        spawnReason: MobSpawnType,
+        entityData: SpawnGroupData?,
+        persistentData: CompoundTag?,
+    ): SpawnGroupData? {
+        // Match vanilla animals: birds spawned during world generation are permanent
+        if (spawnReason == MobSpawnType.CHUNK_GENERATION) {
+            this.setPersistenceRequired()
+        }
+
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, persistentData)
     }
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
