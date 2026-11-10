@@ -133,7 +133,10 @@ open class BaseParrotEntity(
     }
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
-        return !this.hasCustomName()
+        return !isPersistenceRequired &&
+                !this.hasCustomName() &&
+                !this.isLeashed &&
+                !this.isTame
     }
 
     override fun getMaxSpawnClusterSize(): Int {
