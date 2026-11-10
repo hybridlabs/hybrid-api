@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Birds spawn during world generation like vanilla animals (registered in the CREATURE spawn group) and then stay there
 - Leashed, tamed, bred and creature-net birds are no longer despawned by distance check
   (leashed birds now count as persistent)
 
