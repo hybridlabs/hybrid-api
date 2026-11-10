@@ -298,7 +298,8 @@ open class BaseFlyingAnimal(
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
         return !isPersistenceRequired &&
             !this.fromCreatureNet &&
-            !this.hasCustomName()
+            !this.hasCustomName() &&
+            !this.isLeashed
     }
 
     override fun getMaxSpawnClusterSize(): Int {
