@@ -9,9 +9,9 @@ import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 
@@ -39,8 +39,8 @@ open class BaseWadingBirdEntity(
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
             AnimationController(
-                this, "Walk/Swim/Fly/Idle", 4
-            ) { state: AnimationState<BaseWadingBirdEntity> ->
+                 "Walk/Swim/Fly/Idle", 4
+            ) { state: AnimationTest<BaseWadingBirdEntity> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     state.isMoving && isInWater -> state.setAndContinue(DefaultAnimations.SWIM)

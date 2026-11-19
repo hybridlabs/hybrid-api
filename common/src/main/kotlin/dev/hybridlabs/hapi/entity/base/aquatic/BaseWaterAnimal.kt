@@ -22,15 +22,19 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.level.gamerules.GameRules
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animation.RawAnimation
 import java.util.*
+import dev.hybridlabs.hapi.entity.base.VariantHolder
+import net.minecraft.core.UUIDUtil
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseWaterAnimal protected constructor(
@@ -60,12 +64,12 @@ abstract class BaseWaterAnimal protected constructor(
         return WaterBoundPathNavigation(this, level)
     }
 
-    override fun customServerAiStep() {
+    override fun customServerAiStep(level: ServerLevel) {
         if (this.getAge() != 0) {
             this.inLove = 0
         }
 
-        super.customServerAiStep()
+        super.customServerAiStep(level)
     }
 
     override fun removeWhenFarAway(distanceSquared: Double): Boolean {
@@ -93,7 +97,7 @@ abstract class BaseWaterAnimal protected constructor(
 
 
         prevRoll = currentRoll
-        var targetRoll = ((this.yRot - this.yRotO) * 0.1f).coerceIn(-0.45f, 0.45f)
+        var targetRoll = ((this.getYRot() - this.yRotO) * 0.1f).coerceIn(-0.45f, 0.45f)
         targetRoll = -targetRoll
         currentRoll += (targetRoll - currentRoll) * 0.05f
 
@@ -121,7 +125,7 @@ abstract class BaseWaterAnimal protected constructor(
             }
         }
 
-        if (!this.level().isClientSide && this.isAlive && this.isEffectiveAi) {
+        if (!this.level().isClientSide() && this.isAlive && this.isEffectiveAi) {
             ++this.ticksSinceEaten
 
             val itemstack = this.getItemBySlot(EquipmentSlot.MAINHAND)
@@ -135,7 +139,7 @@ abstract class BaseWaterAnimal protected constructor(
                 if (this.ticksSinceEaten > 60) {
 
                     if (this.random.nextFloat() < 0.2f) {
-                        this.playSound(this.getEatingSound(itemstack), 1.0f, 1.0f)
+                        this.playSound(SoundEvents.GENERIC_EAT.value(), 1.0f, 1.0f)
                         this.level().broadcastEntityEvent(this, 45.toByte())
                     }
                 }
@@ -177,16 +181,7 @@ abstract class BaseWaterAnimal protected constructor(
         return false
     }
 
-    override fun canTakeItem(itemstack: ItemStack): Boolean {
-        val equipmentSlot = getEquipmentSlotForItem(itemstack)
-        return if (!this.getItemBySlot(equipmentSlot).isEmpty) {
-            false
-        } else {
-            equipmentSlot == EquipmentSlot.MAINHAND && super.canTakeItem(itemstack)
-        }
-    }
-
-    override fun pickUpItem(itemEntity: ItemEntity) {
+    override fun pickUpItem(level: ServerLevel, itemEntity: ItemEntity) {
         if (this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty) {
             val itemstack = itemEntity.item
             if (this.canHoldItem(itemstack)) {
@@ -208,13 +203,13 @@ abstract class BaseWaterAnimal protected constructor(
                         (this.random.nextFloat().toDouble() - 0.5) * 0.1,
                         Math.random() * 0.1 + 0.1,
                         0.0
-                    )).xRot(-this.xRot * (Math.PI.toFloat() / 180f))
-                        .yRot(-this.yRot * (Math.PI.toFloat() / 180f))
+                    )).xRot(-this.getXRot() * (Math.PI.toFloat() / 180f))
+                        .yRot(-this.getYRot() * (Math.PI.toFloat() / 180f))
                     this.level().addParticle(
                         ItemParticleOption(ParticleTypes.ITEM, itemstack),
-                        this.x + this.lookAngle.x / 2.0,
-                        this.y,
-                        this.z + this.lookAngle.z / 2.0,
+                        this.getX() + this.getLookAngle().x / 2.0,
+                        this.getY(),
+                        this.getZ() + this.getLookAngle().z / 2.0,
                         vec3.x,
                         vec3.y + 0.05,
                         vec3.z
@@ -243,8 +238,8 @@ abstract class BaseWaterAnimal protected constructor(
         }
     }
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        if (this.isInvulnerableTo(source)) {
+    override fun hurtServer(level: ServerLevel, source: DamageSource, amount: Float): Boolean {
+        if (this.isInvulnerableTo(level, source)) {
             return false
         }
 
@@ -253,18 +248,18 @@ abstract class BaseWaterAnimal protected constructor(
         }
 
         this.inLove = 0
-        return super.hurt(source, amount)
+        return super.hurtServer(level, source, amount)
     }
 
     //#region Drops
-    override fun dropFromLootTable(source: DamageSource, causedByPlayer: Boolean) {
+    override fun dropFromLootTable(level: ServerLevel, source: DamageSource, causedByPlayer: Boolean) {
         val attacker = source.directEntity
         if (attacker !is BaseWaterAnimal) {
-            super.dropFromLootTable(source, causedByPlayer)
+            super.dropFromLootTable(level, source, causedByPlayer)
         }
     }
 
-    override fun getBaseExperienceReward(): Int {
+    override fun getBaseExperienceReward(level: ServerLevel): Int {
         return 1 + this.level().random.nextInt(3)
     }
     //#endregion
@@ -343,6 +338,10 @@ abstract class BaseWaterAnimal protected constructor(
         entityData.set(PERFORMING, performing)
     }
 
+    fun isPerformingTrick(): Boolean {
+        return entityData.get(PERFORMING)
+    }
+
     fun startPerformingTrick() {
         setPerformingTrick(true)
     }
@@ -364,39 +363,37 @@ abstract class BaseWaterAnimal protected constructor(
         builder.define(ATTEMPT_ATTACK, false)
     }
 
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
-        compound.putInt(SIZE_KEY, size)
-        compound.putInt(HUNGER_KEY, hunger)
-        compound.putInt(MOISTNESS_KEY, moistness)
-        compound.putBoolean("FromFishingNet", fromCreatureNet)
-        compound.putInt("InLove", this.inLove)
-        compound.putInt("AttackTick", this.attackTick)
-        compound.putBoolean("Sitting", isSitting())
-        compound.putBoolean("Feeding", isFeeding())
-        this.setGrazing(compound.getBoolean("Grazing"))
-        this.setDigging(compound.getBoolean("Digging"))
-        this.setPerformingTrick(compound.getBoolean("Performing"))
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putInt(SIZE_KEY, size)
+        output.putInt(HUNGER_KEY, hunger)
+        output.putInt(MOISTNESS_KEY, moistness)
+        output.putBoolean("FromFishingNet", fromCreatureNet)
+        output.putInt("InLove", this.inLove)
+        output.putInt("AttackTick", this.attackTick)
+        output.putBoolean("Sitting", isSitting())
+        output.putBoolean("Feeding", isFeeding())
+        output.putBoolean("Grazing", isGrazing())
+        output.putBoolean("Digging", isDigging())
+        output.putBoolean("Performing", isPerformingTrick())
 
-        if (this.loveCause != null) {
-            compound.putUUID("LoveCause", this.loveCause)
-        }
+        this.loveCause?.let { output.store("LoveCause", UUIDUtil.CODEC, it) }
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
-        size = compound.getInt(SIZE_KEY)
-        hunger = compound.getInt(HUNGER_KEY)
-        moistness = compound.getInt(MOISTNESS_KEY)
-        fromCreatureNet = compound.getBoolean("FromFishingNet")
-        this.inLove = compound.getInt("InLove")
-        this.loveCause = if (compound.hasUUID("LoveCause")) compound.getUUID("LoveCause") else null
-        this.attackTick = compound.getInt("AttackTick")
-        this.setSitting(compound.getBoolean("Sitting"))
-        this.setFeeding(compound.getBoolean("Feeding"))
-        this.setGrazing(compound.getBoolean("Grazing"))
-        this.setDigging(compound.getBoolean("Digging"))
-        this.setPerformingTrick(compound.getBoolean("Performing"))
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        size = input.getIntOr(SIZE_KEY, 0)
+        hunger = input.getIntOr(HUNGER_KEY, 0)
+        moistness = input.getIntOr(MOISTNESS_KEY, 0)
+        fromCreatureNet = input.getBooleanOr("FromFishingNet", false)
+        this.inLove = input.getIntOr("InLove", 0)
+        this.loveCause = input.read("LoveCause", UUIDUtil.CODEC).orElse(null)
+        this.attackTick = input.getIntOr("AttackTick", 0)
+        this.setSitting(input.getBooleanOr("Sitting", false))
+        this.setFeeding(input.getBooleanOr("Feeding", false))
+        this.setGrazing(input.getBooleanOr("Grazing", false))
+        this.setDigging(input.getBooleanOr("Digging", false))
+        this.setPerformingTrick(input.getBooleanOr("Performing", false))
     }
     //#endregion
 
@@ -411,21 +408,21 @@ abstract class BaseWaterAnimal protected constructor(
             this.setPersistenceRequired()
             val i = this.getAge()
 
-            if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
+            if (!this.level().isClientSide() && i == 0 && this.canFallInLove()) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.setInLove(player)
                 this.setPersistenceRequired()
-                return InteractionResult.SUCCESS
+                return InteractionResult.SUCCESS_SERVER
             }
 
             if (this.isBaby) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true)
                 this.setPersistenceRequired()
-                return InteractionResult.sidedSuccess(this.level().isClientSide)
+                return if (this.level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
             }
 
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 return InteractionResult.CONSUME
             }
         }
@@ -433,8 +430,8 @@ abstract class BaseWaterAnimal protected constructor(
         return super.mobInteract(player, hand)
     }
 
-    protected open fun usePlayerItem(player: Player, hand: InteractionHand?, stack: ItemStack) {
-        if (!player.abilities.instabuild) {
+    override fun usePlayerItem(player: Player, hand: InteractionHand, stack: ItemStack) {
+        if (!player.getAbilities().instabuild) {
             stack.shrink(1)
         }
 
@@ -479,7 +476,7 @@ abstract class BaseWaterAnimal protected constructor(
         mate.setPersistenceRequired()
         baby.setPersistenceRequired()
         baby.isBaby = true
-        baby.moveTo(this.x, this.y, this.z, 0.0f, 0.0f)
+        baby.snapTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f)
 
         if (this is VariantHolder<*> &&
             mate is VariantHolder<*> &&
@@ -496,7 +493,7 @@ abstract class BaseWaterAnimal protected constructor(
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         this.size = this.random.nextIntBetweenInclusive(getMinSize(), getMaxSize())
@@ -510,13 +507,13 @@ abstract class BaseWaterAnimal protected constructor(
         this.resetLove()
         waterAnimal.resetLove()
         level.broadcastEntityEvent(this, 18.toByte())
-        if (level.gameRules.getBoolean(GameRules.RULE_DOMOBLOOT)) {
+        if (level.getGameRules().get(GameRules.MOB_DROPS)) {
             level.addFreshEntity(
                 ExperienceOrb(
                     level,
-                    this.x,
-                    this.y,
-                    this.z,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
                     this.getRandom().nextInt(7) + 1
                 )
             )
@@ -531,14 +528,14 @@ abstract class BaseWaterAnimal protected constructor(
     }
 
     protected open fun handleAirSupply(air: Int) {
-        if (this.isAlive && !this.isInWaterOrBubble) {
-            this.airSupply -= 1
-            if (this.airSupply == -20) {
-                this.airSupply = 0
+        if (this.isAlive && !this.isInWater) {
+            this.setAirSupply(this.getAirSupply() - 1)
+            if (this.getAirSupply() == -20) {
+                this.setAirSupply(0)
                 this.hurt(this.damageSources().drown(), 2.0f)
             }
         } else {
-            this.airSupply = maxAirSupply
+            this.setAirSupply(this.getMaxAirSupply())
         }
     }
 

@@ -28,7 +28,7 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
@@ -69,49 +69,49 @@ open class BaseDolphinEntity(type: EntityType<out BaseDolphinEntity>, world: Lev
         if (this.isNoAi) {
             this.airSupply = this.maxAirSupply
         } else {
-            if (this.isInWaterRainOrBubble) {
+            if (this.isInWaterOrRain) {
                 moistness = getMaxMoistness()
             } else {
                 moistness -= 1
                 if (moistness <= 0) {
                     this.hurt(this.damageSources().dryOut(), 2.0f)
-                    this.xRot = 0.0f
-                    this.yRot = 0.0f
+                    this.setXRot(0.0f)
+                    this.setYRot(0.0f)
                 }
 
                 if (this.onGround()) {
-                    this.deltaMovement = this.deltaMovement.add(
+                    this.setDeltaMovement( this.getDeltaMovement().add(
                         ((this.random.nextFloat() * 2.0f - 1.0f) * 0.2f).toDouble(),
                         0.5,
                         ((this.random.nextFloat() * 2.0f - 1.0f) * 0.2f).toDouble()
-                    )
-                    this.yRot = this.random.nextFloat() * 360.0f
+                    ))
+                    this.setYRot(this.random.nextFloat() * 360.0f)
                     this.setOnGround(false)
-                    this.hasImpulse = true
+                    this.needsSync = true
                 }
             }
 
-            if (this.level().isClientSide && this.isInWater && this.deltaMovement.lengthSqr() > 0.03) {
+            if (this.level().isClientSide() && this.isInWater && this.getDeltaMovement().lengthSqr() > 0.03) {
                 val vec3 = this.getViewVector(0.0f)
-                val f = Mth.cos(this.yRot * (Math.PI.toFloat() / 180f)) * 0.3f
-                val f1 = Mth.sin(this.yRot * (Math.PI.toFloat() / 180f)) * 0.3f
+                val f = Mth.cos((this.getYRot() * (Math.PI.toFloat() / 180f)).toDouble()) * 0.3f
+                val f1 = Mth.sin((this.getYRot() * (Math.PI.toFloat() / 180f)).toDouble()) * 0.3f
                 val f2 = 1.2f - this.random.nextFloat() * 0.7f
 
                 for (i in 0..1) {
                     this.level().addParticle(
                         ParticleTypes.DOLPHIN,
-                        this.x - vec3.x * f2.toDouble() + f.toDouble(),
-                        this.y - vec3.y,
-                        this.z - vec3.z * f2.toDouble() + f1.toDouble(),
+                        this.getX() - vec3.x * f2.toDouble() + f.toDouble(),
+                        this.getY() - vec3.y,
+                        this.getZ() - vec3.z * f2.toDouble() + f1.toDouble(),
                         0.0,
                         0.0,
                         0.0
                     )
                     this.level().addParticle(
                         ParticleTypes.DOLPHIN,
-                        this.x - vec3.x * f2.toDouble() - f.toDouble(),
-                        this.y - vec3.y,
-                        this.z - vec3.z * f2.toDouble() - f1.toDouble(),
+                        this.getX() - vec3.x * f2.toDouble() - f.toDouble(),
+                        this.getY() - vec3.y,
+                        this.getZ() - vec3.z * f2.toDouble() - f1.toDouble(),
                         0.0,
                         0.0,
                         0.0
@@ -140,8 +140,8 @@ open class BaseDolphinEntity(type: EntityType<out BaseDolphinEntity>, world: Lev
     override fun travel(travelVector: Vec3) {
         if (this.isEffectiveAi && this.isInWater) {
             this.moveRelative(this.speed, travelVector)
-            this.move(MoverType.SELF, this.deltaMovement)
-            this.deltaMovement = deltaMovement.scale(0.9)
+            this.move(MoverType.SELF, this.getDeltaMovement())
+            this.setDeltaMovement( deltaMovement.scale(0.9))
         } else {
             super.travel(travelVector)
         }
@@ -150,12 +150,11 @@ open class BaseDolphinEntity(type: EntityType<out BaseDolphinEntity>, world: Lev
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         this.airSupply = this.maxAirSupply
-        this.yRot = 0.0f
-
+        this.setYRot(0.0f)
         if (this.random.nextFloat() < 0.25f) {
             this.setAge(-6000)
         }
@@ -169,7 +168,7 @@ open class BaseDolphinEntity(type: EntityType<out BaseDolphinEntity>, world: Lev
 
     //#region Animations
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
-        controllers.add(DefaultAnimations.genericSwimIdleController(this))
+        controllers.add(DefaultAnimations.genericSwimIdleController<BaseDolphinEntity>())
     }
 
     override fun getAnimatableInstanceCache(): AnimatableInstanceCache {
@@ -186,7 +185,7 @@ open class BaseDolphinEntity(type: EntityType<out BaseDolphinEntity>, world: Lev
         fun canSpawn(
             type: EntityType<out BaseDolphinEntity>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

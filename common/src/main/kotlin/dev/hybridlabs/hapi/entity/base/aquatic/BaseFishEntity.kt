@@ -27,11 +27,11 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
 import software.bernie.geckolib.animation.AnimationController.AnimationStateHandler
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
+import software.bernie.geckolib.animation.state.AnimationTest
+import software.bernie.geckolib.animation.`object`.PlayState
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -71,7 +71,7 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
 
     //#region Moistness & Air
     override fun handleAirSupply(air: Int) {
-        if (isInWaterOrBubble) {
+        if (isInWater) {
             airSupply = maxAirSupply
         }
     }
@@ -84,8 +84,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
     //#region Animations
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
-            AnimationController(this, "Run/Swim/Idle", 4) { state: AnimationState<BaseFishEntity> ->
-                if (this.isInWaterOrBubble && state.isMoving) state.setAndContinue(
+            AnimationController( "Run/Swim/Idle", 4) { state: AnimationTest<BaseFishEntity> ->
+                if (this.isInWater && state.isMoving) state.setAndContinue(
                     if (this.isSprinting) DefaultAnimations.RUN else DefaultAnimations.SWIM
                 )
                 else state.setAndContinue(
@@ -96,8 +96,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
 
         controllers.add(
             AnimationController(
-                this, "sit_controller",
-                AnimationStateHandler { state: AnimationState<BaseFishEntity> ->
+                 "sit_controller",
+                AnimationStateHandler { state: AnimationTest<BaseFishEntity> ->
                     if (this.isSitting())
                         return@AnimationStateHandler state.setAndContinue(DefaultAnimations.SIT)
                     PlayState.STOP
@@ -107,8 +107,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
 
         controllers.add(
             AnimationController(
-                this, "graze_controller",
-                AnimationStateHandler { state: AnimationState<BaseFishEntity> ->
+                 "graze_controller",
+                AnimationStateHandler { state: AnimationTest<BaseFishEntity> ->
                     if (this.isGrazing())
                         return@AnimationStateHandler state.setAndContinue(GRAZE_ANIMATION)
                     PlayState.STOP
@@ -117,8 +117,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
         )
 
         controllers.add(
-            AnimationController(this, "flop_controller", 4) { state ->
-                if (!this.isInWaterOrBubble && this.moistness < 590) {
+            AnimationController( "flop_controller", 4) { state: AnimationTest<BaseFishEntity> ->
+                if (!this.isInWater && this.moistness < 590) {
                     return@AnimationController state.setAndContinue(FLOP_ANIMATION)
                 }
 
@@ -127,17 +127,17 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
         )
 
         controllers.add(
-            AnimationController(this, "trick_controller") { PlayState.STOP }
+            AnimationController( "trick_controller") { _: AnimationTest<BaseFishEntity> -> PlayState.STOP }
                 .triggerableAnim("trick", TRICK_ANIMATION)
         )
 
         controllers.add(
-            AnimationController(this, "eat_controller") { PlayState.STOP }
+            AnimationController( "eat_controller") { _: AnimationTest<BaseFishEntity> -> PlayState.STOP }
                 .triggerableAnim("eat", EAT_ANIMATION)
         )
 
         controllers.add(
-            DefaultAnimations.genericAttackAnimation(this, DefaultAnimations.ATTACK_BITE)
+            DefaultAnimations.genericAttackAnimation<BaseFishEntity>(DefaultAnimations.ATTACK_BITE)
         )
     }
 
@@ -187,8 +187,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
             if (moistness <= -20) {
                 moistness = 0
                 hurt(this.damageSources().dryOut(), 2.0f)
-                this.xRot = 0.0f
-                this.yRot = 0.0f
+                this.setXRot(0.0f)
+                this.setYRot(0.0f)
                 currentRoll = Mth.lerp(0.2f, currentRoll, 0f)
             }
         }
@@ -197,8 +197,8 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
     override fun travel(travelVector: Vec3) {
         if (this.isEffectiveAi && this.isInWater) {
             this.moveRelative(this.speed, travelVector)
-            this.move(MoverType.SELF, this.deltaMovement)
-            this.deltaMovement = deltaMovement.scale(0.9)
+            this.move(MoverType.SELF, this.getDeltaMovement())
+            this.setDeltaMovement( this.getDeltaMovement().scale(0.9))
         } else {
             super.travel(travelVector)
         }
@@ -206,19 +206,19 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
 
     override fun aiStep() {
         if (this.shouldFlopOnLand() && !this.isInWater && this.onGround() && this.verticalCollision) {
-            this.deltaMovement = deltaMovement.add(
-                ((random.nextFloat() * 2.0f - 1.0f) * 0.05f).toDouble(), 0.4000000059604645,
-                ((random.nextFloat() * 2.0f - 1.0f) * 0.05f).toDouble()
-            )
+            this.setDeltaMovement( this.getDeltaMovement().add(
+                ((this.random.nextFloat() * 2.0f - 1.0f) * 0.05f).toDouble(), 0.4000000059604645,
+                ((this.random.nextFloat() * 2.0f - 1.0f) * 0.05f).toDouble()
+            ))
             this.setOnGround(false)
-            this.hasImpulse = true
+            this.needsSync = true
             this.playSound(this.flopSound, this.soundVolume, this.voicePitch)
         }
         super.aiStep()
     }
 
-    override fun doHurtTarget(target: Entity): Boolean {
-        if (super.doHurtTarget(target)) {
+    override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
+        if (super.doHurtTarget(level, target)) {
             playSound(SoundEvents.FOX_BITE, 1.0F, 1.0F)
             return true
         } else {
@@ -236,7 +236,7 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
         fun canShallowSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -249,7 +249,7 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
         fun canSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -262,12 +262,12 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
         fun canNightSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
             val seaLevel = world.level.chunkSource.generator.seaLevel
-            return !world.level.isDay &&
+            return !world.level.isBrightOutside &&
                     return pos.y in (seaLevel - 32)..(seaLevel - 8) &&
                             world.isWaterAt(pos) &&
                             WorldHelper.canSeeSkyFromBelowWater(world, pos)
@@ -276,7 +276,7 @@ abstract class BaseFishEntity(type: EntityType<out BaseFishEntity>, world: Level
         fun canDeepSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

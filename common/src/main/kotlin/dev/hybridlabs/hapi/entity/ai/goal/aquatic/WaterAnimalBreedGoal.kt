@@ -2,7 +2,7 @@ package dev.hybridlabs.hapi.entity.ai.goal.aquatic
 
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.VariantHolder
+import dev.hybridlabs.hapi.entity.base.VariantHolder
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.level.Level
@@ -18,7 +18,7 @@ open class WaterAnimalBreedGoal @JvmOverloads constructor(
     private var loveTime = 0
 
     init {
-        this.flags = EnumSet.of<Flag?>(Flag.MOVE, Flag.LOOK)
+        this.flags = EnumSet.of<Flag>(Flag.MOVE, Flag.LOOK)
     }
 
     override fun canUse(): Boolean {
@@ -61,7 +61,7 @@ open class WaterAnimalBreedGoal @JvmOverloads constructor(
 
     private val freePartner: BaseWaterAnimal?
         get() {
-            val list: MutableList<out BaseWaterAnimal> = this.level.getNearbyEntities(
+            val list: MutableList<out BaseWaterAnimal> = getServerLevel(this.waterAnimal).getNearbyEntities(
                 this.partnerClass,
                 PARTNER_TARGETING,
                 this.waterAnimal,

@@ -14,7 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.MoverType
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl
@@ -27,10 +27,10 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.EasingType
+import software.bernie.geckolib.animation.state.AnimationTest
+import software.bernie.geckolib.animation.`object`.EasingType
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -111,7 +111,7 @@ open class BaseJellyfishEntity(
         this.prevTentacleAngle = this.tentacleAngle
         this.thrustTimer += this.thrustTimerSpeed
         if (thrustTimer.toDouble() > 6.283185307179586) {
-            if (level().isClientSide) {
+            if (level().isClientSide()) {
                 this.thrustTimer = 6.2831855f
             } else {
                 this.thrustTimer -= 6.2831855f
@@ -123,10 +123,10 @@ open class BaseJellyfishEntity(
             }
         }
 
-        if (this.isInWaterOrBubble) {
+        if (this.isInWater) {
             if (this.thrustTimer < 3.1415927f) {
                 val f = this.thrustTimer / 3.1415927f
-                this.tentacleAngle = Mth.sin(f * f * 3.1415927f) * 3.1415927f * 0.25f
+                this.tentacleAngle = Mth.sin((f * f * 3.1415927f).toDouble()) * 3.1415927f * 0.25f
                 if (f.toDouble() > 0.75) {
                     this.swimVelocityScale = 0.5f
                     this.turningSpeed = 0.5f
@@ -139,7 +139,7 @@ open class BaseJellyfishEntity(
                 this.turningSpeed *= 0.99f
             }
 
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 this.setDeltaMovement(
                     (this.swimX * this.swimVelocityScale).toDouble(),
                     (this.swimY * this.swimVelocityScale).toDouble(),
@@ -147,17 +147,17 @@ open class BaseJellyfishEntity(
                 )
             }
 
-            val vec3d = this.deltaMovement
+            val vec3d = this.getDeltaMovement()
             val d = vec3d.horizontalDistance()
             val targetYaw = -(Mth.atan2(vec3d.x, vec3d.z).toFloat()) * (180f / Math.PI.toFloat())
             val deltaYaw = Mth.wrapDegrees(targetYaw - this.yBodyRot)
             this.yBodyRot += deltaYaw * 0.1f
             this.yHeadRot = this.yBodyRot
-            this.yRot = this.yBodyRot
+            this.setYRot(this.yBodyRot)
             this.tiltAngle += (-(Mth.atan2(d, vec3d.y).toFloat()) * 57.295776f - this.tiltAngle) * 0.1f
         } else {
-            this.tentacleAngle = Mth.abs(Mth.sin(this.thrustTimer)) * 3.1415927f * 0.25f
-            if (!level().isClientSide) {
+            this.tentacleAngle = Mth.abs(Mth.sin(this.thrustTimer.toDouble())) * 3.1415927f * 0.25f
+            if (!level().isClientSide()) {
                 var e = deltaMovement.y
                 if (this.hasEffect(MobEffects.LEVITATION)) {
                     e = 0.05 * (getEffect(MobEffects.LEVITATION)!!.amplifier + 1).toDouble()
@@ -172,8 +172,8 @@ open class BaseJellyfishEntity(
         }
     }
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        if (super.hurt(source, amount)) {
+    override fun hurtServer(level: ServerLevel, source: DamageSource, amount: Float): Boolean {
+        if (super.hurtServer(level, source, amount)) {
 
             val attacker = source.directEntity
             if (attacker is Player && isVenomous && attacker.mainHandItem.isEmpty && !attacker.isPassenger) {
@@ -195,7 +195,7 @@ open class BaseJellyfishEntity(
     }
 
     override fun travel(movementInput: Vec3) {
-        this.move(MoverType.SELF, this.deltaMovement)
+        this.move(MoverType.SELF, this.getDeltaMovement())
     }
 
     override fun handleEntityEvent(id: Byte) {
@@ -229,9 +229,9 @@ open class BaseJellyfishEntity(
                 !jellyfish.wasTouchingWater ||
                 !jellyfish.hasSwimmingVector()) {
                 val f = jellyfish.random.nextFloat() * 6.2831855f
-                val g = Mth.cos(f) * 0.2f
+                val g = Mth.cos(f.toDouble()) * 0.2f
                 val h = -0.1f + jellyfish.random.nextFloat() * 0.2f
-                val j = Mth.sin(f) * 0.2f
+                val j = Mth.sin(f.toDouble()) * 0.2f
                 jellyfish.setSwimmingVector(g, h, j)
             }
         }
@@ -240,10 +240,10 @@ open class BaseJellyfishEntity(
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
             AnimationController(
-                this,
+                
                 "Swim/Idle",
                 20
-            ) { state: AnimationState<BaseJellyfishEntity> ->
+            ) { state: AnimationTest<BaseJellyfishEntity> ->
                 if (state.isMoving) {
                     state.setAndContinue(DefaultAnimations.SWIM)
                 } else {
@@ -258,7 +258,7 @@ open class BaseJellyfishEntity(
     }
 
     override fun handleAirSupply(air: Int) {
-        if (isInWaterOrBubble) {
+        if (isInWater) {
             airSupply = maxAirSupply
         }
     }
@@ -272,7 +272,7 @@ open class BaseJellyfishEntity(
         fun canSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -288,7 +288,7 @@ open class BaseJellyfishEntity(
         fun canDeepSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

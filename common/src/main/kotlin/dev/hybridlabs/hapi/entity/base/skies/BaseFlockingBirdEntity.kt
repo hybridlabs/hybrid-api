@@ -46,15 +46,15 @@ open class BaseFlockingBirdEntity(
             return
         }
 
-        if (this.isControlledByLocalInstance) {
+        if (this.isLocalInstanceAuthoritative) {
             if (this.isInWater) {
                 this.moveRelative(0.02f, travelVector)
-                this.move(MoverType.SELF, this.deltaMovement)
-                this.deltaMovement = this.deltaMovement.scale(0.8)
+                this.move(MoverType.SELF, this.getDeltaMovement())
+                this.setDeltaMovement( this.getDeltaMovement().scale(0.8))
             } else if (this.isInLava) {
                 this.moveRelative(0.02f, travelVector)
-                this.move(MoverType.SELF, this.deltaMovement)
-                this.deltaMovement = this.deltaMovement.scale(0.5)
+                this.move(MoverType.SELF, this.getDeltaMovement())
+                this.setDeltaMovement( this.getDeltaMovement().scale(0.5))
             } else {
                 var f = 0.91f
                 if (this.onGround()) {
@@ -70,8 +70,8 @@ open class BaseFlockingBirdEntity(
                 }
 
                 this.moveRelative(if (this.onGround()) 0.1f * f1 else 0.02f, travelVector)
-                this.move(MoverType.SELF, this.deltaMovement)
-                this.deltaMovement = this.deltaMovement.scale(f.toDouble())
+                this.move(MoverType.SELF, this.getDeltaMovement())
+                this.setDeltaMovement( this.getDeltaMovement().scale(f.toDouble()))
             }
         }
 

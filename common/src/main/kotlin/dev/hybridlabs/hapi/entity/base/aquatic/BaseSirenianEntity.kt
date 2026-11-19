@@ -33,16 +33,18 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
 import software.bernie.geckolib.animation.AnimationController.AnimationStateHandler
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
+import software.bernie.geckolib.animation.state.AnimationTest
+import software.bernie.geckolib.animation.`object`.PlayState
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
@@ -97,21 +99,22 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
         builder.define(HAS_SEA_LETTUCE, false)
     }
 
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
-        compound.putInt("TreasurePosX", this.getClamPos().x)
-        compound.putInt("TreasurePosY", this.getClamPos().y)
-        compound.putInt("TreasurePosZ", this.getClamPos().z)
-        compound.putBoolean("GotFish", this.gotSeaLettuce())
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        val clamPos = this.getClamPos()
+        output.putInt("TreasurePosX", clamPos.x)
+        output.putInt("TreasurePosY", clamPos.y)
+        output.putInt("TreasurePosZ", clamPos.z)
+        output.putBoolean("GotFish", this.gotSeaLettuce())
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
-        val i = compound.getInt("TreasurePosX")
-        val j = compound.getInt("TreasurePosY")
-        val k = compound.getInt("TreasurePosZ")
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        val i = input.getIntOr("TreasurePosX", 0)
+        val j = input.getIntOr("TreasurePosY", 0)
+        val k = input.getIntOr("TreasurePosZ", 0)
         this.setClamPos(BlockPos(i, j, k))
-        this.setGotSeaLettuce(compound.getBoolean("GotFish"))
+        this.setGotSeaLettuce(input.getBooleanOr("GotFish", false))
     }
 
     override fun getMaxSpawnClusterSize(): Int {
@@ -129,16 +132,16 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         val itemstack = player.getItemInHand(hand)
         if (!itemstack.isEmpty && itemstack.`is`(Items.SEAGRASS)) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.playSound(SoundEvents.CAMEL_EAT, 1.0f, 1.0f)
             }
 
             this.setGotSeaLettuce(true)
-            if (!player.abilities.instabuild) {
+            if (!player.getAbilities().instabuild) {
                 itemstack.shrink(1)
             }
 
-            return InteractionResult.sidedSuccess(this.level().isClientSide)
+            return if (this.level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         } else {
             return super.mobInteract(player, hand)
         }
@@ -151,8 +154,8 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
     override fun travel(travelVector: Vec3) {
         if (this.isEffectiveAi && this.isInWater) {
             this.moveRelative(this.speed, travelVector)
-            this.move(MoverType.SELF, this.deltaMovement)
-            this.deltaMovement = deltaMovement.scale(0.9)
+            this.move(MoverType.SELF, this.getDeltaMovement())
+            this.setDeltaMovement(deltaMovement.scale(0.9))
         } else {
             super.travel(travelVector)
         }
@@ -161,12 +164,11 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         this.airSupply = this.maxAirSupply
-        this.yRot = 0.0f
-
+        this.setYRot(0.0f)
         if (this.random.nextFloat() < 0.1f) {
             this.setAge(-6000)
         }
@@ -181,9 +183,9 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
     //#region Animations
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
-            AnimationController(this, "Run/Swim/Idle", 4) {
-                    state: AnimationState<BaseSirenianEntity> ->
-                if (this.isInWaterOrBubble && state.isMoving) state.setAndContinue(DefaultAnimations.SWIM)
+            AnimationController( "Run/Swim/Idle", 4) {
+                    state: AnimationTest<BaseSirenianEntity> ->
+                if (this.isInWater && state.isMoving) state.setAndContinue(DefaultAnimations.SWIM)
                 else state.setAndContinue(DefaultAnimations.IDLE
                 )
             }
@@ -191,8 +193,8 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
 
         controllers.add(
             AnimationController(
-                this, "Graze",
-                AnimationStateHandler { state: AnimationState<BaseSirenianEntity> ->
+                 "Graze",
+                AnimationStateHandler { state: AnimationTest<BaseSirenianEntity> ->
                     if (this.isGrazing())
                         return@AnimationStateHandler state.setAndContinue(GRAZE_ANIMATION)
                     PlayState.STOP
@@ -201,8 +203,8 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
         )
 
         controllers.add(
-            AnimationController(this, "Flop", 4) { state ->
-                if (!this.isInWaterOrBubble && this.moistness < 590) {
+            AnimationController( "Flop", 4) { state: AnimationTest<BaseSirenianEntity> ->
+                if (!this.isInWater && this.moistness < 590) {
                     return@AnimationController state.setAndContinue(FLOP_ANIMATION)
                 }
 
@@ -229,7 +231,7 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
         fun canSpawn(
             type: EntityType<out BaseSirenianEntity>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -273,9 +275,9 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
             digTime = 0
             targetPos?.let {
                 sirenian.navigation.moveTo(
-                    it.x + 0.5,
-                    it.y + 0.5,
-                    it.z + 0.5,
+                    it.getX() + 0.5,
+                    it.getY() + 0.5,
+                    it.getZ() + 0.5,
                     1.2
                 )
             }
@@ -316,7 +318,7 @@ open class BaseSirenianEntity(type: EntityType<out BaseSirenianEntity>, world: L
                     }
                 }
 
-                if (digTime == 60 && !sirenian.level().isClientSide) {
+                if (digTime == 60 && !sirenian.level().isClientSide()) {
                     val level = sirenian.level()
 
                     val item = ItemStack(Items.NAUTILUS_SHELL)

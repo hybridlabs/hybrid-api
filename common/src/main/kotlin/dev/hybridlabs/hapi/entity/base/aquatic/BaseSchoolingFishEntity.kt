@@ -3,7 +3,7 @@ package dev.hybridlabs.hapi.entity.base.aquatic
 import dev.hybridlabs.hapi.entity.ai.goal.aquatic.FishFollowGroupLeaderGoal
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.VariantHolder
+import dev.hybridlabs.hapi.entity.base.VariantHolder
 import net.minecraft.world.level.Level
 import java.util.stream.Stream
 

@@ -44,10 +44,10 @@ open class FlyingAnimalFollowParentGoal(
     override fun canContinueToUse(): Boolean {
         if (this.bird.getAge() >= 0) {
             return false
-        } else if (!this.parent!!.isAlive) {
+        } else if (this.parent?.isAlive == false) {
             return false
         } else {
-            val d0 = this.bird.distanceToSqr(this.parent)
+            val d0 = this.bird.distanceToSqr(this.parent!!)
             return !(d0 < 9.0) && !(d0 > 256.0)
         }
     }
@@ -63,7 +63,7 @@ open class FlyingAnimalFollowParentGoal(
     override fun tick() {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10)
-            this.bird.getNavigation().moveTo(this.parent, this.speedModifier)
+            this.bird.getNavigation().moveTo(this.parent!!, this.speedModifier)
         }
     }
 }

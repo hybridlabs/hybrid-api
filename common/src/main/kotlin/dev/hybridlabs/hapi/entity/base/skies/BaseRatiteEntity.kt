@@ -1,6 +1,7 @@
 package dev.hybridlabs.hapi.entity.base.skies
 
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -14,9 +15,9 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.constant.DefaultAnimations
 
 @Suppress("LeakingThis", "DEPRECATION")
@@ -36,8 +37,8 @@ open class BaseRatiteEntity(
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
             AnimationController(
-                this, "Walk/Fly/Idle", 4
-            ) { state: AnimationState<BaseRatiteEntity> ->
+                 "Walk/Fly/Idle", 4
+            ) { state: AnimationTest<BaseRatiteEntity> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     !this.onGround() -> state.setAndContinue(DefaultAnimations.FLY)
@@ -50,9 +51,9 @@ open class BaseRatiteEntity(
 
     override fun aiStep() {
         super.aiStep()
-        val vec3d = this.deltaMovement
+        val vec3d = this.getDeltaMovement()
         if (!this.onGround() && vec3d.y < 0.0) {
-            this.deltaMovement = vec3d.multiply(1.0, 0.75, 1.0)
+            this.setDeltaMovement( vec3d.multiply(1.0, 0.75, 1.0))
         }
     }
 
@@ -68,8 +69,8 @@ open class BaseRatiteEntity(
         val jumpStrength = power / 100.0f
         val verticalBoost = 0.4 + (jumpStrength * 0.6)
 
-        this.deltaMovement = this.deltaMovement.add(0.0, verticalBoost, 0.0)
-        this.hasImpulse = true
+        this.setDeltaMovement( this.getDeltaMovement().add(0.0, verticalBoost, 0.0))
+        this.needsSync = true
     }
 
     override fun handleStartJump(power: Int) {
@@ -91,10 +92,10 @@ open class BaseRatiteEntity(
         }
 
         if (isRideable && !isBaby && !isVehicle && !player.isSecondaryUseActive) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 player.startRiding(this)
             }
-            return InteractionResult.sidedSuccess(level().isClientSide)
+            return if (level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         }
 
         return super.mobInteract(player, hand)
@@ -112,7 +113,7 @@ open class BaseRatiteEntity(
         }
         super.tickRidden(player, travelVector)
         this.setRot(player.yRot, player.xRot * 0.5f)
-        this.yHeadRot = this.yRot
+        this.yHeadRot = this.getYRot()
         this.yBodyRot = this.yHeadRot
         this.yRotO = this.yBodyRot
     }
@@ -154,6 +155,9 @@ open class BaseRatiteEntity(
     companion object {
         @Suppress("UNUSED_PARAMETER")
 
-        val BREEDING_INGREDIENT: Ingredient = Ingredient.of(ItemTags.VILLAGER_PLANTABLE_SEEDS)
+        val BREEDING_INGREDIENT: Ingredient = Ingredient.of(
+            BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM)
+                .getOrThrow(ItemTags.VILLAGER_PLANTABLE_SEEDS)
+        )
     }
 }

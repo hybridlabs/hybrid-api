@@ -22,7 +22,7 @@ class StayInWaterGoal(private val mob: Mob) : Goal() {
 
     fun amount(): Float {
         var amount = 0.1f
-        val dY = Mth.abs(mob.deltaMovement.y.toFloat())
+        val dY = Mth.abs(mob.getDeltaMovement().y.toFloat())
 
         if (dY > amount) {
             amount = dY

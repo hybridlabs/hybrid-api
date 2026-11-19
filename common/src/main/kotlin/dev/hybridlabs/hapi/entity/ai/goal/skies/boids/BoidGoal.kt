@@ -5,7 +5,7 @@ import dev.hybridlabs.hapi.entity.base.skies.BaseFlockingBirdEntity
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
-import net.minecraft.world.entity.VariantHolder
+import dev.hybridlabs.hapi.entity.base.VariantHolder
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.phys.Vec3
@@ -83,7 +83,7 @@ class BoidGoal(
 
         bird.addDeltaMovement(boidVec)
 
-        val targetPos = bird.position().add(bird.deltaMovement)
+        val targetPos = bird.position().add(bird.getDeltaMovement())
         bird.lookAt(
             EntityAnchorArgument.Anchor.EYES,
             Vec3(targetPos.x, targetPos.y + bird.eyeHeight, targetPos.z)
@@ -91,7 +91,7 @@ class BoidGoal(
     }
 
     fun random(): Vec3 {
-        val velocity = bird.deltaMovement
+        val velocity = bird.getDeltaMovement()
         if (velocity.length() < maxSpeed * 0.001) {
             val yaw = (bird.random.nextGaussian() * 40) - 20
             val pitch = (bird.random.nextGaussian() * 2) - 1
@@ -116,11 +116,11 @@ class BoidGoal(
         var c = Vec3.ZERO
 
         for (nearbyMob in nearbyMobs) {
-            c = c.add(nearbyMob.deltaMovement)
+            c = c.add(nearbyMob.getDeltaMovement())
         }
 
         c = c.scale((1f / nearbyMobs.size).toDouble())
-        c = c.subtract(bird.deltaMovement)
+        c = c.subtract(bird.getDeltaMovement())
         return c.scale(alignmentInfluence.toDouble())
     }
 

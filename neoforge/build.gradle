@@ -10,3 +10,9 @@ dependencies {
 publishMods.platforms.configureEach {
     requires 'kotlin-for-forge', 'geckolib'
 }
+
+// GeckoLib 5 marks vanilla render states as GeoRenderState via NeoForge interface injection.
+// hybrid-gradle does not wire dependency-provided injection data yet, so we do it here.
+neoForge {
+    interfaceInjectionData.from(rootProject.file('gradle/geckolib-interface-injections.json'))
+}

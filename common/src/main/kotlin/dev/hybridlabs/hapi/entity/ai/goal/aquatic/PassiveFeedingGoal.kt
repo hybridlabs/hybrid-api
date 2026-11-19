@@ -10,7 +10,7 @@ class PassiveFeedingGoal(
 
     override fun canUse(): Boolean {
         if (waterAnimal.hunger > 0 ||
-            !waterAnimal.isInWaterOrBubble ||
+            !waterAnimal.isInWater ||
             waterAnimal.level().getNearestPlayer(waterAnimal, 32.0) == null) {
             return false
         }

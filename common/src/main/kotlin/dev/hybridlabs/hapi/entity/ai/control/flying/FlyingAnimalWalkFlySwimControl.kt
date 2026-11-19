@@ -19,9 +19,9 @@ class FlyingAnimalWalkFlySwimControl(
         if (this.operation == Operation.MOVE_TO) {
             this.operation = Operation.WAIT
             this.mob.isNoGravity = true
-            val d0 = this.wantedX - this.mob.x
-            val d1 = this.wantedY - this.mob.y
-            val d2 = this.wantedZ - this.mob.z
+            val d0 = this.wantedX - this.mob.getX()
+            val d1 = this.wantedY - this.mob.getY()
+            val d2 = this.wantedZ - this.mob.getZ()
             val d3 = d0 * d0 + d1 * d1 + d2 * d2
             if (d3 < 2.5000003E-7) {
                 this.mob.setYya(0.0f)

@@ -4,6 +4,7 @@ import dev.hybridlabs.hapi.entity.ai.goal.aquatic.WaterAnimalAttackGoal
 import dev.hybridlabs.hapi.entity.ai.goal.aquatic.boids.StayInWaterGoal
 import dev.hybridlabs.hapi.world.WorldHelper
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
@@ -26,12 +27,15 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
@@ -44,8 +48,8 @@ open class BaseSharkEntity(
     private val factory = GeckoLibUtil.createInstanceCache(this)
     open val isPassive: Boolean = true
     open val closePlayerAttack: Boolean = false
-    private var angerTime = 0
-    private var angryAt: UUID? = null
+    private var persistentAngerEndTime = 0L
+    private var persistentAngerTarget: EntityReference<LivingEntity>? = null
 
     //#region Initialization
     override fun createNavigation(level: Level): PathNavigation {
@@ -68,7 +72,8 @@ open class BaseSharkEntity(
         targetSelector.addGoal(
             1,
             NearestAttackableTargetGoal(this, Player::class.java, 10, true, true) {
-                entity: LivingEntity -> isAngryAt(entity) || shouldProximityAttack(entity as Player) && !isPassive
+                entity: LivingEntity, level: ServerLevel ->
+                isAngryAt(entity, level) || (shouldProximityAttack(entity as Player) && !isPassive)
             }
         )
         getTargetConfig()?.addAttackTarget(targetSelector, MAX_HUNGER / 4, this, BaseWaterAnimal::hunger)
@@ -93,8 +98,8 @@ open class BaseSharkEntity(
             if (moistness <= -20) {
                 moistness = 0
                 hurt(this.damageSources().dryOut(), 2.0f)
-                this.xRot = 0.0f
-                this.yRot = 0.0f
+                this.setXRot(0.0f)
+                this.setYRot(0.0f)
             }
         }
     }
@@ -105,14 +110,14 @@ open class BaseSharkEntity(
     }
 
     //#region Data
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
-        this.addPersistentAngerSaveData(compound)
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        this.addPersistentAngerSaveData(output)
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
-        this.readPersistentAngerSaveData(this.level(), compound)
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        this.readPersistentAngerSaveData(this.level(), input)
     }
     //#endregion
 
@@ -120,8 +125,8 @@ open class BaseSharkEntity(
     override fun travel(travelVector: Vec3) {
         if (this.isEffectiveAi && this.isInWater) {
             this.moveRelative(this.speed, travelVector)
-            this.move(MoverType.SELF, this.deltaMovement)
-            this.deltaMovement = deltaMovement.scale(0.9)
+            this.move(MoverType.SELF, this.getDeltaMovement())
+            this.setDeltaMovement(deltaMovement.scale(0.9))
         } else {
             super.travel(travelVector)
         }
@@ -163,7 +168,7 @@ open class BaseSharkEntity(
     //#region Animations
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
-            AnimationController(this, "Cephalopod Animation Controller", 4) { state ->
+            AnimationController( "Cephalopod Animation Controller", 4) { state: AnimationTest<BaseSharkEntity> ->
                 when {
                     isInWater && state.isMoving -> {
                         state.setAndContinue(DefaultAnimations.SWIM)
@@ -187,24 +192,24 @@ open class BaseSharkEntity(
     //#endregion
 
     //#region Angerable Implementation Details
-    override fun getRemainingPersistentAngerTime(): Int {
-        return angerTime
+    override fun getPersistentAngerEndTime(): Long {
+        return this.persistentAngerEndTime
     }
 
-    override fun setRemainingPersistentAngerTime(angerTime: Int) {
-        this.angerTime = angerTime
+    override fun setPersistentAngerEndTime(persistentAngerEndTime: Long) {
+        this.persistentAngerEndTime = persistentAngerEndTime
     }
 
-    override fun getPersistentAngerTarget(): UUID? {
-        return this.angryAt
+    override fun getPersistentAngerTarget(): EntityReference<LivingEntity>? {
+        return this.persistentAngerTarget
     }
 
-    override fun setPersistentAngerTarget(angryAt: UUID?) {
-        this.angryAt = angryAt
+    override fun setPersistentAngerTarget(persistentAngerTarget: EntityReference<LivingEntity>?) {
+        this.persistentAngerTarget = persistentAngerTarget
     }
 
     override fun startPersistentAngerTimer() {
-        remainingPersistentAngerTime = ANGER_TIME_RANGE.sample(random)
+        this.setTimeToRemainAngry(ANGER_TIME_RANGE.sample(random).toLong())
     }
 
     private fun shouldProximityAttack(player: Player): Boolean {
@@ -214,8 +219,8 @@ open class BaseSharkEntity(
     }
     //#endregion
 
-    override fun doHurtTarget(target: Entity): Boolean {
-        if (super.doHurtTarget(target)) {
+    override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
+        if (super.doHurtTarget(level, target)) {
             playSound(SoundEvents.FOX_BITE, 1.0F, 0.0F)
             return true
         } else {
@@ -227,14 +232,14 @@ open class BaseSharkEntity(
         val ANGER_TIME_RANGE: UniformInt = TimeUtil.rangeOfSeconds(10, 30)
 
         val BREEDING_INGREDIENT: Ingredient = Ingredient.of(
-            ItemTags.FISHES,
+            BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM).getOrThrow(ItemTags.FISHES)
         )
 
         //#region Spawning
         fun canShallowSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -250,7 +255,7 @@ open class BaseSharkEntity(
         fun canSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -266,7 +271,7 @@ open class BaseSharkEntity(
         fun canDeepSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

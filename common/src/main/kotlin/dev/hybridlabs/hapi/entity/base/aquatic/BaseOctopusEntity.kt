@@ -22,16 +22,18 @@ import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal
 import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
 import software.bernie.geckolib.animation.AnimationController.AnimationStateHandler
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
+import software.bernie.geckolib.animation.state.AnimationTest
+import software.bernie.geckolib.animation.`object`.PlayState
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -59,8 +61,8 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
     override fun travel(travelVector: Vec3) {
         if (this.isEffectiveAi && this.isInWater) {
             this.moveRelative(this.speed, travelVector)
-            this.move(MoverType.SELF, this.deltaMovement)
-            this.deltaMovement = deltaMovement.scale(0.9)
+            this.move(MoverType.SELF, this.getDeltaMovement())
+            this.setDeltaMovement(deltaMovement.scale(0.9))
         } else {
             super.travel(travelVector)
         }
@@ -81,16 +83,16 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
         builder.define(CURRENT_COLOR, 12799593)
     }
 
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
-        compound.putInt("targetColor", getTargetColor())
-        compound.putInt("currentColor", getCurrentColor())
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putInt("targetColor", getTargetColor())
+        output.putInt("currentColor", getCurrentColor())
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
-        this.setTargetColor(compound.getInt("targetColor"))
-        this.setCurrentColor(compound.getInt("currentColor"))
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        this.setTargetColor(input.getIntOr("targetColor", 12799593))
+        this.setCurrentColor(input.getIntOr("currentColor", 12799593))
     }
     //#endregion
 
@@ -106,8 +108,8 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
             if (moistness <= -20) {
                 moistness = 0
                 hurt(this.damageSources().dryOut(), 2.0f)
-                this.xRot = 0.0f
-                this.yRot = 0.0f
+                this.setXRot(0.0f)
+                this.setYRot(0.0f)
                 this.yHeadRot = 0.0f
             }
         }
@@ -158,9 +160,9 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
     }
     //#endregion
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        if (super.hurt(source, amount) && this.lastHurtByMob != null) {
-            if (!level().isClientSide) {
+    override fun hurtServer(level: ServerLevel, source: DamageSource, amount: Float): Boolean {
+        if (super.hurtServer(level, source, amount) && this.lastHurtByMob != null) {
+            if (!level().isClientSide()) {
                 if (this.isUnderWater) {
                     inkConfig?.run(::squirt)
                 }
@@ -181,7 +183,7 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
     private fun squirt(config: InkConfiguration) {
         this.playSound(this.getSquirtSound(), this.soundVolume, this.voicePitch)
 
-        val entityPosition = Vec3(this.x, this.y, this.z)
+        val entityPosition = Vec3(this.getX(), this.getY(), this.getZ())
         val radius = 3.0
 
         val affectedEntities = level().getEntitiesOfClass(
@@ -264,9 +266,9 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
     //#region Animations
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
-            AnimationController(this, "Run/Swim/Idle", 4) {
-                    state: AnimationState<BaseOctopusEntity> ->
-                if (this.isInWaterOrBubble && state.isMoving) state.setAndContinue(
+            AnimationController( "Run/Swim/Idle", 4) {
+                    state: AnimationTest<BaseOctopusEntity> ->
+                if (this.isInWater && state.isMoving) state.setAndContinue(
                     if (this.isSprinting) DefaultAnimations.RUN else DefaultAnimations.SWIM)
                 else state.setAndContinue(DefaultAnimations.IDLE
                 )
@@ -275,8 +277,8 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
 
         controllers.add(
             AnimationController(
-                this, "Sit",
-                AnimationStateHandler { state: AnimationState<BaseOctopusEntity> ->
+                 "Sit",
+                AnimationStateHandler { state: AnimationTest<BaseOctopusEntity> ->
                     if (this.isSitting())
                         return@AnimationStateHandler state.setAndContinue(DefaultAnimations.SIT)
                     PlayState.STOP
@@ -302,7 +304,7 @@ open class BaseOctopusEntity(type: EntityType<out BaseOctopusEntity>, world: Lev
         fun canSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

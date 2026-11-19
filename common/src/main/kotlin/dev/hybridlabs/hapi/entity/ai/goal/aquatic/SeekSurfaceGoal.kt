@@ -11,7 +11,7 @@ import java.util.*
 
 class SeekSurfaceGoal(private val mob: BaseWaterAnimal) : Goal() {
     init {
-        this.flags = EnumSet.of<Flag?>(Flag.MOVE, Flag.LOOK)
+        this.flags = EnumSet.of<Flag>(Flag.MOVE, Flag.LOOK)
     }
 
     override fun canUse(): Boolean {
@@ -32,12 +32,12 @@ class SeekSurfaceGoal(private val mob: BaseWaterAnimal) : Goal() {
 
     private fun findAirPosition() {
         val iterable = BlockPos.betweenClosed(
-            Mth.floor(this.mob.x - 1.0),
+            Mth.floor(this.mob.getX() - 1.0),
             this.mob.blockY,
-            Mth.floor(this.mob.z - 1.0),
-            Mth.floor(this.mob.x + 1.0),
-            Mth.floor(this.mob.y + 8.0),
-            Mth.floor(this.mob.z + 1.0)
+            Mth.floor(this.mob.getZ() - 1.0),
+            Mth.floor(this.mob.getX() + 1.0),
+            Mth.floor(this.mob.getY() + 8.0),
+            Mth.floor(this.mob.getZ() + 1.0)
         )
         var blockpos: BlockPos? = null
 
@@ -49,7 +49,7 @@ class SeekSurfaceGoal(private val mob: BaseWaterAnimal) : Goal() {
         }
 
         if (blockpos == null) {
-            blockpos = BlockPos.containing(this.mob.x, this.mob.y + 8.0, this.mob.z)
+            blockpos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 8.0, this.mob.getZ())
         }
 
         this.mob.getNavigation()
@@ -59,7 +59,7 @@ class SeekSurfaceGoal(private val mob: BaseWaterAnimal) : Goal() {
     override fun tick() {
         this.findAirPosition()
         this.mob.moveRelative(0.02f, Vec3(this.mob.xxa.toDouble(), this.mob.yya.toDouble(), this.mob.zza.toDouble()))
-        this.mob.move(MoverType.SELF, this.mob.deltaMovement)
+        this.mob.move(MoverType.SELF, this.mob.getDeltaMovement())
     }
 
     private fun givesAir(level: LevelReader, pos: BlockPos): Boolean {

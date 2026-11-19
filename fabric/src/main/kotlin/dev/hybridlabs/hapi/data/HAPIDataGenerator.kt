@@ -31,7 +31,7 @@ object HAPIDataGenerator : DataGeneratorEntrypoint {
 
     override fun buildRegistry(registryBuilder: RegistrySetBuilder) {
 
-        fun <T> filterHybridLabs(registry: Registry<T>): (T & Any) -> Boolean {
+        fun <T : Any> filterHybridLabs(registry: Registry<T>): (T) -> Boolean {
             return { o ->
                 val id = registry.getKey(o)
                 id!!.namespace == Constants.MOD_ID

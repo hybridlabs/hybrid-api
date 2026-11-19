@@ -2,236 +2,72 @@ package dev.hybridlabs.hapi.item
 
 import dev.hybridlabs.hapi.CommonClass
 import dev.hybridlabs.hapi.tag.HAPIItemTags
-import net.minecraft.core.Holder
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.sounds.SoundEvent
+import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.ItemTags
-import net.minecraft.world.item.ArmorItem
-import net.minecraft.world.item.ArmorMaterial
-import net.minecraft.world.item.Items
-import net.minecraft.world.item.crafting.Ingredient
-import java.util.*
-import java.util.function.Supplier
-import kotlin.collections.set
-import kotlin.jvm.java
-import kotlin.to
+import net.minecraft.world.item.equipment.ArmorMaterial
+import net.minecraft.world.item.equipment.ArmorType
+import net.minecraft.world.item.equipment.EquipmentAsset
+import net.minecraft.world.item.equipment.EquipmentAssets
 
 object HAPIArmorMaterials {
-    val DIVING = register(
-        "diving",
-        mapOf(
-            ArmorItem.Type.HELMET to 2,
-            ArmorItem.Type.CHESTPLATE to 5,
-            ArmorItem.Type.LEGGINGS to 4,
-            ArmorItem.Type.BOOTS to 2,
-            ArmorItem.Type.BODY to 5
-        ),
-        9,
-        SoundEvents.ARMOR_EQUIP_CHAIN,
-        {
-            Ingredient.of(
-                Items.COPPER_INGOT
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f,
-    )
-
-    val GLOWING_DIVING = register(
-        "glowing_diving",
-        mapOf(
-            ArmorItem.Type.HELMET to 2,
-            ArmorItem.Type.CHESTPLATE to 5,
-            ArmorItem.Type.LEGGINGS to 4,
-            ArmorItem.Type.BOOTS to 2,
-            ArmorItem.Type.BODY to 5
-        ),
-        9,
-        SoundEvents.ARMOR_EQUIP_GENERIC,
-        {
-            Ingredient.of(
-                Items.COPPER_INGOT
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f,
-    )
-
-    val REINFORCED_DIVING = register(
-        "reinforced_diving",
-        mapOf(
-            ArmorItem.Type.HELMET to 3,
-            ArmorItem.Type.CHESTPLATE to 7,
-            ArmorItem.Type.LEGGINGS to 5,
-            ArmorItem.Type.BOOTS to 3,
-            ArmorItem.Type.BODY to 5
-        ),
-        9,
-        SoundEvents.ARMOR_EQUIP_NETHERITE,
-        {
-            Ingredient.of(
-                Items.COPPER_INGOT
-            )
-        },
-        listOf(),
-        0.0f,
-        1.0f,
-    )
-
-    val SEASHELL = register(
-        "seashell",
-        mapOf(
-            ArmorItem.Type.HELMET to 2,
-            ArmorItem.Type.CHESTPLATE to 4,
-            ArmorItem.Type.LEGGINGS to 3,
-            ArmorItem.Type.BOOTS to 2,
-            ArmorItem.Type.BODY to 4
-        ),
-        22,
-        SoundEvents.ARMOR_EQUIP_TURTLE,
-        {
-            Ingredient.of(
-                Items.NAUTILUS_SHELL
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f,
-    )
-
-    val MANGLERFISH = register(
-        "manglerfish",
-        mapOf(
-            ArmorItem.Type.HELMET to 1,
-            ArmorItem.Type.CHESTPLATE to 1,
-            ArmorItem.Type.LEGGINGS to 1,
-            ArmorItem.Type.BOOTS to 1,
-            ArmorItem.Type.BODY to 1
-        ),
-        15,
-        SoundEvents.ARMOR_EQUIP_GENERIC,
-        {
-            Ingredient.of(
-                HAPIItemTags.GLOWSLIME
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f
-    )
-
-    val EEL = register(
-        "eel",
-        mapOf(
-            ArmorItem.Type.HELMET to 1,
-            ArmorItem.Type.CHESTPLATE to 1,
-            ArmorItem.Type.LEGGINGS to 1,
-            ArmorItem.Type.BOOTS to 1,
-            ArmorItem.Type.BODY to 1
-        ),
-        15,
-        SoundEvents.ARMOR_EQUIP_GENERIC,
-        {
-            Ingredient.of(
-                ItemTags.WOOL
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f
-    )
-
-    val HATXOLOTL = register(
-        "hatxolotl",
-        mapOf(
-            ArmorItem.Type.HELMET to 1,
-            ArmorItem.Type.CHESTPLATE to 1,
-            ArmorItem.Type.LEGGINGS to 1,
-            ArmorItem.Type.BOOTS to 1,
-            ArmorItem.Type.BODY to 1
-        ),
-        15,
-        SoundEvents.ARMOR_EQUIP_GENERIC,
-        {
-            Ingredient.of(
-                Items.LEATHER
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f
-    )
-
-    val MOONJELLYFISH = register(
-        "moon_jelly",
-        mapOf(
-            ArmorItem.Type.HELMET to 1,
-            ArmorItem.Type.CHESTPLATE to 1,
-            ArmorItem.Type.LEGGINGS to 1,
-            ArmorItem.Type.BOOTS to 1,
-            ArmorItem.Type.BODY to 1
-        ),
-        15,
-        SoundEvents.ARMOR_EQUIP_GENERIC,
-        {
-            Ingredient.of(
-                Items.SLIME_BALL
-            )
-        },
-        listOf(),
-        0.0f,
-        0.0f
-    )
-
-    val TURTLE = register(
-        "turtle",
-        mapOf(
-            ArmorItem.Type.HELMET to 1,
-            ArmorItem.Type.CHESTPLATE to 1,
-            ArmorItem.Type.LEGGINGS to 1,
-            ArmorItem.Type.BOOTS to 1,
-            ArmorItem.Type.BODY to 1
-        ),
-        9,
-        SoundEvents.ARMOR_EQUIP_TURTLE,
-        {
-            Ingredient.of(
-                Items.TURTLE_SCUTE
-            )
-        },
-        listOf(),
-        1.0f,
-        0.3f,
-    )
-
-    fun register(
-        name: String,
-        defense: Map<ArmorItem.Type, Int>,
-        enchantmentValue: Int,
-        equipSound: Holder<SoundEvent>,
-        repairIngridient: Supplier<Ingredient>,
-        layers: List<ArmorMaterial.Layer>,
-        toughness: Float,
-        knockbackResistance: Float
-    ): Holder<ArmorMaterial?> {
-        val enummap: EnumMap<ArmorItem.Type?, Int?> = EnumMap(ArmorItem.Type::class.java)
-        for (type in ArmorItem.Type.entries) enummap[type] = defense[type]
-        return Registry.registerForHolder(
-            BuiltInRegistries.ARMOR_MATERIAL,
-            CommonClass.locate(name),
-            ArmorMaterial(
-                enummap,
-                enchantmentValue,
-                equipSound,
-                repairIngridient,
-                layers,
-                toughness,
-                knockbackResistance
-            )
+    private fun makeDefense(helmet: Int, chestplate: Int, leggings: Int, boots: Int, body: Int): Map<ArmorType, Int> {
+        return mapOf(
+            ArmorType.HELMET to helmet,
+            ArmorType.CHESTPLATE to chestplate,
+            ArmorType.LEGGINGS to leggings,
+            ArmorType.BOOTS to boots,
+            ArmorType.BODY to body
         )
     }
+
+    private fun asset(name: String): ResourceKey<EquipmentAsset> {
+        return ResourceKey.create(EquipmentAssets.ROOT_ID, CommonClass.locate(name))
+    }
+
+    val DIVING = ArmorMaterial(
+        11, makeDefense(2, 5, 4, 2, 5), 9, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0f, 0.0f,
+        ItemTags.REPAIRS_COPPER_ARMOR, asset("diving")
+    )
+
+    val GLOWING_DIVING = ArmorMaterial(
+        11, makeDefense(2, 5, 4, 2, 5), 9, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f,
+        ItemTags.REPAIRS_COPPER_ARMOR, asset("glowing_diving")
+    )
+
+    val REINFORCED_DIVING = ArmorMaterial(
+        15, makeDefense(3, 7, 5, 3, 5), 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.0f, 1.0f,
+        ItemTags.REPAIRS_COPPER_ARMOR, asset("reinforced_diving")
+    )
+
+    val SEASHELL = ArmorMaterial(
+        25, makeDefense(2, 4, 3, 2, 4), 22, SoundEvents.ARMOR_EQUIP_TURTLE, 0.0f, 0.0f,
+        HAPIItemTags.REPAIRS_SEASHELL_ARMOR, asset("seashell")
+    )
+
+    val MANGLERFISH = ArmorMaterial(
+        5, makeDefense(1, 1, 1, 1, 1), 15, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f,
+        HAPIItemTags.GLOWSLIME, asset("manglerfish")
+    )
+
+    val EEL = ArmorMaterial(
+        5, makeDefense(1, 1, 1, 1, 1), 15, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f,
+        ItemTags.WOOL, asset("eel")
+    )
+
+    val HATXOLOTL = ArmorMaterial(
+        5, makeDefense(1, 1, 1, 1, 1), 15, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f,
+        ItemTags.REPAIRS_LEATHER_ARMOR, asset("hatxolotl")
+    )
+
+    val MOONJELLYFISH = ArmorMaterial(
+        5, makeDefense(1, 1, 1, 1, 1), 15, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f,
+        HAPIItemTags.REPAIRS_MOON_JELLY_ARMOR, asset("moon_jelly")
+    )
+
+    val TURTLE = ArmorMaterial(
+        25, makeDefense(1, 1, 1, 1, 1), 9, SoundEvents.ARMOR_EQUIP_TURTLE, 1.0f, 0.3f,
+        ItemTags.REPAIRS_TURTLE_HELMET, asset("turtle")
+    )
 }

@@ -10,7 +10,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.goal.*
@@ -22,9 +22,9 @@ import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
@@ -52,12 +52,11 @@ open class BaseMammalEntity(type: EntityType<out BaseMammalEntity>, world: Level
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?
     ): SpawnGroupData? {
         this.airSupply = this.maxAirSupply
-        this.yRot = 0.0f
-
+        this.setYRot(0.0f)
         if (this.random.nextFloat() < 0.25f) {
             this.setAge(-6000)
         }
@@ -73,8 +72,8 @@ open class BaseMammalEntity(type: EntityType<out BaseMammalEntity>, world: Level
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
             AnimationController(
-                this, "Walk/Swim/Idle", 4
-            ) { state: AnimationState<BaseMammalEntity> ->
+                 "Walk/Swim/Idle", 4
+            ) { state: AnimationTest<BaseMammalEntity> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     state.isMoving && isInWater -> state.setAndContinue(DefaultAnimations.SWIM)
@@ -107,9 +106,9 @@ open class BaseMammalEntity(type: EntityType<out BaseMammalEntity>, world: Level
 
     override fun aiStep() {
         super.aiStep()
-        val vec3d = this.deltaMovement
+        val vec3d = this.getDeltaMovement()
         if (!this.onGround() && this.isSwimming && vec3d.y < 0.0) {
-            this.deltaMovement = vec3d.multiply(1.0, 0.6, 1.0)
+            this.setDeltaMovement( vec3d.multiply(1.0, 0.6, 1.0))
         }
     }
 
@@ -119,7 +118,7 @@ open class BaseMammalEntity(type: EntityType<out BaseMammalEntity>, world: Level
         fun canSpawn(
             type: EntityType<out BaseMammalEntity>,
             level: LevelAccessor,
-            spawnReason: MobSpawnType,
+            spawnReason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource
         ): Boolean {

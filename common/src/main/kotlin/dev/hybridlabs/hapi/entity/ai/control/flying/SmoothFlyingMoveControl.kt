@@ -16,9 +16,9 @@ open class SmoothFlyingMoveControl(
 ) : MoveControl(bird) {
     override fun tick() {
         if (this.operation == Operation.MOVE_TO && !this.mob.getNavigation().isDone) {
-            val d0 = this.wantedX - this.mob.x
-            val d1 = this.wantedY - this.mob.y
-            val d2 = this.wantedZ - this.mob.z
+            val d0 = this.wantedX - this.mob.getX()
+            val d1 = this.wantedY - this.mob.getY()
+            val d2 = this.wantedZ - this.mob.getZ()
             val d3 = d0 * d0 + d1 * d1 + d2 * d2
             if (d3 < 2.5000003E-7) {
                 this.mob.setZza(0.0f)
@@ -34,11 +34,11 @@ open class SmoothFlyingMoveControl(
                     if (abs(d1) > 1.0E-5 || abs(d4) > 1.0E-5) {
                         var f3 = -((Mth.atan2(d1, d4) * (180f / Math.PI.toFloat()).toDouble()).toFloat())
                         f3 = Mth.clamp(Mth.wrapDegrees(f3), (-this.maxTurnX).toFloat(), this.maxTurnX.toFloat())
-                        this.mob.xRot = this.rotlerp(this.mob.xRot, f3, 5.0f)
+                        this.mob.setXRot(this.rotlerp(this.mob.getXRot(), f3, 5.0f))
                     }
 
-                    val f6 = Mth.cos(this.mob.xRot * (Math.PI.toFloat() / 180f))
-                    val f4 = Mth.sin(this.mob.xRot * (Math.PI.toFloat() / 180f))
+                    val f6 = Mth.cos((this.mob.getXRot() * (Math.PI.toFloat() / 180f)).toDouble())
+                    val f4 = Mth.sin((this.mob.getXRot() * (Math.PI.toFloat() / 180f)).toDouble())
                     this.mob.zza = f6 * f1
                     this.mob.yya = -f4 * f1
                 } else {

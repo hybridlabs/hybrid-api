@@ -1,6 +1,9 @@
 {
   "values": [
-    "#minecraft:is_jungle",
+    {
+      "id": "#minecraft:is_jungle",
+      "required": false
+    },
     {
       "id": "regions_unexplored:eucalyptus_forest",
       "required": false

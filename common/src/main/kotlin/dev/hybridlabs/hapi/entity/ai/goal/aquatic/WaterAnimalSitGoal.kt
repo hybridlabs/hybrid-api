@@ -37,12 +37,12 @@ class WaterAnimalSitGoal(
     }
 
     override fun canContinueToUse(): Boolean {
-        return sitTime > 0 && waterAnimal.isInWaterOrBubble
+        return sitTime > 0 && waterAnimal.isInWater
     }
 
     override fun tick() {
         sitTime--
-        waterAnimal.deltaMovement = waterAnimal.deltaMovement.subtract(0.0, 0.01, 0.0)
+        waterAnimal.setDeltaMovement( waterAnimal.getDeltaMovement().subtract(0.0, 0.01, 0.0))
         waterAnimal.navigation.stop()
     }
 }

@@ -1,70 +1,49 @@
 package dev.hybridlabs.hapi.client.model.entity.skies
 
+import dev.hybridlabs.hapi.client.model.HAPIDataTickets
 import dev.hybridlabs.hapi.entity.base.skies.BaseRatiteEntity
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.constant.DataTickets
+import net.minecraft.resources.Identifier
 import software.bernie.geckolib.model.GeoModel
+import software.bernie.geckolib.renderer.base.GeoRenderState
 
-@Suppress("OVERRIDE_DEPRECATION")
 abstract class BaseRatiteEntityModel<T: BaseRatiteEntity>(
     private val namespace: String,
     private val id: String
 ) : GeoModel<T>() {
 
-    override fun getModelResource(animatable: T): ResourceLocation {
-        return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+    override fun getModelResource(renderState: GeoRenderState): Identifier {
+        return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
+            Identifier.fromNamespaceAndPath(
                 namespace,
                 "geo/entity/$id/baby_$id.geo.json")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
                 namespace,
                 "geo/entity/$id/$id.geo.json")
         }
     }
 
-    override fun getTextureResource(animatable: T): ResourceLocation {
-        return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+    override fun getTextureResource(renderState: GeoRenderState): Identifier {
+        return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
+            Identifier.fromNamespaceAndPath(
                 namespace,
                 "textures/entity/$id/baby_$id.png")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
                 namespace,
                 "textures/entity/$id/$id.png")
         }
     }
 
-    override fun getAnimationResource(animatable: T): ResourceLocation {
+    override fun getAnimationResource(animatable: T): Identifier {
         return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
                 namespace,
                 "animations/entity/$id/baby_$id.animation.json")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
                 namespace,
                 "animations/entity/$id/$id.animation.json")
-        }
-    }
-
-    override fun setCustomAnimations(animatable: T, instanceId: Long, animationState: AnimationState<T>) {
-        val head = animationProcessor.getBone("head")
-        val neck = animationProcessor.getBone("neck")
-
-        if (head != null) {
-            val entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA)
-
-            head.rotX = entityData!!.headPitch() * Mth.DEG_TO_RAD
-            head.rotY = entityData.netHeadYaw() * Mth.DEG_TO_RAD
-        }
-
-        if (neck != null) {
-            val entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA)
-
-            neck.rotX = (entityData!!.headPitch() * Mth.DEG_TO_RAD) / 2
-            neck.rotY = (entityData.netHeadYaw() * Mth.DEG_TO_RAD) / 2
         }
     }
 }

@@ -16,7 +16,7 @@ import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal
@@ -30,15 +30,18 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
 import software.bernie.geckolib.animation.AnimationController.AnimationStateHandler
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
+import software.bernie.geckolib.animation.state.AnimationTest
+import software.bernie.geckolib.animation.`object`.PlayState
 import software.bernie.geckolib.animation.RawAnimation
-import software.bernie.geckolib.animation.keyframe.event.ParticleKeyframeEvent
+import software.bernie.geckolib.animation.state.KeyFrameEvent
+import software.bernie.geckolib.cache.animation.keyframeevent.ParticleKeyframeData
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -75,7 +78,7 @@ open class BaseCrustaceanEntity(
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         size = random.nextIntBetweenInclusive(getMinSize(), getMaxSize())
@@ -162,14 +165,14 @@ open class BaseCrustaceanEntity(
         builder.define(SHELL_ITEM, ItemStack.EMPTY)
     }
 
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
-        this.setBurrowing(compound.getBoolean("Burrowing"))
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putBoolean("Burrowing", this.isBurrowing())
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
-        this.setBurrowing(compound.getBoolean("Burrowing"))
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        this.setBurrowing(input.getBooleanOr("Burrowing", false))
     }
     //#endregion
 
@@ -196,12 +199,12 @@ open class BaseCrustaceanEntity(
     //#region Animations
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
-            DefaultAnimations.genericWalkIdleController(this)
+            DefaultAnimations.genericWalkIdleController<BaseCrustaceanEntity>()
         )
         controllerRegistrar.add(
             AnimationController(
-                this, "Dance", 4,
-                AnimationStateHandler { state: AnimationState<BaseCrustaceanEntity> ->
+                 "Dance", 4,
+                AnimationStateHandler { state: AnimationTest<BaseCrustaceanEntity> ->
                     if (this.canDance && isSongPlaying())
                         return@AnimationStateHandler state.setAndContinue(DANCE_ANIMATION)
                     PlayState.STOP
@@ -214,11 +217,11 @@ open class BaseCrustaceanEntity(
         return factory
     }
 
-    fun particleEvents(event: ParticleKeyframeEvent<BaseCrustaceanEntity>) {
+    fun particleEvents(event: KeyFrameEvent<BaseCrustaceanEntity, ParticleKeyframeData>) {
         val entity = event.animatable
         val level = entity.level()
 
-        if (!level.isClientSide) return
+        if (!level.isClientSide()) return
 
         val blockpos = entity.blockPosition()
         val blockstate = level.getBlockState(blockpos.below())
@@ -231,9 +234,9 @@ open class BaseCrustaceanEntity(
 
             level.addParticle(
                 BlockParticleOption(ParticleTypes.BLOCK, blockstate),
-                entity.x + xOffset,
-                entity.y,
-                entity.z + zOffset,
+                entity.getX() + xOffset,
+                entity.getY(),
+                entity.getZ() + zOffset,
                 rand.nextGaussian() * 0.05,
                 0.3 + rand.nextDouble() * 0.4,
                 rand.nextGaussian() * 0.05
@@ -242,14 +245,14 @@ open class BaseCrustaceanEntity(
     }
     //#endregion
 
-    override fun dropFromLootTable(source: DamageSource, causedByPlayer: Boolean) {
+    override fun dropFromLootTable(level: ServerLevel, source: DamageSource, causedByPlayer: Boolean) {
         val attacker = source.directEntity
         if (attacker !is BaseFishEntity &&
             attacker !is BaseSharkEntity &&
             attacker !is BaseCephalopodEntity &&
             attacker !is BaseMammalEntity
         ) {
-            super.dropFromLootTable(source, causedByPlayer)
+            super.dropFromLootTable(level, source, causedByPlayer)
         }
     }
 
@@ -267,7 +270,7 @@ open class BaseCrustaceanEntity(
         fun canSpawnOnLand(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -283,7 +286,7 @@ open class BaseCrustaceanEntity(
         fun canSpawnInWater(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -299,7 +302,7 @@ open class BaseCrustaceanEntity(
         fun canSpawnInDeepWater(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl
 import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation
 import net.minecraft.world.entity.animal.FlyingAnimal
-import net.minecraft.world.entity.animal.ShoulderRidingEntity
+import net.minecraft.world.entity.animal.parrot.ShoulderRidingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -27,9 +27,9 @@ import net.minecraft.world.level.block.state.BlockState
 import org.jetbrains.annotations.Nullable
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -72,16 +72,16 @@ open class BaseParrotEntity(
         val itemStack = player.getItemInHand(hand)
 
         if (this.isTameable && !this.isTame && TAME_FOOD.contains(itemStack.item)) {
-            if (!player.abilities.instabuild) {
+            if (!player.getAbilities().instabuild) {
                 itemStack.shrink(1)
             }
 
             if (!this.isSilent) {
                 this.level().playSound(
                     null,
-                    this.x,
-                    this.y,
-                    this.z,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
                     SoundEvents.PARROT_EAT,
                     this.soundSource,
                     1.0f,
@@ -89,7 +89,7 @@ open class BaseParrotEntity(
                 )
             }
 
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 if (this.random.nextInt(10) == 0) {
                     this.tame(player)
                     this.level().broadcastEntityEvent(this, 7.toByte())
@@ -98,14 +98,14 @@ open class BaseParrotEntity(
                 }
             }
 
-            return InteractionResult.sidedSuccess(this.level().isClientSide)
+            return if (this.level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         }
 
         if (!this.isFlying && this.isTame && this.isOwnedBy(player)) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.isOrderedToSit = !this.isOrderedToSit
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide)
+            return if (this.level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         }
 
         return super.mobInteract(player, hand)
@@ -119,8 +119,8 @@ open class BaseParrotEntity(
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
             AnimationController(
-                this, "Walk/Fly/Idle", 4
-            ) { state: AnimationState<BaseParrotEntity> ->
+                 "Walk/Fly/Idle", 4
+            ) { state: AnimationTest<BaseParrotEntity> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     !this.onGround() -> state.setAndContinue(DefaultAnimations.FLY)
@@ -137,11 +137,11 @@ open class BaseParrotEntity(
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         // Match vanilla animals: birds spawned during world generation are permanent
-        if (spawnReason == MobSpawnType.CHUNK_GENERATION) {
+        if (spawnReason == EntitySpawnReason.CHUNK_GENERATION) {
             this.setPersistenceRequired()
         }
 
@@ -181,9 +181,9 @@ open class BaseParrotEntity(
 
     override fun aiStep() {
         super.aiStep()
-        val vec3d = this.deltaMovement
+        val vec3d = this.getDeltaMovement()
         if (!this.onGround() && vec3d.y < 0.0) {
-            this.deltaMovement = vec3d.multiply(1.0, 0.6, 1.0)
+            this.setDeltaMovement( vec3d.multiply(1.0, 0.6, 1.0))
         }
     }
 
@@ -196,7 +196,7 @@ open class BaseParrotEntity(
         fun canBirdSpawn(
             type: EntityType<out BaseFlyingAnimal>,
             level: LevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

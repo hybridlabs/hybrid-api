@@ -16,7 +16,7 @@ class FlyingAnimalFlyFloatControl(
         val bird = this.mob as BaseFlyingAnimal
 
         if (bird.isBelowWaterline()) {
-            var delta = bird.deltaMovement
+            var delta = bird.getDeltaMovement()
 
             delta = delta.add(0.0, 0.05, 0.0)
 

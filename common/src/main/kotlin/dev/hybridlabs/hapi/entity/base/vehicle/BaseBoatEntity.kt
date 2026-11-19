@@ -1,16 +1,16 @@
 package dev.hybridlabs.hapi.entity.base.vehicle
 
-import net.minecraft.BlockUtil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
+import net.minecraft.util.BlockUtil
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -20,22 +20,25 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Leashable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
-import net.minecraft.world.entity.animal.WaterAnimal
+import net.minecraft.world.entity.animal.fish.WaterAnimal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.WaterlilyBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.level.gamerules.GameRules
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.Shapes
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 import kotlin.math.max
@@ -62,12 +65,6 @@ abstract class BaseBoatEntity(
     private var invFriction = 0f
 
     var deltaRotation = 0f
-    private var lerpSteps = 0
-    private var lerpX = 0.0
-    private var lerpY = 0.0
-    private var lerpZ = 0.0
-    private var lerpYRot = 0.0
-    private var lerpXRot = 0.0
     var lastYd = 0.0
 
     var status: Status? = null
@@ -75,7 +72,7 @@ abstract class BaseBoatEntity(
     private var leashData: Leashable.LeashData? = null
 
     init {
-        noCulling = true
+        this.blocksBuilding = true
     }
 
     override fun getLeashData(): Leashable.LeashData? {
@@ -90,13 +87,6 @@ abstract class BaseBoatEntity(
         return Vec3(0.0, (0.88f * this.eyeHeight).toDouble(), (this.bbWidth * 0.64f).toDouble())
     }
 
-    override fun elasticRangeLeashBehaviour(leashHolder: Entity, distance: Float) {
-        val vec3 = leashHolder.position().subtract(this.position()).normalize().scale(distance.toDouble() - 6.0)
-        val vec31 = this.deltaMovement
-        val flag = vec31.dot(vec3) > 0.0
-        this.deltaMovement = vec31.add(vec3.scale(if (flag) 0.15 else 0.2))
-    }
-
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
         builder.define(DATA_ID_HURT, 0)
         builder.define(DATA_ID_HURTDIR, 1)
@@ -104,14 +94,14 @@ abstract class BaseBoatEntity(
         builder.define(DATA_ID_BUBBLE_TIME, 0)
     }
 
-    override fun addAdditionalSaveData(tag: CompoundTag) {
-        tag.putFloat("Damage", getDamage())
-        this.writeLeashData(tag, this.leashData)
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        output.putFloat("Damage", getDamage())
+        this.writeLeashData(output, this.leashData)
     }
 
-    override fun readAdditionalSaveData(tag: CompoundTag) {
-        this.leashData = this.readLeashData(tag)
-        setDamage(tag.getFloat("Damage"))
+    override fun readAdditionalSaveData(input: ValueInput) {
+        this.readLeashData(input)
+        setDamage(input.getFloatOr("Damage", 0.0f))
     }
 
     fun setDamage(damageTaken: Float) {
@@ -138,7 +128,7 @@ abstract class BaseBoatEntity(
         return canVehicleCollide(this, entity)
     }
 
-    override fun canBeCollidedWith(): Boolean {
+    override fun canBeCollidedWith(entity: Entity?): Boolean {
         return true
     }
 
@@ -153,7 +143,7 @@ abstract class BaseBoatEntity(
         } else if (player.isSecondaryUseActive) {
             InteractionResult.PASS
         } else if (this.outOfControlTicks < 60.0f) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 if (player.startRiding(this)) InteractionResult.CONSUME else InteractionResult.PASS
             } else {
                 InteractionResult.SUCCESS
@@ -163,8 +153,8 @@ abstract class BaseBoatEntity(
         }
     }
 
-    override fun onAboveBubbleCol(downwards: Boolean) {
-        if (!this.level().isClientSide) {
+    override fun onAboveBubbleColumn(downwards: Boolean, pos: BlockPos) {
+        if (!this.level().isClientSide()) {
             this.isAboveBubbleColumn = true
             this.bubbleColumnDirectionIsDown = downwards
             if (this.bubbleTime == 0) {
@@ -174,20 +164,20 @@ abstract class BaseBoatEntity(
 
         this.level().addParticle(
             ParticleTypes.SPLASH,
-            this.x + this.random.nextFloat().toDouble(),
-            this.y + 0.7,
-            this.z + this.random.nextFloat().toDouble(),
+            this.getX() + this.random.nextFloat().toDouble(),
+            this.getY() + 0.7,
+            this.getZ() + this.random.nextFloat().toDouble(),
             0.0,
             0.0,
             0.0
         )
         if (this.random.nextInt(20) == 0) {
             this.level().playLocalSound(
-                this.x,
-                this.y,
-                this.z,
-                this.swimSplashSound,
-                this.soundSource,
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                this.getSwimSplashSound(),
+                this.getSoundSource(),
                 1.0f,
                 0.8f + 0.4f * this.random.nextFloat(),
                 false
@@ -198,7 +188,7 @@ abstract class BaseBoatEntity(
 
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
-            AnimationController(this, "Boat Controller", 4) { state ->
+            AnimationController("Boat Controller", 4) { state: AnimationTest<BaseBoatEntity> ->
                 when {
                     isInWater -> {
                         state.setAndContinue(DefaultAnimations.IDLE)
@@ -212,7 +202,7 @@ abstract class BaseBoatEntity(
         )
     }
 
-    override fun getAnimatableInstanceCache(): AnimatableInstanceCache? {
+    override fun getAnimatableInstanceCache(): AnimatableInstanceCache {
         return animCache
     }
 
@@ -228,7 +218,7 @@ abstract class BaseBoatEntity(
             ++this.outOfControlTicks
         }
 
-        if (!this.level().isClientSide && this.outOfControlTicks >= 60.0f) {
+        if (!this.level().isClientSide() && this.outOfControlTicks >= 60.0f) {
             this.ejectPassengers()
         }
 
@@ -240,27 +230,22 @@ abstract class BaseBoatEntity(
             this.setDamage(this.getDamage() - 1.0f)
         }
 
-        this.tickLerp()
-
-        if (this.isControlledByLocalInstance) {
-
+        if (this.isLocalInstanceAuthoritative()) {
             this.floatWaterVehicle()
-
-            this.move(MoverType.SELF, this.deltaMovement)
+            this.move(MoverType.SELF, this.getDeltaMovement())
         } else {
-            this.deltaMovement = Vec3.ZERO
+            this.setDeltaMovement(Vec3.ZERO)
         }
 
         this.tickBubbleColumn()
 
-        this.checkInsideBlocks()
         val list = this.level()
             .getEntities(this, this.boundingBox.inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this))
         if (!list.isEmpty()) {
-            val flag = !this.level().isClientSide && this.controllingPassenger !is Player
+            val flag = !this.level().isClientSide() && this.controllingPassenger !is Player
 
             for (j in list.indices) {
-                val entity = list[j] as Entity
+                val entity = list[j]
                 if (!entity.hasPassenger(this)) {
                     if (flag && this.passengers.size < this.maxPassengers && !entity.isPassenger && this.hasEnoughSpaceFor(
                             entity
@@ -283,7 +268,7 @@ abstract class BaseBoatEntity(
         get() = 3
 
     private fun tickBubbleColumn() {
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             val i = this.bubbleTime
             if (i > 0) {
                 this.bubbleMultiplier += 0.05f
@@ -294,7 +279,7 @@ abstract class BaseBoatEntity(
             this.bubbleMultiplier = Mth.clamp(this.bubbleMultiplier, 0.0f, 1.0f)
             this.bubbleAngleO = this.bubbleAngle
             this.bubbleAngle =
-                10.0f * sin((0.5f * this.level().gameTime.toFloat()).toDouble()).toFloat() * this.bubbleMultiplier
+                10.0f * sin((0.5f * this.level().getGameTime().toFloat()).toDouble()).toFloat() * this.bubbleMultiplier
         } else {
             if (!this.isAboveBubbleColumn) {
                 this.bubbleTime = 0
@@ -307,14 +292,14 @@ abstract class BaseBoatEntity(
                 val j = 60 - k - 1
                 if (j > 0 && k == 0) {
                     this.bubbleTime = 0
-                    val vec3 = this.deltaMovement
+                    val vec3 = this.getDeltaMovement()
                     if (this.bubbleColumnDirectionIsDown) {
-                        this.deltaMovement = vec3.add(0.0, -0.7, 0.0)
+                        this.setDeltaMovement(vec3.add(0.0, -0.7, 0.0))
                         this.ejectPassengers()
                     } else {
                         this.setDeltaMovement(
                             vec3.x,
-                            if (this.hasPassenger { entity: Entity? -> entity is Player }) 2.7 else 0.6,
+                            if (this.hasPassenger { entity: Entity -> entity is Player }) 2.7 else 0.6,
                             vec3.z
                         )
                     }
@@ -330,7 +315,6 @@ abstract class BaseBoatEntity(
             return when (this.getCurrentStatus().ordinal) {
                 0, 1, 2 -> SoundEvents.BOAT_PADDLE_WATER
                 3 -> SoundEvents.BOAT_PADDLE_LAND
-                4 -> null
                 else -> null
             }
         }
@@ -343,36 +327,8 @@ abstract class BaseBoatEntity(
         return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, portal))
     }
 
-    override fun lerpTo(x: Double, y: Double, z: Double, pitch: Float, xRot: Float, posRotationIncrements: Int) {
-        this.lerpX = x
-        this.lerpY = y
-        this.lerpZ = z
-        this.lerpYRot = pitch.toDouble()
-        this.lerpXRot = xRot.toDouble()
-        this.lerpSteps = 10
-    }
-
     override fun getMotionDirection(): Direction {
         return this.direction.clockWise
-    }
-
-    private fun tickLerp() {
-        if (this.isControlledByLocalInstance) {
-            this.lerpSteps = 0
-            this.syncPacketPositionCodec(this.x, this.y, this.z)
-        }
-
-        if (this.lerpSteps > 0) {
-            val d0 = this.x + (this.lerpX - this.x) / this.lerpSteps.toDouble()
-            val d1 = this.y + (this.lerpY - this.y) / this.lerpSteps.toDouble()
-            val d2 = this.z + (this.lerpZ - this.z) / this.lerpSteps.toDouble()
-            val d3 = Mth.wrapDegrees(this.lerpYRot - this.yRot.toDouble())
-            this.yRot += d3.toFloat() / this.lerpSteps.toFloat()
-            this.xRot += (this.lerpXRot - this.xRot.toDouble()).toFloat() / this.lerpSteps.toFloat()
-            --this.lerpSteps
-            this.setPos(d0, d1, d2)
-            this.setRot(this.yRot, this.xRot)
-        }
     }
 
     fun floatWaterVehicle() {
@@ -383,16 +339,16 @@ abstract class BaseBoatEntity(
         if (this.oldStatus == Status.IN_AIR && this.status != Status.IN_AIR && this.status != Status.ON_LAND) {
             this.waterLevel = this.getY(1.0)
             val targetY: Double = this.waterLevelAbove - this.bbHeight + 0.101
-            if (this.level().noCollision(this, this.boundingBox.move(0.0, targetY - this.y, 0.0))) {
-                this.setPos(this.x, targetY, this.z)
-                this.deltaMovement = this.deltaMovement.multiply(1.0, 0.0, 1.0)
+            if (this.level().noCollision(this, this.boundingBox.move(0.0, targetY - this.getY(), 0.0))) {
+                this.setPos(this.getX(), targetY, this.getZ())
+                this.setDeltaMovement(this.getDeltaMovement().multiply(1.0, 0.0, 1.0))
                 this.lastYd = 0.0
             }
 
             this.status = Status.IN_WATER
         } else {
             if (this.status == Status.IN_WATER) {
-                buoyancy = (this.waterLevel - this.y) / this.bbHeight
+                buoyancy = (this.waterLevel - this.getY()) / this.bbHeight
                 invFriction = 0.9f
             } else if (this.status == Status.UNDER_FLOWING_WATER) {
                 vspeed = -7.0E-4
@@ -409,11 +365,11 @@ abstract class BaseBoatEntity(
                 }
             }
 
-            val movement = this.deltaMovement
+            val movement = this.getDeltaMovement()
             this.setDeltaMovement(movement.x * invFriction, movement.y + vspeed, movement.z * invFriction)
             this.deltaRotation *= invFriction
             if (buoyancy > 0.0) {
-                val deltaMovement = this.deltaMovement
+                val deltaMovement = this.getDeltaMovement()
                 this.setDeltaMovement(
                     deltaMovement.x,
                     (deltaMovement.y + buoyancy * (gravity / 0.65)) * 0.75,
@@ -583,7 +539,7 @@ abstract class BaseBoatEntity(
         }
 
     override fun checkFallDamage(y: Double, onGround: Boolean, state: BlockState, pos: BlockPos) {
-        this.lastYd = this.deltaMovement.y
+        this.lastYd = this.getDeltaMovement().y
         if (!this.isPassenger) {
             if (onGround) {
                 if (this.fallDistance > 3.0f) {
@@ -593,11 +549,12 @@ abstract class BaseBoatEntity(
                     }
 
                     this.causeFallDamage(this.fallDistance, 1.0f, this.damageSources().fall())
-                    if (!this.level().isClientSide && !this.isRemoved) {
-                        this.kill()
-                        if (this.level().gameRules.getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                    if (!this.level().isClientSide() && !this.isRemoved) {
+                        val serverLevel = this.level() as ServerLevel
+                        this.kill(serverLevel)
+                        if (serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
                             for (j in 0..1) {
-                                this.spawnAtLocation(Items.STICK)
+                                this.spawnAtLocation(serverLevel, Items.STICK)
                             }
                         }
                     }
@@ -624,10 +581,6 @@ abstract class BaseBoatEntity(
         return this.status == Status.UNDER_WATER || this.status == Status.UNDER_FLOWING_WATER
     }
 
-    init {
-        this.blocksBuilding = true
-    }
-
     enum class Status {
         IN_WATER,
         UNDER_WATER,
@@ -647,7 +600,7 @@ abstract class BaseBoatEntity(
             SynchedEntityData.defineId(BaseBoatEntity::class.java, EntityDataSerializers.INT)
 
         fun canVehicleCollide(vehicle: Entity, entity: Entity): Boolean {
-            return (entity.canBeCollidedWith() || entity.isPushable) && !vehicle.isPassengerOfSameVehicle(entity)
+            return (entity.canBeCollidedWith(vehicle) || entity.isPushable) && !vehicle.isPassengerOfSameVehicle(entity)
         }
     }
 }

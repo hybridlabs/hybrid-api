@@ -1,86 +1,49 @@
 package dev.hybridlabs.hapi.client.model.entity.aquatic
 
+import dev.hybridlabs.hapi.client.model.HAPIDataTickets
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseSirenianEntity
-import net.minecraft.client.model.geom.PartNames
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.AnimationState
+import net.minecraft.resources.Identifier
 import software.bernie.geckolib.model.GeoModel
-import kotlin.math.abs
+import software.bernie.geckolib.renderer.base.GeoRenderState
 
-@Suppress("OVERRIDE_DEPRECATION")
 abstract class BaseSirenianEntityModel<T : BaseSirenianEntity>(
     private val namespace: String,
     private val id: String
 ) : GeoModel<T>() {
 
-    override fun getModelResource(animatable: T): ResourceLocation {
-        return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+    override fun getModelResource(renderState: GeoRenderState): Identifier {
+        return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
+            Identifier.fromNamespaceAndPath(
             namespace,
             "geo/mammal/$id/baby_$id.geo.json")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
             namespace,
             "geo/mammal/$id/$id.geo.json")
         }
     }
 
-    override fun getTextureResource(animatable: T): ResourceLocation {
-        return if (animatable.isBaby) {
-            ResourceLocation.fromNamespaceAndPath(
+    override fun getTextureResource(renderState: GeoRenderState): Identifier {
+        return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
+            Identifier.fromNamespaceAndPath(
             namespace,
             "textures/entity/mammal/$id/baby_$id.png")
         } else {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
             namespace,
             "textures/entity/mammal/$id/$id.png")
         }
     }
 
-    override fun getAnimationResource(animatable: T): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+    override fun getAnimationResource(animatable: T): Identifier {
+        return Identifier.fromNamespaceAndPath(
             namespace,
             "animations/entity/mammal/$id/$id.animation.json")
     }
 
-    fun getLayerTextureResource(layer: String): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(
+    fun getLayerTextureResource(layer: String): Identifier {
+        return Identifier.fromNamespaceAndPath(
             namespace,
             "textures/entity/mammal/$id/layers/${id}_$layer.png")
-    }
-
-    override fun setCustomAnimations(
-        animatable: T,
-        instanceId: Long,
-        animationState: AnimationState<T>
-    ) {
-        super.setCustomAnimations(animatable, instanceId, animationState)
-
-        if (!animatable.isInWater) {
-            return
-        }
-
-        val deltaTime = animationState.partialTick
-        val body = animationProcessor.getBone(PartNames.BODY)
-        val tail = animationProcessor.getBone(PartNames.TAIL)
-
-        val tilt = Mth.clamp(
-            Mth.lerp(deltaTime, animatable.xRotO, animatable.xRot),
-            -45f, 45f
-        )
-
-        val yawDiff = animatable.yRot - animatable.yRotO
-        val targetRoll = Mth.clamp(yawDiff * 3f, -30f, 30f)
-
-        val turnSpeed = abs(yawDiff)
-        val smoothing = Mth.clamp(0.05f + turnSpeed * 0.02f, 0.05f, 0.25f)
-        animatable.currentRoll = Mth.lerp(smoothing, animatable.currentRoll, targetRoll)
-
-        val roll = Mth.lerp(deltaTime, animatable.prevRoll, animatable.currentRoll)
-
-        body.rotX = tilt * -Mth.DEG_TO_RAD
-        body.rotZ = roll * -Mth.DEG_TO_RAD
-        tail.rotY += roll * Mth.DEG_TO_RAD
     }
 }

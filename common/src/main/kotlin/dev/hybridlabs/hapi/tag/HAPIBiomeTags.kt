@@ -1,7 +1,7 @@
 package dev.hybridlabs.hapi.tag
 
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import dev.hybridlabs.hapi.CommonClass
@@ -10,15 +10,15 @@ import net.minecraft.world.item.Item
 object HAPIBiomeTags {
     //#region Compatibility Biome Tags
     // rainbow reef
-    val RR_WARM_OCEANS = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("rainbow_reef", "warm_oceans"))
+    val RR_WARM_OCEANS = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("rainbow_reef", "warm_oceans"))
     //fintastic
-    val MOONY_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "moony_biomes"))
-    val PLECO_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "pleco_biomes"))
-    val CATFISH_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "catfish_biomes"))
-    val ARAPAIMA_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "arapaima_biomes"))
-    val GUPPY_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "guppy_biomes"))
-    val FWSHARK_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "fwshark_biomes"))
-    val MINNOW_SURFACE_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("fintastic", "minnow_surface_biomes"))
+    val MOONY_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "moony_biomes"))
+    val PLECO_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "pleco_biomes"))
+    val CATFISH_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "catfish_biomes"))
+    val ARAPAIMA_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "arapaima_biomes"))
+    val GUPPY_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "guppy_biomes"))
+    val FWSHARK_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "fwshark_biomes"))
+    val MINNOW_SURFACE_BIOMES = TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("fintastic", "minnow_surface_biomes"))
 
     //#region Frozen Ocean Tags
     val SHALLOW_FROZEN_OCEANS = create("shallow_frozen_oceans")
@@ -109,6 +109,6 @@ object HAPIBiomeTags {
     }
 
     private fun createConventional(id: String): TagKey<Biome> {
-        return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("c", id))
+        return TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("c", id))
     }
 }

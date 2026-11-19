@@ -2,58 +2,64 @@ package dev.hybridlabs.hapi.client.render.entity.aquatic
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import dev.hybridlabs.hapi.client.model.HAPIDataTickets
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseJellyfishEntity
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
-import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.util.Mth
 import software.bernie.geckolib.model.GeoModel
 import software.bernie.geckolib.renderer.GeoEntityRenderer
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer
+import software.bernie.geckolib.renderer.base.GeoRenderState
+import software.bernie.geckolib.renderer.base.RenderPassInfo
+import software.bernie.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer
 
 @Suppress("LeakingThis")
-open class BaseJellyfishEntityRenderer<T : BaseJellyfishEntity>(
+open class BaseJellyfishEntityRenderer<T : BaseJellyfishEntity, R : LivingEntityRenderState>(
     context: EntityRendererProvider.Context,
     model: GeoModel<T>,
     private var variableSize: Boolean = false,
     canGlow: Boolean = false
-) : GeoEntityRenderer<T>(context, model) {
+) : GeoEntityRenderer<T, R>(context, model) {
 
     init {
-        if (canGlow) addRenderLayer(AutoGlowingGeoLayer(this))
+        if (canGlow) withRenderLayer(AutoGlowingGeoLayer(this))
     }
 
-    override fun applyRotations(
-        jellyfishEntity: T,
-        poseStack: PoseStack,
-        ageInTicks: Float,
-        rotationYaw: Float,
-        partialTick: Float,
-        nativeScale: Float
-    ) {
-        val i = Mth.lerp(partialTick, jellyfishEntity.prevTiltAngle, jellyfishEntity.tiltAngle)
+    override fun addRenderData(animatable: T, relatedObject: Void?, renderState: R, partialTick: Float) {
+        super.addRenderData(animatable, relatedObject, renderState, partialTick)
+        HAPIDataTickets.captureEntityState(animatable, renderState)
+
+        renderState.addGeckolibData(HAPIDataTickets.IS_BABY, animatable.isBaby)
+        renderState.addGeckolibData(
+            HAPIDataTickets.SIZE,
+            if (variableSize) BaseWaterAnimal.getScaleAdjustment(animatable, 0.05f) else 1f
+        )
+        renderState.addGeckolibData(
+            HAPIDataTickets.TILT_ANGLE,
+            Mth.lerp(partialTick, animatable.prevTiltAngle, animatable.tiltAngle)
+        )
+    }
+
+    override fun applyRotations(renderPassInfo: RenderPassInfo<R>, poseStack: PoseStack, nativeScale: Float) {
+        val renderState = renderPassInfo.renderState()
+        val tiltAngle = renderState.getGeckolibData(HAPIDataTickets.TILT_ANGLE) ?: 0f
+        val rotationYaw = renderState.getOrDefaultGeckolibData(
+            software.bernie.geckolib.constant.DataTickets.ENTITY_BODY_YAW, 0f
+        ) ?: 0f
+
         poseStack.translate(0.0f, 0.25f, 0.0f)
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - rotationYaw))
-        poseStack.mulPose(Axis.XP.rotationDegrees(i))
+        poseStack.mulPose(Axis.XP.rotationDegrees(tiltAngle))
         poseStack.translate(0.0f, 0.0f, 0.0f)
     }
 
-    override fun getDeathMaxRotation(animatable: T): Float {
+    override fun getDeathMaxRotation(renderState: GeoRenderState): Float {
         return 0f
     }
 
-    override fun render(
-        entity: T,
-        entityYaw: Float,
-        partialTick: Float,
-        poseStack: PoseStack,
-        bufferSource: MultiBufferSource,
-        packedLight: Int
-    ) {
-        if (variableSize) {
-            val size = BaseWaterAnimal.Companion.getScaleAdjustment(entity, 0.05f)
-            poseStack.scale(size, size, size)
-        }
-        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight)
+    override fun scaleModelForRender(renderPassInfo: RenderPassInfo<R>, widthScale: Float, heightScale: Float) {
+        val size = renderPassInfo.getGeckolibData(HAPIDataTickets.SIZE) ?: 1f
+        super.scaleModelForRender(renderPassInfo, widthScale * size, heightScale * size)
     }
 }

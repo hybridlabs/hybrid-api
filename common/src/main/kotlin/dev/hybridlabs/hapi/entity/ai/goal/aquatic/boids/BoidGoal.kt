@@ -4,7 +4,7 @@ import dev.hybridlabs.hapi.entity.base.aquatic.BaseFishEntity
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
-import net.minecraft.world.entity.VariantHolder
+import dev.hybridlabs.hapi.entity.base.VariantHolder
 import net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.phys.Vec3
@@ -82,7 +82,7 @@ class BoidGoal(
 
         fish.addDeltaMovement(boidVec)
 
-        val targetPos = fish.position().add(fish.deltaMovement)
+        val targetPos = fish.position().add(fish.getDeltaMovement())
         fish.lookAt(
             EntityAnchorArgument.Anchor.EYES,
             Vec3(targetPos.x, targetPos.y + fish.eyeHeight, targetPos.z)
@@ -90,7 +90,7 @@ class BoidGoal(
     }
 
     fun random(): Vec3 {
-        val velocity = fish.deltaMovement
+        val velocity = fish.getDeltaMovement()
         if (velocity.length() < maxSpeed * 0.001) {
             val yaw = (fish.random.nextGaussian() * 40) - 20
             val pitch = (fish.random.nextGaussian() * 2) - 1
@@ -115,11 +115,11 @@ class BoidGoal(
         var c = Vec3.ZERO
 
         for (nearbyMob in nearbyMobs) {
-            c = c.add(nearbyMob.deltaMovement)
+            c = c.add(nearbyMob.getDeltaMovement())
         }
 
         c = c.scale((1f / nearbyMobs.size).toDouble())
-        c = c.subtract(fish.deltaMovement)
+        c = c.subtract(fish.getDeltaMovement())
         return c.scale(alignmentInfluence.toDouble())
     }
 

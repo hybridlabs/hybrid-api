@@ -2,10 +2,8 @@ package dev.hybridlabs.hapi.item
 
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
@@ -16,9 +14,8 @@ open class PlaceableInWaterItem(block: Block, settings: Properties) : BlockItem(
         return InteractionResult.PASS
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         val blockHitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY)
-        val actionResult = super.useOn(UseOnContext(user, hand, blockHitResult))
-        return InteractionResultHolder(actionResult, user.getItemInHand(hand))
+        return super.useOn(UseOnContext(user, hand, blockHitResult))
     }
 }

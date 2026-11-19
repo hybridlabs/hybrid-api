@@ -62,7 +62,7 @@ open class WaterAnimalAttackGoal(
             false
         } else if (!this.followingTargetEvenIfNotSeen) {
             !waterAnimal.navigation.isDone
-        } else if (!waterAnimal.isWithinRestriction(livingEntity.blockPosition())) {
+        } else if (!waterAnimal.isWithinHome(livingEntity.blockPosition())) {
             false
         } else {
             livingEntity !is Player || !livingEntity.isSpectator && !livingEntity.isCreative
@@ -81,7 +81,7 @@ open class WaterAnimalAttackGoal(
 
     override fun stop() {
         val livingEntity = waterAnimal.target
-        if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingEntity)) {
+        if (livingEntity == null || !EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingEntity)) {
             waterAnimal.target = null
         }
 
@@ -110,9 +110,9 @@ open class WaterAnimalAttackGoal(
                     this.pathedTargetZ
                 ) >= 1.0) || (waterAnimal.random.nextFloat() < 0.05f))
             ) {
-                this.pathedTargetX = livingEntity.x
-                this.pathedTargetY = livingEntity.y
-                this.pathedTargetZ = livingEntity.z
+                this.pathedTargetX = livingEntity.getX()
+                this.pathedTargetY = livingEntity.getY()
+                this.pathedTargetZ = livingEntity.getZ()
                 this.ticksUntilNextPathRecalculation = 4 + waterAnimal.random.nextInt(7)
                 val d0: Double = waterAnimal.distanceToSqr(livingEntity)
                 if (d0 > 1024.0) {
@@ -137,7 +137,7 @@ open class WaterAnimalAttackGoal(
         if (this.canPerformAttack(target)) {
             this.resetAttackCooldown()
             waterAnimal.swing(InteractionHand.MAIN_HAND)
-            waterAnimal.doHurtTarget(target)
+            waterAnimal.doHurtTarget(getServerLevel(waterAnimal), target)
         }
     }
 

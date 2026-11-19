@@ -43,10 +43,10 @@ open class WaterAnimalFollowParentGoal(
     override fun canContinueToUse(): Boolean {
         if (this.waterAnimal.getAge() >= 0) {
             return false
-        } else if (!this.parent!!.isAlive) {
+        } else if (this.parent?.isAlive == false) {
             return false
         } else {
-            val d0 = this.waterAnimal.distanceToSqr(this.parent)
+            val d0 = this.waterAnimal.distanceToSqr(this.parent!!)
             return !(d0 < 9.0) && !(d0 > 256.0)
         }
     }
@@ -62,7 +62,7 @@ open class WaterAnimalFollowParentGoal(
     override fun tick() {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10)
-            this.waterAnimal.getNavigation().moveTo(this.parent, this.speedModifier)
+            this.waterAnimal.getNavigation().moveTo(this.parent!!, this.speedModifier)
         }
     }
 }

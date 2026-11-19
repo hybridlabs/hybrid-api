@@ -2,6 +2,7 @@ package dev.hybridlabs.hapi.entity.base.skies
 
 import dev.hybridlabs.hapi.entity.ai.goal.skies.FlyingAnimalFollowParentGoal
 import net.minecraft.core.BlockPos
+import net.minecraft.core.UUIDUtil
 import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
@@ -25,19 +26,21 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.BlockAndTintGetter
-import net.minecraft.world.level.GameRules
+import net.minecraft.world.level.gamerules.GameRules
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import org.jetbrains.annotations.Nullable
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
@@ -67,12 +70,12 @@ open class BaseFlyingAnimal(
         return GroundPathNavigation(this, level)
     }
 
-    override fun customServerAiStep() {
+    override fun customServerAiStep(level: ServerLevel) {
         if (this.getAge() != 0) {
             this.inLove = 0
         }
 
-        super.customServerAiStep()
+        super.customServerAiStep(level)
     }
 
     override fun aiStep() {
@@ -80,9 +83,9 @@ open class BaseFlyingAnimal(
 
         this.updateSwingTime()
 
-        val vec3d = this.deltaMovement
+        val vec3d = this.getDeltaMovement()
         if (!this.onGround() && vec3d.y < 0.0) {
-            this.deltaMovement = vec3d.multiply(1.0, 0.6, 1.0)
+            this.setDeltaMovement( vec3d.multiply(1.0, 0.6, 1.0))
         }
 
         if (this.getAge() != 0) {
@@ -117,13 +120,13 @@ open class BaseFlyingAnimal(
                         (this.random.nextFloat().toDouble() - 0.5) * 0.1,
                         Math.random() * 0.1 + 0.1,
                         0.0
-                    )).xRot(-this.xRot * (Math.PI.toFloat() / 180f))
-                        .yRot(-this.yRot * (Math.PI.toFloat() / 180f))
+                    )).xRot(-this.getXRot() * (Math.PI.toFloat() / 180f))
+                        .yRot(-this.getYRot() * (Math.PI.toFloat() / 180f))
                     this.level().addParticle(
                         ItemParticleOption(ParticleTypes.ITEM, itemstack),
-                        this.x + this.lookAngle.x / 2.0,
-                        this.y,
-                        this.z + this.lookAngle.z / 2.0,
+                        this.getX() + this.lookAngle.x / 2.0,
+                        this.getY(),
+                        this.getZ() + this.lookAngle.z / 2.0,
                         vec3.x,
                         vec3.y + 0.05,
                         vec3.z
@@ -152,13 +155,13 @@ open class BaseFlyingAnimal(
         }
     }
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        if (this.isInvulnerableTo(source)) {
+    override fun hurtServer(level: ServerLevel, source: DamageSource, amount: Float): Boolean {
+        if (this.isInvulnerableTo(level, source)) {
             return false
         }
 
         this.inLove = 0
-        return super.hurt(source, amount)
+        return super.hurtServer(level, source, amount)
     }
 
     override fun registerGoals() {
@@ -186,21 +189,19 @@ open class BaseFlyingAnimal(
         return 90
     }
 
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
-        compound.putBoolean("FromCreatureNet", fromCreatureNet)
-        compound.putInt("InLove", this.inLove)
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putBoolean("FromCreatureNet", fromCreatureNet)
+        output.putInt("InLove", this.inLove)
 
-        if (this.loveCause != null) {
-            compound.putUUID("LoveCause", this.loveCause)
-        }
+        this.loveCause?.let { output.store("LoveCause", UUIDUtil.CODEC, it) }
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
-        fromCreatureNet = compound.getBoolean("FromCreatureNet")
-        this.inLove = compound.getInt("InLove")
-        this.loveCause = if (compound.hasUUID("LoveCause")) compound.getUUID("LoveCause") else null
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        fromCreatureNet = input.getBooleanOr("FromCreatureNet", false)
+        this.inLove = input.getIntOr("InLove", 0)
+        this.loveCause = input.read("LoveCause", UUIDUtil.CODEC).orElse(null)
     }
     //#endregion
 
@@ -212,7 +213,7 @@ open class BaseFlyingAnimal(
         val itemstack = player.getItemInHand(hand)
         if (this.isFood(itemstack)) {
             val i = this.getAge()
-            if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
+            if (!this.level().isClientSide() && i == 0 && this.canFallInLove()) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.setInLove(player)
                 return InteractionResult.SUCCESS
@@ -221,10 +222,10 @@ open class BaseFlyingAnimal(
             if (this.isBaby) {
                 this.usePlayerItem(player, hand, itemstack)
                 this.ageUp(getSpeedUpSecondsWhenFeeding(-i), true)
-                return InteractionResult.sidedSuccess(this.level().isClientSide)
+                return if (this.level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
             }
 
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 return InteractionResult.CONSUME
             }
         }
@@ -249,7 +250,7 @@ open class BaseFlyingAnimal(
         mate.setPersistenceRequired()
         baby.setPersistenceRequired()
         baby.isBaby = true
-        baby.moveTo(this.x, this.y, this.z, 0.0f, 0.0f)
+        baby.snapTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f)
 
         this.finalizeSpawnChildFromBreeding(level, mate)
         level.addFreshEntityWithPassengers(baby)
@@ -261,13 +262,13 @@ open class BaseFlyingAnimal(
         this.resetLove()
         bird.resetLove()
         level.broadcastEntityEvent(this, 18.toByte())
-        if (level.gameRules.getBoolean(GameRules.RULE_DOMOBLOOT)) {
+        if (level.getGameRules().get(GameRules.MOB_DROPS)) {
             level.addFreshEntity(
                 ExperienceOrb(
                     level,
-                    this.x,
-                    this.y,
-                    this.z,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
                     this.getRandom().nextInt(7) + 1
                 )
             )
@@ -282,8 +283,8 @@ open class BaseFlyingAnimal(
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
             AnimationController(
-                this, "Walk/Swim/Fly/Idle", 4
-            ) { state: AnimationState<BaseFlyingAnimal> ->
+                 "Walk/Swim/Fly/Idle", 4
+            ) { state: AnimationTest<BaseFlyingAnimal> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     !this.onGround() && !isInWater -> state.setAndContinue(DefaultAnimations.FLY)
@@ -300,11 +301,11 @@ open class BaseFlyingAnimal(
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         // Match vanilla animals: birds spawned during world generation are permanent
-        if (spawnReason == MobSpawnType.CHUNK_GENERATION) {
+        if (spawnReason == EntitySpawnReason.CHUNK_GENERATION) {
             this.setPersistenceRequired()
         }
 
@@ -351,7 +352,7 @@ open class BaseFlyingAnimal(
         fun canBirdSpawn(
             type: EntityType<out BaseFlyingAnimal>,
             level: LevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

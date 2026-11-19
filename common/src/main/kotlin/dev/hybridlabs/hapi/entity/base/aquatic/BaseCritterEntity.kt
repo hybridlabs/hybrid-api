@@ -9,7 +9,7 @@ import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal
@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -51,7 +51,7 @@ open class BaseCritterEntity(
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?,
     ): SpawnGroupData? {
         this.size = this.random.nextIntBetweenInclusive(getMinSize(), getMaxSize())
@@ -78,7 +78,7 @@ open class BaseCritterEntity(
     //#region Animations
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
-            DefaultAnimations.genericWalkIdleController(this)
+            DefaultAnimations.genericWalkIdleController<BaseCritterEntity>()
         )
     }
 
@@ -97,7 +97,7 @@ open class BaseCritterEntity(
         fun canSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

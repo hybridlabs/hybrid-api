@@ -127,18 +127,18 @@ class WaterAnimalGrazeGoal(
             val motionY = waterAnimal.getRandom().nextGaussian() * 0.07
             val motionZ = waterAnimal.getRandom().nextGaussian() * 0.07
             val angle = ((0.0174532925 * waterAnimal.yBodyRot) + i1).toFloat()
-            val extraX = (radius * Mth.sin(Mth.PI + angle)).toDouble()
+            val extraX = (radius * Mth.sin((Mth.PI + angle).toDouble())).toDouble()
             val extraY = 0.8
-            val extraZ = (radius * Mth.cos(angle)).toDouble()
+            val extraZ = (radius * Mth.cos(angle.toDouble())).toDouble()
             val state = waterAnimal.level().getBlockState(target)
             (waterAnimal.level() as ServerLevel).sendParticles(
                 BlockParticleOption(
                     ParticleTypes.BLOCK,
                     state
                 ),
-                target.x + 0.5 + extraX,
-                target.y + 0.5 + extraY,
-                target.z + 0.5 + extraZ,
+                target.getX() + 0.5 + extraX,
+                target.getY() + 0.5 + extraY,
+                target.getZ() + 0.5 + extraZ,
                 1,
                 motionX,
                 motionY,

@@ -7,7 +7,7 @@ import net.minecraft.core.Direction
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
 import net.minecraft.world.entity.ai.goal.PanicGoal
@@ -20,9 +20,9 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 
@@ -57,8 +57,8 @@ open class BaseAquaticBirdEntity(
     override fun registerControllers(controllerRegistrar: AnimatableManager.ControllerRegistrar) {
         controllerRegistrar.add(
             AnimationController(
-                this, "Walk/Swim/Fly/Idle", 4
-            ) { state: AnimationState<BaseAquaticBirdEntity> ->
+                 "Walk/Swim/Fly/Idle", 4
+            ) { state: AnimationTest<BaseAquaticBirdEntity> ->
                 when {
                     state.isMoving && onGround() -> state.setAndContinue(DefaultAnimations.WALK)
                     state.isMoving && isInWater -> state.setAndContinue(DefaultAnimations.SWIM)
@@ -77,7 +77,7 @@ open class BaseAquaticBirdEntity(
         fun canAquaticBirdSpawn(
             type: EntityType<out BaseAquaticBirdEntity>,
             level: LevelAccessor,
-            spawnReason: MobSpawnType,
+            spawnReason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

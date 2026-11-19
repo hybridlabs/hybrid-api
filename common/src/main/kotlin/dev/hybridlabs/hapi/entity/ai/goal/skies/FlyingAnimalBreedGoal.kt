@@ -18,7 +18,7 @@ open class FlyingAnimalBreedGoal @JvmOverloads constructor(
     private var loveTime = 0
 
     init {
-        this.flags = EnumSet.of<Flag?>(Flag.MOVE, Flag.LOOK)
+        this.flags = EnumSet.of<Flag>(Flag.MOVE, Flag.LOOK)
     }
 
     override fun canUse(): Boolean {
@@ -40,17 +40,18 @@ open class FlyingAnimalBreedGoal @JvmOverloads constructor(
     }
 
     override fun tick() {
-        this.bird.getLookControl().setLookAt(this.partner, 10.0f, this.bird.maxHeadXRot.toFloat())
-        this.bird.getNavigation().moveTo(this.partner, this.speedModifier)
+        val partner = this.partner ?: return
+        this.bird.getLookControl().setLookAt(partner, 10.0f, this.bird.maxHeadXRot.toFloat())
+        this.bird.getNavigation().moveTo(partner, this.speedModifier)
         ++this.loveTime
-        if (this.loveTime >= this.adjustedTickDelay(60) && this.bird.distanceToSqr(this.partner) < 9.0) {
+        if (this.loveTime >= this.adjustedTickDelay(60) && this.bird.distanceToSqr(partner) < 9.0) {
             this.breed()
         }
     }
 
     private val freePartner: BaseFlyingAnimal?
         get() {
-            val list: MutableList<out BaseFlyingAnimal> = this.level.getNearbyEntities(
+            val list: MutableList<out BaseFlyingAnimal> = getServerLevel(this.bird).getNearbyEntities(
                 this.partnerClass,
                 PARTNER_TARGETING,
                 this.bird,

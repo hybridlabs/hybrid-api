@@ -23,13 +23,16 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation
 import net.minecraft.world.entity.monster.Monster.isDarkEnoughToSpawn
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animatable.manager.AnimatableManager
 import software.bernie.geckolib.animation.AnimationController
+import software.bernie.geckolib.animation.state.AnimationTest
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 
@@ -66,22 +69,22 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
         builder.define(ATTEMPT_ATTACK, false)
     }
 
-    override fun addAdditionalSaveData(compound: CompoundTag) {
-        super.addAdditionalSaveData(compound)
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
     }
 
-    override fun readAdditionalSaveData(compound: CompoundTag) {
-        super.readAdditionalSaveData(compound)
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
     }
     //#endregion
 
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?
     ): SpawnGroupData? {
-        this.xRot = 0.0f
+        this.setXRot(0.0f)
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData)
     }
 
@@ -96,7 +99,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     override fun tick() {
         super.tick()
 
-        if (isInWaterRainOrBubble) {
+        if (isInWaterOrRain) {
             moistness = getMaxMoistness()
         } else {
             moistness -= 1
@@ -106,8 +109,8 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
             }
 
             if (!this.isUnderWater) {
-                this.xRot = 0.0f
-                this.yRot = this.yRotO
+                this.setXRot(0.0f)
+                this.setYRot(this.yRotO)
                 this.yHeadRot = this.yHeadRotO
             }
         }
@@ -115,9 +118,9 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
         isSprinting = isAggressive
     }
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        if (super.hurt(source, amount) && this.lastHurtByMob != null) {
-            if (!level().isClientSide) {
+    override fun hurtServer(level: ServerLevel, source: DamageSource, amount: Float): Boolean {
+        if (super.hurtServer(level, source, amount) && this.lastHurtByMob != null) {
+            if (!level().isClientSide()) {
                 if (this.isUnderWater) {
                     inkConfig?.run(::squirt)
                 }
@@ -138,7 +141,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     private fun squirt(inkConfig: InkConfiguration) {
         this.playSound(this.getSquirtSound(), this.soundVolume, this.voicePitch)
 
-        val entityPosition = Vec3(this.x, this.y, this.z)
+        val entityPosition = Vec3(this.getX(), this.getY(), this.getZ())
         val radius = 3.0
 
         val affectedEntities = level().getEntitiesOfClass(
@@ -179,8 +182,8 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     override fun travel(travelVector: Vec3) {
         if (this.isEffectiveAi && this.isInWater) {
             this.moveRelative(this.speed, travelVector)
-            this.move(MoverType.SELF, this.deltaMovement)
-            this.deltaMovement = deltaMovement.scale(0.9)
+            this.move(MoverType.SELF, this.getDeltaMovement())
+            this.setDeltaMovement(deltaMovement.scale(0.9))
         } else {
             super.travel(travelVector)
         }
@@ -211,7 +214,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
     //#region Animations
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
         controllers.add(
-            AnimationController(this, "Cephalopod Animation Controller", 4) { state ->
+            AnimationController( "Cephalopod Animation Controller", 4) { state: AnimationTest<BaseCephalopodEntity> ->
                 when {
                     isInWater && state.isMoving -> {
                         state.setAndContinue(DefaultAnimations.SWIM)
@@ -251,7 +254,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
         override fun checkAndPerformAttack(target: LivingEntity) {
             if (canPerformAttack(target)){
                 resetAttackCooldown()
-                mob.doHurtTarget(target)
+                mob.doHurtTarget(cephalopod.level() as ServerLevel, target)
                 cephalopod.isSprinting = true
                 cephalopod.attemptAttack = true
 
@@ -281,7 +284,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
         fun canSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {
@@ -299,7 +302,7 @@ open class BaseCephalopodEntity(type: EntityType<out BaseCephalopodEntity>, worl
         fun canDeepSpawn(
             type: EntityType<out BaseWaterAnimal>,
             world: ServerLevelAccessor,
-            reason: MobSpawnType,
+            reason: EntitySpawnReason,
             pos: BlockPos,
             random: RandomSource,
         ): Boolean {

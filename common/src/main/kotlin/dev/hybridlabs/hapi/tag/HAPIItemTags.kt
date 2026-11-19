@@ -3,7 +3,7 @@
 package dev.hybridlabs.hapi.tag
 
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import dev.hybridlabs.hapi.CommonClass
@@ -12,6 +12,9 @@ object HAPIItemTags {
     val CORAL_CHUNK = create("coral_chunk")
     val SHARK_TOOTH = create("shark_tooth")
     val GLOWSLIME = create("glowslime")
+    val SEASHELL_TOOL_MATERIALS = create("seashell_tool_materials")
+    val REPAIRS_SEASHELL_ARMOR = create("repairs_seashell_armor")
+    val REPAIRS_MOON_JELLY_ARMOR = create("repairs_moon_jelly_armor")
     val DRIFTWOOD_LOG = create("driftwood_log")
     val DRIFTWOOD_PLANKS = create("driftwood_planks")
     val DRIFTWOOD_SLAB = create("driftwood_slab")
@@ -21,6 +24,6 @@ object HAPIItemTags {
     }
 
     private fun createConventional(id: String): TagKey<Item> {
-		return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", id))
+		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", id))
     }
 }

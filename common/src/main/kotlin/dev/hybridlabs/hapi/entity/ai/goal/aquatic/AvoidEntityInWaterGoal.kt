@@ -24,7 +24,7 @@ class AvoidEntityInWaterGoal<T: LivingEntity> (
         maxDistance: Float,
         walkSpeedModifier: Double,
         sprintSpeedModifier: Double) :
-            this(mob, entityClassToAvoid, { true }, maxDistance, walkSpeedModifier, sprintSpeedModifier, Predicate { t: LivingEntity? -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(t) })
+            this(mob, entityClassToAvoid, { true }, maxDistance, walkSpeedModifier, sprintSpeedModifier, Predicate { t: LivingEntity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(t) })
 
     constructor(
         mob: PathfinderMob,
@@ -37,10 +37,10 @@ class AvoidEntityInWaterGoal<T: LivingEntity> (
         this(mob, entityClassToAvoid, { true }, maxDistance, walkSpeedModifier, sprintSpeedModifier, predicateOnAvoidEntity)
 
     override fun canUse(): Boolean {
-        toAvoid = mob.level().getNearestEntity(
+        toAvoid = getServerLevel(mob).getNearestEntity(
             mob.level().getEntitiesOfClass(avoidClass, mob.boundingBox.inflate(this.maxDist.toDouble(), 7.0, this.maxDist.toDouble())) { entity -> entity.isInWater },
-            TargetingConditions.forCombat().range(maxDistance.toDouble()).selector(predicateOnAvoidEntity.and(avoidPredicate)),
-            mob, mob.x, mob.y, mob.z
+            TargetingConditions.forCombat().range(maxDistance.toDouble()).selector { t, _ -> predicateOnAvoidEntity.test(t) && avoidPredicate.test(t) },
+            mob, mob.getX(), mob.getY(), mob.getZ()
         )
 
         if (this.toAvoid == null) return false

@@ -3,6 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
+// GeckoLib 5 marks vanilla render states as GeoRenderState via NeoForge interface injection,
+// which Kotlin (and javac) only see when the injection data is part of the compile classpath.
+// hybrid-gradle does not wire dependency-provided injection data yet, so we do it here.
+neoForge {
+    interfaceInjectionData.from(rootProject.file('gradle/geckolib-interface-injections.json'))
+}
+
 dependencies {
     implementation "software.bernie.geckolib:geckolib-neoforge-$geckolib_version"
 }

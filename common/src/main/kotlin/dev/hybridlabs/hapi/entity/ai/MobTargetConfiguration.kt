@@ -16,7 +16,7 @@ data class MobTargetConfiguration(
     fun <T : Mob> addAttackTarget(targetSelector: GoalSelector, hungerLimit: Int, mob: T, hungerProvider: (T) -> Int) {
         if (prey.isEmpty()) return
 
-        targetSelector.addGoal(1, NearestAttackableTargetGoal(mob, LivingEntity::class.java, 10, true, true) { entity ->
+        targetSelector.addGoal(1, NearestAttackableTargetGoal(mob, LivingEntity::class.java, 10, true, true) { entity, _ ->
             prey.any { tag -> entity.type.`is`(tag) } && hungerProvider.invoke(mob) < hungerLimit }
         )
     }
