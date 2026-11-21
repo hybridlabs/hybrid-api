@@ -24,7 +24,7 @@ class BoidGoal(
     private val maxSpeed: Float = bird.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat()
 
     override fun canUse(): Boolean {
-        if (!bird.isFlying) {
+        if (!bird.isFlying()) {
             return false
         }
 
@@ -46,7 +46,7 @@ class BoidGoal(
     }
 
     override fun canContinueToUse(): Boolean {
-        if (!bird.isFlying) {
+        if (!bird.isFlying()) {
             return false
         }
 

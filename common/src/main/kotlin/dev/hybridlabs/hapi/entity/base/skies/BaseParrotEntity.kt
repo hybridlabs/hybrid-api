@@ -14,7 +14,6 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.control.FlyingMoveControl
 import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation
-import net.minecraft.world.entity.animal.FlyingAnimal
 import net.minecraft.world.entity.animal.parrot.ShoulderRidingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
@@ -40,7 +39,6 @@ open class BaseParrotEntity(
     private val isTameable: Boolean
 ) :
     ShoulderRidingEntity(type, world),
-    FlyingAnimal,
     GeoEntity {
     private val factory = GeckoLibUtil.createInstanceCache(this)
 
@@ -101,7 +99,7 @@ open class BaseParrotEntity(
             return if (this.level().isClientSide()) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         }
 
-        if (!this.isFlying && this.isTame && this.isOwnedBy(player)) {
+        if (!this.isFlying() && this.isTame && this.isOwnedBy(player)) {
             if (!this.level().isClientSide()) {
                 this.isOrderedToSit = !this.isOrderedToSit
             }
@@ -187,7 +185,7 @@ open class BaseParrotEntity(
         }
     }
 
-    override fun isFlying(): Boolean {
+    fun isFlying(): Boolean {
         return !this.onGround()
     }
 

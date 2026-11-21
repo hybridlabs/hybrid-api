@@ -7,7 +7,7 @@ import kotlin.math.max
 
 // credit to fowl play for the code
 
-class BirdFloatControl(bird: BaseFlyingAnimal) : MoveControl(bird) {
+class BirdFloatControl(bird: BaseFlyingAnimal) : MoveControl<BaseFlyingAnimal>(bird) {
     override fun tick() {
         var deltaMovement: Vec3 = this.mob.getDeltaMovement()
         if ((this.mob as BaseFlyingAnimal).isBelowWaterline()) {

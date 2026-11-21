@@ -11,7 +11,7 @@ class FlyingAnimalWalkFlySwimControl(
     bird: BaseFlyingAnimal,
     maxTurn: Int,
     hoversInPlace: Boolean,
-) : FlyingMoveControl(bird, maxTurn, hoversInPlace) {
+) : FlyingMoveControl<BaseFlyingAnimal>(bird, maxTurn, hoversInPlace) {
     private val maxTurn = 0
     private val hoversInPlace = false
 

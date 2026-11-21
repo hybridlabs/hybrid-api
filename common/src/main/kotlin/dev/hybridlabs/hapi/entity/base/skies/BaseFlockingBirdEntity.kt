@@ -7,7 +7,6 @@ import net.minecraft.world.entity.MoverType
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation
 import net.minecraft.world.entity.ai.navigation.PathNavigation
-import net.minecraft.world.entity.animal.FlyingAnimal
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.PathType
@@ -19,7 +18,7 @@ open class BaseFlockingBirdEntity(
     world: Level,
 ) :
     BaseFlyingAnimal(type, world),
-    GeoEntity, FlyingAnimal {
+    GeoEntity {
 
     override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(PathType.WATER, 0.0f)
@@ -33,7 +32,7 @@ open class BaseFlockingBirdEntity(
         return FlyingPathNavigation(this, level)
     }
 
-    override fun isFlying(): Boolean {
+    fun isFlying(): Boolean {
         return !this.onGround() || !this.isInWater
     }
 

@@ -10,7 +10,7 @@ class FlyingAnimalFlyFloatControl(
     bird: BaseFlyingAnimal,
     maxTurn: Int,
     hoversInPlace: Boolean
-) : FlyingMoveControl(bird, maxTurn, hoversInPlace) {
+) : FlyingMoveControl<BaseFlyingAnimal>(bird, maxTurn, hoversInPlace) {
 
     override fun tick() {
         val bird = this.mob as BaseFlyingAnimal

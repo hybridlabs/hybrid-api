@@ -3,8 +3,10 @@ package dev.hybridlabs.hapi.item
 import dev.hybridlabs.hapi.tag.HAPIEntityTags
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.ProblemReporter
 import net.minecraft.world.InteractionHand
@@ -146,7 +148,8 @@ class CreatureNetItem(settings: Properties) : Item(settings) {
         fun getEntityFromNBT(customData: CustomData): Optional<EntityType<*>> {
             val nbt = customData.copyTag()
             val storedNBT = nbt.getCompoundOrEmpty(ENTITY_KEY)
-            return storedNBT.getString("id").flatMap { EntityType.byString(it) }
+            return storedNBT.getString("id")
+                .flatMap { BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.tryParse(it)) }
         }
 
         fun alreadyHasFish(stack: ItemStack): Boolean {

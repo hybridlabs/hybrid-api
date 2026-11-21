@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.EntityTypeTags
-import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EntityTypes
 import java.util.concurrent.CompletableFuture
 
 class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>) :
@@ -164,7 +164,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
         //#region Food Chain Tags
         builder(HAPIEntityTags.BAIT_FISH)
             .add(
-                EntityType.COD.builtInRegistryHolder().key()
+                EntityTypes.COD.builtInRegistryHolder().key()
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "mackerel")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "herring")))
@@ -177,7 +177,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.TOXIC_ANIMALS)
             .add(
-                EntityType.PUFFERFISH.builtInRegistryHolder().key()
+                EntityTypes.PUFFERFISH.builtInRegistryHolder().key()
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "stonefish")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "lionfish")))
@@ -185,9 +185,9 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.SMALL_CREATURES)
             .add(
-                EntityType.SALMON.builtInRegistryHolder().key(),
-                EntityType.COD.builtInRegistryHolder().key(),
-                EntityType.TROPICAL_FISH.builtInRegistryHolder().key()
+                EntityTypes.SALMON.builtInRegistryHolder().key(),
+                EntityTypes.COD.builtInRegistryHolder().key(),
+                EntityTypes.TROPICAL_FISH.builtInRegistryHolder().key()
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "clownfish")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "garden_eel")))
@@ -288,7 +288,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.LARGE_CREATURES)
             .add(
-                EntityType.TURTLE.builtInRegistryHolder().key(),
+                EntityTypes.TURTLE.builtInRegistryHolder().key(),
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "ocean_sunfish")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "oarfish")))
@@ -313,7 +313,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.PLAYERS)
             .add(
-                EntityType.PLAYER.builtInRegistryHolder().key()
+                EntityTypes.PLAYER.builtInRegistryHolder().key()
             )
 
         builder(HAPIEntityTags.OTTER_PREY)
@@ -346,7 +346,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.REEF_FISH)
             .add(
-                EntityType.TROPICAL_FISH.builtInRegistryHolder().key(),
+                EntityTypes.TROPICAL_FISH.builtInRegistryHolder().key(),
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "blowfish")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "boxfish")))
@@ -450,8 +450,8 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.RIVER_FISH)
             .add(
-                EntityType.COD.builtInRegistryHolder().key(),
-                EntityType.SALMON.builtInRegistryHolder().key()
+                EntityTypes.COD.builtInRegistryHolder().key(),
+                EntityTypes.SALMON.builtInRegistryHolder().key()
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "carp")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "goldfish")))
@@ -639,8 +639,8 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.SQUID)
             .add(
-                EntityType.SQUID.builtInRegistryHolder().key(),
-                EntityType.GLOW_SQUID.builtInRegistryHolder().key()
+                EntityTypes.SQUID.builtInRegistryHolder().key(),
+                EntityTypes.GLOW_SQUID.builtInRegistryHolder().key()
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "arrow_squid")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "cuttlefish")))
@@ -675,7 +675,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.DOLPHIN)
             .add(
-                EntityType.DOLPHIN.builtInRegistryHolder().key(),
+                EntityTypes.DOLPHIN.builtInRegistryHolder().key(),
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "orca")))
 
@@ -792,20 +792,20 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
 
         builder(HAPIEntityTags.TURTLE)
             .add(
-                EntityType.TURTLE.builtInRegistryHolder().key(),
+                EntityTypes.TURTLE.builtInRegistryHolder().key(),
             )
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("alexsmobs", "terrapin")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("alexsmobs", "alligator_snapping_turtle")))
 
         builder(HAPIEntityTags.ALL_AMPHIBIANS)
             .add(
-                EntityType.AXOLOTL.builtInRegistryHolder().key(),
-                EntityType.FROG.builtInRegistryHolder().key(),
+                EntityTypes.AXOLOTL.builtInRegistryHolder().key(),
+                EntityTypes.FROG.builtInRegistryHolder().key(),
             )
         //#endregion
 
         builder(HAPIEntityTags.LANDFOWL)
-            .add(EntityType.CHICKEN.builtInRegistryHolder().key())
+            .add(EntityTypes.CHICKEN.builtInRegistryHolder().key())
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_birds", "rooster")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_birds", "turkey")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_birds", "guinea_fowl")))
@@ -827,7 +827,7 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_birds", "rhea")))
 
         builder(HAPIEntityTags.SONGBIRD)
-            .add(EntityType.PARROT.builtInRegistryHolder().key())
+            .add(EntityTypes.PARROT.builtInRegistryHolder().key())
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_birds", "jay")))
 
         //#region Fishing Net Implementation
@@ -852,26 +852,26 @@ class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: Completa
         // boats append to it from their own data generators.
         builder(HAPIEntityTags.BOATS)
             .add(
-                EntityType.ACACIA_BOAT.builtInRegistryHolder().key(),
-                EntityType.ACACIA_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.BAMBOO_CHEST_RAFT.builtInRegistryHolder().key(),
-                EntityType.BAMBOO_RAFT.builtInRegistryHolder().key(),
-                EntityType.BIRCH_BOAT.builtInRegistryHolder().key(),
-                EntityType.BIRCH_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.CHERRY_BOAT.builtInRegistryHolder().key(),
-                EntityType.CHERRY_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.DARK_OAK_BOAT.builtInRegistryHolder().key(),
-                EntityType.DARK_OAK_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.JUNGLE_BOAT.builtInRegistryHolder().key(),
-                EntityType.JUNGLE_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.MANGROVE_BOAT.builtInRegistryHolder().key(),
-                EntityType.MANGROVE_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.OAK_BOAT.builtInRegistryHolder().key(),
-                EntityType.OAK_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.PALE_OAK_BOAT.builtInRegistryHolder().key(),
-                EntityType.PALE_OAK_CHEST_BOAT.builtInRegistryHolder().key(),
-                EntityType.SPRUCE_BOAT.builtInRegistryHolder().key(),
-                EntityType.SPRUCE_CHEST_BOAT.builtInRegistryHolder().key()
+                EntityTypes.ACACIA_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.ACACIA_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.BAMBOO_CHEST_RAFT.builtInRegistryHolder().key(),
+                EntityTypes.BAMBOO_RAFT.builtInRegistryHolder().key(),
+                EntityTypes.BIRCH_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.BIRCH_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.CHERRY_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.CHERRY_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.DARK_OAK_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.DARK_OAK_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.JUNGLE_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.JUNGLE_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.MANGROVE_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.MANGROVE_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.OAK_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.OAK_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.PALE_OAK_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.PALE_OAK_CHEST_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.SPRUCE_BOAT.builtInRegistryHolder().key(),
+                EntityTypes.SPRUCE_CHEST_BOAT.builtInRegistryHolder().key()
             )
         //#endregion
     }

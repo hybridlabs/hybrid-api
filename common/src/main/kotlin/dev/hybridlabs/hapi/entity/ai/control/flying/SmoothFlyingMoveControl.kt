@@ -13,7 +13,7 @@ open class SmoothFlyingMoveControl(
     private val maxTurnY: Int,
     private val flightSpeedModifier: Float,
     private val onLandSpeedModifier: Float,
-) : MoveControl(bird) {
+) : MoveControl<Mob>(bird) {
     override fun tick() {
         if (this.operation == Operation.MOVE_TO && !this.mob.getNavigation().isDone) {
             val d0 = this.wantedX - this.mob.getX()
