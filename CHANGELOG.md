@@ -10,9 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated to Minecraft 1.21.11
 - Updated to Minecraft 26.1.2
 - Updated to Minecraft 26.2
+- Updated to Minecraft 26.3
 
 <details>
 <summary>Developer notes</summary>
+
+- Features now carry their configuration directly; `ConfiguredFeature` and `FeatureConfiguration`
+  were removed, and custom feature types register a `MapCodec` in `FEATURE_TYPE`
+- `PoseStack.mulPose` only accepts matrices and transformations, so axis-angle rotations need
+  wrapping in a `Matrix4f`
+- Swing state is tracked inside `LivingEntity`; `swingTime`, `attackAnim` and `updateSwingTime`
+  are gone, and attacks use `swingForAttack`
+- Vanilla's `TryFindWaterGoal` was removed, so a replacement ships in HAPI
 
 - GeckoLib 5.5 uses the `com.geckolib` package
 - Held-item layers follow the new item render-state API, so models are resolved into
