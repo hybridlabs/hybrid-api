@@ -11,5 +11,16 @@ neoForge {
 }
 
 dependencies {
-    implementation "software.bernie.geckolib:geckolib-neoforge-$geckolib_version"
+    implementation "com.geckolib:geckolib-neoforge-$geckolib_version"
+}
+
+// GeckoLib 5.5 moved to the com.geckolib group, which hybrid-gradle's GeckoLib repository
+// filter does not include yet.
+repositories {
+    maven {
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup('com.geckolib')
+        }
+    }
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation "software.bernie.geckolib:geckolib-neoforge-$geckolib_version"
+    implementation "com.geckolib:geckolib-neoforge-$geckolib_version"
 }
 
 publishMods.platforms.configureEach {
@@ -15,4 +15,22 @@ publishMods.platforms.configureEach {
 // hybrid-gradle does not wire dependency-provided injection data yet, so we do it here.
 neoForge {
     interfaceInjectionData.from(rootProject.file('gradle/geckolib-interface-injections.json'))
+
+    // hybrid-gradle still configures its data run with the MDG 1.x `data()` type, which
+    // NeoForge no longer ships from 1.21.4 on (only clientData/serverData exist now).
+    // Keep the run/task names (`runData`, `prepareDataRun`) but use the server data generator.
+    runs.named('data') {
+        serverData()
+    }
+}
+
+// GeckoLib 5.5 moved to the com.geckolib group, which hybrid-gradle's GeckoLib repository
+// filter does not include yet.
+repositories {
+    maven {
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup('com.geckolib')
+        }
+    }
 }

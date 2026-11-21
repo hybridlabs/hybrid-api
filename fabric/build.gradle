@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    modApi "software.bernie.geckolib:geckolib-fabric-$geckolib_version"
+    implementation "com.geckolib:geckolib-fabric-$geckolib_version"
 }
 
 fabricApi {
@@ -16,4 +16,15 @@ fabricApi {
 
 publishMods.platforms.configureEach {
     requires 'fabric-api', 'fabric-language-kotlin', 'geckolib'
+}
+
+// GeckoLib 5.5 moved to the com.geckolib group, which hybrid-gradle's GeckoLib repository
+// filter does not include yet.
+repositories {
+    maven {
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup('com.geckolib')
+        }
+    }
 }
