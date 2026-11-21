@@ -151,6 +151,14 @@ class EntityTypeTagProvider(output: FabricDataOutput, registriesFuture: Completa
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "karcinoma")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "shell_beast")))
             .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "beakling")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "argonaut")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "catfish")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "herring")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "mackerel")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "pearlfish")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "pupfish")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "rockfish")))
+            .addOptional(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("hybrid_aquatic", "sea_bass")))
         //#endregion
 
         //#region Food Chain Tags

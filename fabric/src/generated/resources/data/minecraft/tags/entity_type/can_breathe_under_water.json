@@ -499,6 +499,38 @@
     {
       "id": "hybrid_aquatic:beakling",
       "required": false
+    },
+    {
+      "id": "hybrid_aquatic:argonaut",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:catfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:herring",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:mackerel",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:pearlfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:pupfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:rockfish",
+      "required": false
+    },
+    {
+      "id": "hybrid_aquatic:sea_bass",
+      "required": false
     }
   ]
 }
