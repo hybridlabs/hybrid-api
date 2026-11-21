@@ -24,8 +24,9 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.BlockAndTintGetter
+import net.minecraft.world.level.BlockAndLightGetter
 import net.minecraft.world.level.gamerules.GameRules
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
@@ -36,13 +37,13 @@ import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import org.jetbrains.annotations.Nullable
-import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.manager.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.state.AnimationTest
-import software.bernie.geckolib.constant.DefaultAnimations
-import software.bernie.geckolib.util.GeckoLibUtil
+import com.geckolib.animatable.GeoEntity
+import com.geckolib.animatable.instance.AnimatableInstanceCache
+import com.geckolib.animatable.manager.AnimatableManager
+import com.geckolib.animation.AnimationController
+import com.geckolib.animation.state.AnimationTest
+import com.geckolib.constant.DefaultAnimations
+import com.geckolib.util.GeckoLibUtil
 import java.util.*
 
 @Suppress("LeakingThis")
@@ -60,8 +61,8 @@ open class BaseFlyingAnimal(
 
     override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(PathType.WATER, 0.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(PathType.FIRE_IN_NEIGHBOR, 16.0f)
+        setPathfindingMalus(PathType.FIRE, -1.0f)
 
         moveControl = MoveControl(this)
         navigation = GroundPathNavigation(this, level)
@@ -123,7 +124,7 @@ open class BaseFlyingAnimal(
                     )).xRot(-this.getXRot() * (Math.PI.toFloat() / 180f))
                         .yRot(-this.getYRot() * (Math.PI.toFloat() / 180f))
                     this.level().addParticle(
-                        ItemParticleOption(ParticleTypes.ITEM, itemstack),
+                        ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(itemstack)),
                         this.getX() + this.lookAngle.x / 2.0,
                         this.getY(),
                         this.getZ() + this.lookAngle.z / 2.0,
@@ -345,7 +346,7 @@ open class BaseFlyingAnimal(
 
     companion object {
         @Suppress("UNUSED_PARAMETER")
-        private fun isBrightEnoughToSpawn(level: BlockAndTintGetter, pos: BlockPos): Boolean {
+        private fun isBrightEnoughToSpawn(level: BlockAndLightGetter, pos: BlockPos): Boolean {
             return level.getRawBrightness(pos, 0) > 8
         }
 

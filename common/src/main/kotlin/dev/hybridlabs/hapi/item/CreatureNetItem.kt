@@ -64,7 +64,7 @@ class CreatureNetItem(settings: Properties) : Item(settings) {
         entity: LivingEntity,
         hand: InteractionHand
     ): InteractionResult {
-        val validFishForNet = entity.type.`is`(HAPIEntityTags.NET_CATCHABLE)
+        val validFishForNet = entity.type.builtInRegistryHolder().`is`(HAPIEntityTags.NET_CATCHABLE)
 
         if (!alreadyHasFish(stack) && validFishForNet) {
             writeEntityToNet(entity, user, hand)

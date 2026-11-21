@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
-import software.bernie.geckolib.animatable.GeoEntity
+import com.geckolib.animatable.GeoEntity
 
 open class BaseFlockingBirdEntity(
     type: EntityType<out BaseFlockingBirdEntity>,
@@ -23,8 +23,8 @@ open class BaseFlockingBirdEntity(
 
     override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(PathType.WATER, 0.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(PathType.FIRE_IN_NEIGHBOR, 16.0f)
+        setPathfindingMalus(PathType.FIRE, -1.0f)
 
         moveControl = SmoothFlyingMoveControl(this, 85, 5, 0.02F, 0.1f)
         lookControl = SmoothSwimmingLookControl(this, 10)

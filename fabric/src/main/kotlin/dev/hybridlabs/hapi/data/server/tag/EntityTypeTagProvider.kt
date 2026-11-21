@@ -1,8 +1,8 @@
 package dev.hybridlabs.hapi.data.server.tag
 
 import dev.hybridlabs.hapi.tag.HAPIEntityTags
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
@@ -11,8 +11,8 @@ import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.entity.EntityType
 import java.util.concurrent.CompletableFuture
 
-class EntityTypeTagProvider(output: FabricDataOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>) :
-    FabricTagProvider.EntityTypeTagProvider(output, registriesFuture) {
+class EntityTypeTagProvider(output: FabricPackOutput, registriesFuture: CompletableFuture<HolderLookup.Provider>) :
+    FabricTagsProvider.EntityTypeTagsProvider(output, registriesFuture) {
     override fun addTags(arg: HolderLookup.Provider) {
 
         //#region Vanilla Tags

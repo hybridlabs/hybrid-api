@@ -3,8 +3,8 @@ package dev.hybridlabs.hapi.client.model.entity.aquatic
 import dev.hybridlabs.hapi.client.model.HAPIDataTickets
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseDolphinEntity
 import net.minecraft.resources.Identifier
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.base.GeoRenderState
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.base.GeoRenderState
 
 abstract class BaseDolphinEntityModel<T : BaseDolphinEntity>(
     private val namespace: String,

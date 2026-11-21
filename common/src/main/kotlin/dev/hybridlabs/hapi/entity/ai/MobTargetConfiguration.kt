@@ -17,7 +17,7 @@ data class MobTargetConfiguration(
         if (prey.isEmpty()) return
 
         targetSelector.addGoal(1, NearestAttackableTargetGoal(mob, LivingEntity::class.java, 10, true, true) { entity, _ ->
-            prey.any { tag -> entity.type.`is`(tag) } && hungerProvider.invoke(mob) < hungerLimit }
+            prey.any { tag -> entity.type.builtInRegistryHolder().`is`(tag) } && hungerProvider.invoke(mob) < hungerLimit }
         )
     }
 
@@ -25,7 +25,7 @@ data class MobTargetConfiguration(
         if (predators.isEmpty()) return
 
         goalSelector.addGoal(2, AvoidEntityGoal(mob, LivingEntity::class.java, 16.0f, 1.5, 1.5) { entity ->
-            predators.any { tag -> entity.type.`is`(tag) }
+            predators.any { tag -> entity.type.builtInRegistryHolder().`is`(tag) }
         })
     }
 

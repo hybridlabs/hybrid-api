@@ -2,8 +2,8 @@ package dev.hybridlabs.hapi.client.model.entity.aquatic
 
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseCrustaceanEntity
 import net.minecraft.resources.Identifier
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.base.GeoRenderState
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.base.GeoRenderState
 
 abstract class BaseCrustaceanEntityModel<T : BaseCrustaceanEntity>(
     private val namespace: String,

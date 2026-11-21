@@ -3,8 +3,8 @@ package dev.hybridlabs.hapi.client.model.entity.skies
 import dev.hybridlabs.hapi.client.model.HAPIDataTickets
 import dev.hybridlabs.hapi.entity.base.skies.BaseParrotEntity
 import net.minecraft.resources.Identifier
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.base.GeoRenderState
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.base.GeoRenderState
 
 abstract class BaseParrotEntityModel<T: BaseParrotEntity>(
     private val namespace: String,

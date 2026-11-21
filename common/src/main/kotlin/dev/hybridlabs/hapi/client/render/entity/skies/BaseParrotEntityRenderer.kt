@@ -5,12 +5,12 @@ import dev.hybridlabs.hapi.entity.base.skies.BaseParrotEntity
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.state.BoneSnapshot
-import software.bernie.geckolib.constant.DataTickets
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.GeoEntityRenderer
-import software.bernie.geckolib.renderer.base.BoneSnapshots
-import software.bernie.geckolib.renderer.base.RenderPassInfo
+import com.geckolib.animation.state.BoneSnapshot
+import com.geckolib.constant.DataTickets
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.GeoEntityRenderer
+import com.geckolib.renderer.base.BoneSnapshots
+import com.geckolib.renderer.base.RenderPassInfo
 
 open class BaseParrotEntityRenderer<T : BaseParrotEntity, R : LivingEntityRenderState>(
     context: EntityRendererProvider.Context,

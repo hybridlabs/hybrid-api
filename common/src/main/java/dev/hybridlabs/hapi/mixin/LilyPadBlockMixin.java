@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.WaterlilyBlock;
+import net.minecraft.world.level.block.LilyPadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * sail straight through lily pads. Anything in the {@code hapi:boats} entity type tag is treated
  * like a boat here, so mods can opt their vehicles in without depending on HAPI's code.
  */
-@Mixin(WaterlilyBlock.class)
-public class WaterlilyBlockMixin {
+@Mixin(LilyPadBlock.class)
+public class LilyPadBlockMixin {
 
     @Inject(method = "entityInside", at = @At("TAIL"))
     private void hapi$breakForModdedBoats(
@@ -35,7 +35,7 @@ public class WaterlilyBlockMixin {
         // Vanilla boats were already handled by the method we are injecting into.
         if (entity instanceof AbstractBoat) return;
         if (!(level instanceof ServerLevel)) return;
-        if (!entity.getType().is(HAPIEntityTags.INSTANCE.getBOATS())) return;
+        if (!entity.getType().builtInRegistryHolder().is(HAPIEntityTags.INSTANCE.getBOATS())) return;
 
         level.destroyBlock(pos, true);
     }

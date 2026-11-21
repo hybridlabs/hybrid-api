@@ -1,12 +1,12 @@
 package dev.hybridlabs.hapi.data.client
 
 import dev.hybridlabs.hapi.item.HAPIItems
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.core.HolderLookup
 import java.util.concurrent.CompletableFuture
 
-class LanguageProvider( output: FabricDataOutput, lookupProvider: CompletableFuture<HolderLookup.Provider>) : FabricLanguageProvider(output,lookupProvider) {
+class LanguageProvider( output: FabricPackOutput, lookupProvider: CompletableFuture<HolderLookup.Provider>) : FabricLanguageProvider(output,lookupProvider) {
     override fun generateTranslations(lookupProvider: HolderLookup.Provider, builder: TranslationBuilder) {
         // item group
         mapOf(

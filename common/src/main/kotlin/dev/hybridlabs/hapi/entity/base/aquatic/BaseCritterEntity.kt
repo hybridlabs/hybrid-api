@@ -19,10 +19,10 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.manager.AnimatableManager
-import software.bernie.geckolib.constant.DefaultAnimations
-import software.bernie.geckolib.util.GeckoLibUtil
+import com.geckolib.animatable.instance.AnimatableInstanceCache
+import com.geckolib.animatable.manager.AnimatableManager
+import com.geckolib.constant.DefaultAnimations
+import com.geckolib.util.GeckoLibUtil
 
 @Suppress("LeakingThis", "DEPRECATION", "UNUSED_PARAMETER")
 open class BaseCritterEntity(
@@ -34,8 +34,8 @@ open class BaseCritterEntity(
     override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(PathType.WATER, 0.0f)
         setPathfindingMalus(PathType.WATER_BORDER, -1.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(PathType.FIRE_IN_NEIGHBOR, 16.0f)
+        setPathfindingMalus(PathType.FIRE, -1.0f)
 
         moveControl = MoveControl(this)
 

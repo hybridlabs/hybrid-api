@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
@@ -30,8 +31,8 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
-import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animation.RawAnimation
+import com.geckolib.animatable.GeoEntity
+import com.geckolib.animation.RawAnimation
 import java.util.*
 import dev.hybridlabs.hapi.entity.base.VariantHolder
 import net.minecraft.core.UUIDUtil
@@ -58,8 +59,8 @@ abstract class BaseWaterAnimal protected constructor(
 
     override fun createNavigation(level: Level): PathNavigation {
         setPathfindingMalus(PathType.WATER, 0.0f)
-        setPathfindingMalus(PathType.DANGER_FIRE, 16.0f)
-        setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0f)
+        setPathfindingMalus(PathType.FIRE_IN_NEIGHBOR, 16.0f)
+        setPathfindingMalus(PathType.FIRE, -1.0f)
 
         return WaterBoundPathNavigation(this, level)
     }
@@ -206,7 +207,7 @@ abstract class BaseWaterAnimal protected constructor(
                     )).xRot(-this.getXRot() * (Math.PI.toFloat() / 180f))
                         .yRot(-this.getYRot() * (Math.PI.toFloat() / 180f))
                     this.level().addParticle(
-                        ItemParticleOption(ParticleTypes.ITEM, itemstack),
+                        ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(itemstack)),
                         this.getX() + this.getLookAngle().x / 2.0,
                         this.getY(),
                         this.getZ() + this.getLookAngle().z / 2.0,

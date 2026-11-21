@@ -24,7 +24,7 @@ import net.minecraft.world.entity.animal.fish.WaterAnimal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.WaterlilyBlock
+import net.minecraft.world.level.block.LilyPadBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.gamerules.GameRules
@@ -34,13 +34,13 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.Shapes
-import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.manager.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.state.AnimationTest
-import software.bernie.geckolib.constant.DefaultAnimations
-import software.bernie.geckolib.util.GeckoLibUtil
+import com.geckolib.animatable.GeoEntity
+import com.geckolib.animatable.instance.AnimatableInstanceCache
+import com.geckolib.animatable.manager.AnimatableManager
+import com.geckolib.animation.AnimationController
+import com.geckolib.animation.state.AnimationTest
+import com.geckolib.constant.DefaultAnimations
+import com.geckolib.util.GeckoLibUtil
 import kotlin.math.max
 import kotlin.math.sin
 
@@ -136,8 +136,8 @@ abstract class BaseBoatEntity(
         return true
     }
 
-    override fun interact(player: Player, hand: InteractionHand): InteractionResult {
-        val interactionresult = super.interact(player, hand)
+    override fun interact(player: Player, hand: InteractionHand, hitPosition: Vec3): InteractionResult {
+        val interactionresult = super.interact(player, hand, hitPosition)
         return if (interactionresult != InteractionResult.PASS) {
             interactionresult
         } else if (player.isSecondaryUseActive) {
@@ -456,7 +456,7 @@ abstract class BaseBoatEntity(
                             if (j2 <= 0 || k2 != k && k2 != l - 1) {
                                 mutableBlockPos.set(l1, k2, i2)
                                 val blockstate = this.level().getBlockState(mutableBlockPos)
-                                if (blockstate.block !is WaterlilyBlock && Shapes.joinIsNotEmpty(
+                                if (blockstate.block !is LilyPadBlock && Shapes.joinIsNotEmpty(
                                         blockstate.getCollisionShape(
                                             this.level(),
                                             mutableBlockPos

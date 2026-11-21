@@ -7,7 +7,7 @@
   "refmap": "hapi.refmap.json",
 
   "mixins": [
-    "WaterlilyBlockMixin"
+    "LilyPadBlockMixin"
   ],
   "client": [
   ],

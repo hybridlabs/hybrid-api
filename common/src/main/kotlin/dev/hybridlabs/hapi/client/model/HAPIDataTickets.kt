@@ -3,8 +3,8 @@ package dev.hybridlabs.hapi.client.model
 import dev.hybridlabs.hapi.entity.base.VariantHolder
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.world.entity.Entity
-import software.bernie.geckolib.constant.dataticket.DataTicket
-import software.bernie.geckolib.renderer.base.GeoRenderState
+import com.geckolib.constant.dataticket.DataTicket
+import com.geckolib.renderer.base.GeoRenderState
 import net.minecraft.world.item.ItemStack
 import java.util.UUID
 
@@ -12,7 +12,7 @@ import java.util.UUID
  * DataTickets used by the HAPI base renderers to hand entity state to the models and bone updates.
  * <p>
  * GeckoLib 5 decouples models and renderers: the model only sees a render state, so the renderer
- * captures entity data in [software.bernie.geckolib.renderer.base.GeoRenderer.addRenderData] and the
+ * captures entity data in [com.geckolib.renderer.base.GeoRenderer.addRenderData] and the
  * model reads it back through these tickets.
  */
 object HAPIDataTickets {

@@ -1,7 +1,7 @@
 package dev.hybridlabs.hapi.client.model
 
-import software.bernie.geckolib.renderer.base.BoneSnapshots
-import software.bernie.geckolib.renderer.base.GeoRenderState
+import com.geckolib.renderer.base.BoneSnapshots
+import com.geckolib.renderer.base.GeoRenderState
 
 /**
  * Implemented by models that adjust bones on top of the baked animation pose. GeckoLib 5 removed

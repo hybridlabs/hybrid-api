@@ -8,12 +8,12 @@ import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animatable.manager.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.state.AnimationTest
-import software.bernie.geckolib.animation.RawAnimation
-import software.bernie.geckolib.constant.DefaultAnimations
+import com.geckolib.animatable.GeoEntity
+import com.geckolib.animatable.manager.AnimatableManager
+import com.geckolib.animation.AnimationController
+import com.geckolib.animation.state.AnimationTest
+import com.geckolib.animation.RawAnimation
+import com.geckolib.constant.DefaultAnimations
 
 @Suppress("LeakingThis", "DEPRECATION")
 open class BaseWadingBirdEntity(

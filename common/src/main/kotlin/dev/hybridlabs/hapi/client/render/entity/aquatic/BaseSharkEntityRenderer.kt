@@ -7,13 +7,13 @@ import net.minecraft.client.model.geom.PartNames
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.util.Mth
-import software.bernie.geckolib.animation.state.BoneSnapshot
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.GeoEntityRenderer
-import software.bernie.geckolib.renderer.base.BoneSnapshots
-import software.bernie.geckolib.renderer.base.GeoRenderState
-import software.bernie.geckolib.renderer.base.RenderPassInfo
-import software.bernie.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer
+import com.geckolib.animation.state.BoneSnapshot
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.GeoEntityRenderer
+import com.geckolib.renderer.base.BoneSnapshots
+import com.geckolib.renderer.base.GeoRenderState
+import com.geckolib.renderer.base.RenderPassInfo
+import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer
 import kotlin.math.abs
 
 @Suppress("LeakingThis")

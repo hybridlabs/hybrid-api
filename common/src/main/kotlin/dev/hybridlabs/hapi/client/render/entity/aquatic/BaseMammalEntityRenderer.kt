@@ -2,7 +2,6 @@ package dev.hybridlabs.hapi.client.render.entity.aquatic
 
 import dev.hybridlabs.hapi.client.model.HABoneAdjustingModel
 
-import com.mojang.datafixers.util.Either
 import com.mojang.math.Axis
 import dev.hybridlabs.hapi.client.model.HAPIDataTickets
 import dev.hybridlabs.hapi.entity.base.aquatic.BaseMammalEntity
@@ -10,19 +9,18 @@ import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
-import net.minecraft.client.renderer.state.CameraRenderState
+import net.minecraft.client.renderer.item.ItemStackRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
-import software.bernie.geckolib.cache.model.BakedGeoModel
-import software.bernie.geckolib.cache.model.GeoBone
-import software.bernie.geckolib.constant.DataTickets
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.GeoEntityRenderer
-import software.bernie.geckolib.renderer.base.BoneSnapshots
-import software.bernie.geckolib.renderer.base.GeoRenderState
-import software.bernie.geckolib.renderer.base.RenderPassInfo
-import software.bernie.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer
+import com.geckolib.cache.model.GeoBone
+import com.geckolib.constant.DataTickets
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.GeoEntityRenderer
+import com.geckolib.renderer.base.BoneSnapshots
+import com.geckolib.renderer.base.GeoRenderState
+import com.geckolib.renderer.base.RenderPassInfo
+import com.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer
 
 open class BaseMammalEntityRenderer<T : BaseMammalEntity, R : LivingEntityRenderState>(
     context: EntityRendererProvider.Context,
@@ -33,7 +31,27 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity, R : LivingEntityRender
     private val itemBone: String = "item"
 
     init {
-        withRenderLayer(object : BlockAndItemGeoLayer<T, Void, R>(this) {
+        withRenderLayer(object : BlockAndItemGeoLayer<T, Void, R>(context, this) {
+
+            override fun getRelevantBones(
+                animatable: T,
+                relatedObject: Void?,
+                renderState: R,
+                partialTick: Float
+            ): List<BlockAndItemGeoLayer.RenderData> {
+                val stack = renderState.getGeckolibData(HAPIDataTickets.MAIN_HAND_ITEM) ?: return emptyList()
+                if (stack.isEmpty) return emptyList()
+
+                return listOf(
+                    BlockAndItemGeoLayer.RenderData.item(
+                        itemBone,
+                        ItemDisplayContext.GROUND,
+                        com.geckolib.util.RenderUtil.createRenderStateForItem(
+                            stack, itemModelResolver, ItemDisplayContext.GROUND, animatable
+                        )
+                    )
+                )
+            }
 
             override fun addRenderData(
                 animatable: T,
@@ -41,29 +59,27 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity, R : LivingEntityRender
                 renderState: R,
                 partialTick: Float
             ) {
-            }
-
-            override fun getRelevantBones(renderState: R, model: BakedGeoModel): List<RenderData<R>> {
-                return listOf(
-                    RenderData(itemBone, ItemDisplayContext.GROUND) { _, state ->
-                        Either.left(state.getGeckolibData(HAPIDataTickets.MAIN_HAND_ITEM) ?: ItemStack.EMPTY)
-                    }
-                )
+                val contents = getRelevantBones(animatable, relatedObject, renderState, partialTick)
+                if (contents.isNotEmpty()) {
+                    renderState.addGeckolibData(BlockAndItemGeoLayer.CONTENTS, contents)
+                }
             }
 
             override fun submitItemStackRender(
                 poseStack: com.mojang.blaze3d.vertex.PoseStack,
                 bone: GeoBone,
-                stack: ItemStack,
+                stack: ItemStackRenderState,
                 displayContext: ItemDisplayContext,
                 renderState: R,
                 renderTasks: SubmitNodeCollector,
-                cameraState: CameraRenderState,
-                packedLight: Int,
-                packedOverlay: Int,
-                renderColor: Int
+                packedLight: Int
             ) {
-                rotateItem(poseStack, bone, stack, renderState)
+                rotateItem(
+                    poseStack,
+                    bone,
+                    renderState.getGeckolibData(HAPIDataTickets.MAIN_HAND_ITEM) ?: ItemStack.EMPTY,
+                    renderState
+                )
 
                 super.submitItemStackRender(
                     poseStack,
@@ -72,10 +88,7 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity, R : LivingEntityRender
                     displayContext,
                     renderState,
                     renderTasks,
-                    cameraState,
-                    packedLight,
-                    packedOverlay,
-                    renderColor
+                    packedLight
                 )
             }
         })

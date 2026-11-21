@@ -8,11 +8,11 @@ import dev.hybridlabs.hapi.entity.base.aquatic.BaseWaterAnimal
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.util.Mth
-import software.bernie.geckolib.model.GeoModel
-import software.bernie.geckolib.renderer.GeoEntityRenderer
-import software.bernie.geckolib.renderer.base.GeoRenderState
-import software.bernie.geckolib.renderer.base.RenderPassInfo
-import software.bernie.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer
+import com.geckolib.model.GeoModel
+import com.geckolib.renderer.GeoEntityRenderer
+import com.geckolib.renderer.base.GeoRenderState
+import com.geckolib.renderer.base.RenderPassInfo
+import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer
 
 @Suppress("LeakingThis")
 open class BaseJellyfishEntityRenderer<T : BaseJellyfishEntity, R : LivingEntityRenderState>(
@@ -45,7 +45,7 @@ open class BaseJellyfishEntityRenderer<T : BaseJellyfishEntity, R : LivingEntity
         val renderState = renderPassInfo.renderState()
         val tiltAngle = renderState.getGeckolibData(HAPIDataTickets.TILT_ANGLE) ?: 0f
         val rotationYaw = renderState.getOrDefaultGeckolibData(
-            software.bernie.geckolib.constant.DataTickets.ENTITY_BODY_YAW, 0f
+            com.geckolib.constant.DataTickets.ENTITY_BODY_YAW, 0f
         ) ?: 0f
 
         poseStack.translate(0.0f, 0.25f, 0.0f)
