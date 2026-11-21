@@ -73,7 +73,7 @@ open class BaseDolphinEntityRenderer<T : BaseDolphinEntity, R : LivingEntityRend
                 renderTasks: SubmitNodeCollector,
                 packedLight: Int
             ) {
-                poseStack.mulPose(Axis.XP.rotationDegrees(-90f))
+                poseStack.mulPose(org.joml.Matrix4f().rotation(Axis.XP.rotationDegrees(-90f)))
                 super.submitItemStackRender(
                     poseStack,
                     bone,

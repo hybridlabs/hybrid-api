@@ -73,8 +73,6 @@ open class WaterAnimalAttackGoal(
         waterAnimal.navigation.moveTo(this.path, this.speedModifier)
         waterAnimal.isAggressive = true
         waterAnimal.isSprinting = true
-        waterAnimal.swinging = false
-        waterAnimal.swingTime = 0
         this.ticksUntilNextPathRecalculation = 0
         this.ticksUntilNextAttack = 0
     }
@@ -136,7 +134,7 @@ open class WaterAnimalAttackGoal(
     protected open fun checkAndPerformAttack(target: LivingEntity) {
         if (this.canPerformAttack(target)) {
             this.resetAttackCooldown()
-            waterAnimal.swing(InteractionHand.MAIN_HAND)
+            waterAnimal.swingForAttack(InteractionHand.MAIN_HAND)
             waterAnimal.doHurtTarget(getServerLevel(waterAnimal), target)
         }
     }

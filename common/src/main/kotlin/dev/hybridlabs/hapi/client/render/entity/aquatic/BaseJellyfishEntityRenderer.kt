@@ -49,8 +49,8 @@ open class BaseJellyfishEntityRenderer<T : BaseJellyfishEntity, R : LivingEntity
         ) ?: 0f
 
         poseStack.translate(0.0f, 0.25f, 0.0f)
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - rotationYaw))
-        poseStack.mulPose(Axis.XP.rotationDegrees(tiltAngle))
+        poseStack.mulPose(org.joml.Matrix4f().rotation(Axis.YP.rotationDegrees(180.0f - rotationYaw)))
+        poseStack.mulPose(org.joml.Matrix4f().rotation(Axis.XP.rotationDegrees(tiltAngle)))
         poseStack.translate(0.0f, 0.0f, 0.0f)
     }
 

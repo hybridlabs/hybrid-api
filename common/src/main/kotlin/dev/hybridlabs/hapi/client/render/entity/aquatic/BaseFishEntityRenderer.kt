@@ -113,7 +113,7 @@ open class BaseFishEntityRenderer<T : BaseFishEntity, R : LivingEntityRenderStat
         stack: ItemStack,
         renderState: R
     ) {
-        poseStack.mulPose(Axis.XP.rotationDegrees(-90f))
+        poseStack.mulPose(org.joml.Matrix4f().rotation(Axis.XP.rotationDegrees(-90f)))
     }
 
     override fun getDeathMaxRotation(renderState: GeoRenderState): Float {

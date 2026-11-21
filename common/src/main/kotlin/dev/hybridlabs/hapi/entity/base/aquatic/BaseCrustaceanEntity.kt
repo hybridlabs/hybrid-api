@@ -106,7 +106,6 @@ open class BaseCrustaceanEntity(
             this.songSource = null
         }
 
-        this.updateSwingTime()
 
         super.aiStep()
     }

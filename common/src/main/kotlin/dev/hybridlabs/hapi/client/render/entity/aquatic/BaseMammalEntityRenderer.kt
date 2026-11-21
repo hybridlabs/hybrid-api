@@ -100,7 +100,7 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity, R : LivingEntityRender
         stack: ItemStack,
         renderState: R
     ) {
-        poseStack.mulPose(Axis.XP.rotationDegrees(-90f))
+        poseStack.mulPose(org.joml.Matrix4f().rotation(Axis.XP.rotationDegrees(-90f)))
     }
 
     override fun addRenderData(animatable: T, relatedObject: Void?, renderState: R, partialTick: Float) {

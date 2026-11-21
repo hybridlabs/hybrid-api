@@ -102,7 +102,6 @@ abstract class BaseWaterAnimal protected constructor(
         targetRoll = -targetRoll
         currentRoll += (targetRoll - currentRoll) * 0.05f
 
-        this.updateSwingTime()
 
         if (this.getAge() != 0) {
             this.inLove = 0
@@ -617,34 +616,6 @@ abstract class BaseWaterAnimal protected constructor(
             entityData.set(MOISTNESS, moistness)
         }
     //#endregion
-
-    private fun getHandSwingDuration(): Int {
-        return 20
-    }
-
-    override fun updateSwingTime() {
-        val i = this.getHandSwingDuration()
-        if (this.swinging) {
-            ++this.swingTime
-            if (this.swingTime >= i) {
-                this.swingTime = 0
-                this.swinging = false
-            }
-        } else {
-            this.swingTime = 0
-        }
-
-        this.attackAnim = swingTime.toFloat() / i.toFloat()
-    }
-
-    override fun getAttackAnim(tickDelta: Float): Float {
-        var f = this.attackAnim - this.oAttackAnim
-        if (f < 0.0f) {
-            ++f
-        }
-
-        return this.oAttackAnim + f * tickDelta
-    }
 
     companion object {
         /** Lower bound on the bounding box size used for render culling, giving ~48 blocks. */

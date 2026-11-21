@@ -47,7 +47,7 @@ class WaterAnimalJumpGoal(
     private fun isWaterAt(pos: BlockPos, offsetX: Int, offsetZ: Int, multiplier: Int): Boolean {
         val blockPos = pos.offset(offsetX * multiplier, 0, offsetZ * multiplier)
         return waterAnimal.level().getFluidState(blockPos).`is`(FluidTags.WATER) && !waterAnimal.level().getBlockState(blockPos)
-            .blocksMotion()
+            .isSolid()
     }
 
     private fun isAirAbove(pos: BlockPos, offsetX: Int, offsetZ: Int, multiplier: Int): Boolean {

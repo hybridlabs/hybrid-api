@@ -1,6 +1,7 @@
 package dev.hybridlabs.hapi.entity.base.aquatic
 
 import dev.hybridlabs.hapi.entity.ai.control.aquatic.FloatControl
+import dev.hybridlabs.hapi.entity.ai.goal.aquatic.TryFindWaterGoal
 import dev.hybridlabs.hapi.entity.ai.goal.aquatic.WaterAnimalFollowParentGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

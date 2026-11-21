@@ -82,7 +82,6 @@ open class BaseFlyingAnimal(
     override fun aiStep() {
         super.aiStep()
 
-        this.updateSwingTime()
 
         val vec3d = this.getDeltaMovement()
         if (!this.onGround() && vec3d.y < 0.0) {
