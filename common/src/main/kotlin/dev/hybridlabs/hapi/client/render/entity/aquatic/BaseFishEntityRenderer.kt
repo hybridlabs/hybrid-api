@@ -1,5 +1,7 @@
 package dev.hybridlabs.hapi.client.render.entity.aquatic
 
+import dev.hybridlabs.hapi.client.model.HABoneAdjustingModel
+
 import com.mojang.datafixers.util.Either
 import com.mojang.math.Axis
 import dev.hybridlabs.hapi.client.model.HAPIDataTickets
@@ -134,11 +136,15 @@ open class BaseFishEntityRenderer<T : BaseFishEntity, R : LivingEntityRenderStat
     }
 
     override fun adjustModelBonesForRender(renderPassInfo: RenderPassInfo<R>, snapshots: BoneSnapshots) {
+        (getGeoModel() as? HABoneAdjustingModel)?.adjustModelBones(renderPassInfo.renderState(), snapshots)
         val tilt = renderPassInfo.getGeckolibData(HAPIDataTickets.TILT) ?: return
         val roll = renderPassInfo.getGeckolibData(HAPIDataTickets.ROLL) ?: return
 
-        snapshots.get(PartNames.BODY).ifPresent { bone: BoneSnapshot ->
-            bone.setRotX(tilt * -Mth.DEG_TO_RAD)
+        for (name in listOf(PartNames.BODY, "body_2", "body_3")) {
+            snapshots.get(name).ifPresent { bone: BoneSnapshot ->
+                bone.setRotX(tilt * -Mth.DEG_TO_RAD)
+                bone.setRotZ(roll * -Mth.DEG_TO_RAD)
+            }
         }
         snapshots.get("torso").ifPresent { bone: BoneSnapshot ->
             bone.setRotZ(roll * -Mth.DEG_TO_RAD)
@@ -146,11 +152,10 @@ open class BaseFishEntityRenderer<T : BaseFishEntity, R : LivingEntityRenderStat
         snapshots.get("torso_2").ifPresent { bone: BoneSnapshot ->
             bone.setRotY(bone.getRotY() + roll * Mth.DEG_TO_RAD)
         }
-        snapshots.get(PartNames.TAIL).ifPresent { bone: BoneSnapshot ->
-            bone.setRotY(bone.getRotY() + roll * Mth.DEG_TO_RAD)
-        }
-        snapshots.get(PartNames.TAIL_FIN).ifPresent { bone: BoneSnapshot ->
-            bone.setRotY(bone.getRotY() + roll * Mth.DEG_TO_RAD)
+        for (name in listOf(PartNames.TAIL, PartNames.TAIL_FIN, "tail2", "tail3", "tail_fin2", "tail_fin3")) {
+            snapshots.get(name).ifPresent { bone: BoneSnapshot ->
+                bone.setRotY(bone.getRotY() + roll * Mth.DEG_TO_RAD)
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package dev.hybridlabs.hapi.client.render.entity.aquatic
 
+import dev.hybridlabs.hapi.client.model.HABoneAdjustingModel
+
 import com.mojang.datafixers.util.Either
 import com.mojang.math.Axis
 import dev.hybridlabs.hapi.client.model.HAPIDataTickets
@@ -106,6 +108,7 @@ open class BaseMammalEntityRenderer<T : BaseMammalEntity, R : LivingEntityRender
     }
 
     override fun adjustModelBonesForRender(renderPassInfo: RenderPassInfo<R>, snapshots: BoneSnapshots) {
+        (getGeoModel() as? HABoneAdjustingModel)?.adjustModelBones(renderPassInfo.renderState(), snapshots)
         val headPitch = renderPassInfo.getOrDefaultGeckolibData(DataTickets.ENTITY_PITCH, 0f) ?: 0f
         val netHeadYaw = renderPassInfo.getOrDefaultGeckolibData(DataTickets.ENTITY_YAW, 0f) ?: 0f
 
