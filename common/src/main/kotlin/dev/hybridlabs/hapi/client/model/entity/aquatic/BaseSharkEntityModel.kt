@@ -13,7 +13,7 @@ abstract class BaseSharkEntityModel<T : BaseSharkEntity>(
     override fun getModelResource(renderState: GeoRenderState): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/shark/$id/$id.geo.json")
+            "shark/$id/$id")
     }
 
     override fun getTextureResource(renderState: GeoRenderState): Identifier {
@@ -25,7 +25,7 @@ abstract class BaseSharkEntityModel<T : BaseSharkEntity>(
     override fun getAnimationResource(animatable: T): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "animations/entity/shark/$id/$id.animation.json")
+            "entity/shark/$id/$id")
     }
 
     fun getLayerTextureResource(layer: String): Identifier {

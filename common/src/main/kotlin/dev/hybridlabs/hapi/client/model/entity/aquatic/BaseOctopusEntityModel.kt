@@ -13,7 +13,7 @@ abstract class BaseOctopusEntityModel<T : BaseOctopusEntity>(
     override fun getModelResource(renderState: GeoRenderState): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/cephalopod/$id/$id.geo.json")
+            "cephalopod/$id/$id")
     }
 
     override fun getTextureResource(renderState: GeoRenderState): Identifier {
@@ -25,7 +25,7 @@ abstract class BaseOctopusEntityModel<T : BaseOctopusEntity>(
     override fun getAnimationResource(animatable: T): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "animations/entity/cephalopod/$id/$id.animation.json")
+            "entity/cephalopod/$id/$id")
     }
 
     fun getLayerTextureResource(): Identifier {

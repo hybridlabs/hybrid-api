@@ -57,6 +57,9 @@ open class BaseFishEntityRenderer<T : BaseFishEntity, R : LivingEntityRenderStat
             }
 
             override fun getRelevantBones(renderState: R, model: BakedGeoModel): List<RenderData<R>> {
+                // Not every fish model has an item bone, and GeckoLib logs an error for every miss
+                if (model.getBone(itemBone).isEmpty) return emptyList()
+
                 return listOf(
                     RenderData(itemBone, ItemDisplayContext.GROUND) { _, state ->
                         Either.left(state.getGeckolibData(HAPIDataTickets.MAIN_HAND_ITEM) ?: ItemStack.EMPTY)

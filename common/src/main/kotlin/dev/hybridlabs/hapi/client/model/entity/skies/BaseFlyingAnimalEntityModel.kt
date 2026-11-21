@@ -15,11 +15,11 @@ abstract class BaseFlyingAnimalEntityModel<T : BaseFlyingAnimal>(
         return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
             Identifier.fromNamespaceAndPath(
                 namespace,
-                "geo/entity/$id/baby_$id.geo.json")
+                "entity/$id/baby_$id")
         } else {
             Identifier.fromNamespaceAndPath(
                 namespace,
-                "geo/entity/$id/$id.geo.json")
+                "entity/$id/$id")
         }
     }
 
@@ -39,11 +39,11 @@ abstract class BaseFlyingAnimalEntityModel<T : BaseFlyingAnimal>(
         return if (animatable.isBaby) {
             Identifier.fromNamespaceAndPath(
                 namespace,
-                "animations/entity/$id/baby_$id.animation.json")
+                "entity/$id/baby_$id")
         } else {
             Identifier.fromNamespaceAndPath(
                 namespace,
-                "animations/entity/$id/$id.animation.json")
+                "entity/$id/$id")
         }
     }
 }

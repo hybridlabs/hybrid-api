@@ -15,11 +15,11 @@ abstract class BaseSirenianEntityModel<T : BaseSirenianEntity>(
         return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
             Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/mammal/$id/baby_$id.geo.json")
+            "mammal/$id/baby_$id")
         } else {
             Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/mammal/$id/$id.geo.json")
+            "mammal/$id/$id")
         }
     }
 
@@ -38,7 +38,7 @@ abstract class BaseSirenianEntityModel<T : BaseSirenianEntity>(
     override fun getAnimationResource(animatable: T): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "animations/entity/mammal/$id/$id.animation.json")
+            "entity/mammal/$id/$id")
     }
 
     fun getLayerTextureResource(layer: String): Identifier {

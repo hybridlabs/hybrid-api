@@ -13,7 +13,7 @@ abstract class BaseCephalopodEntityModel<T : BaseCephalopodEntity>(
     override fun getModelResource(renderState: GeoRenderState): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/cephalopod/$id/$id.geo.json"
+            "cephalopod/$id/$id"
         )
     }
 
@@ -27,7 +27,7 @@ abstract class BaseCephalopodEntityModel<T : BaseCephalopodEntity>(
     override fun getAnimationResource(animatable: T): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "animations/entity/cephalopod/$id/$id.animation.json"
+            "entity/cephalopod/$id/$id"
         )
     }
 }

@@ -13,7 +13,7 @@ abstract class BaseJellyfishEntityModel<T : BaseJellyfishEntity>(
     override fun getModelResource(renderState: GeoRenderState): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/jellyfish/$id/$id.geo.json")
+            "jellyfish/$id/$id")
     }
 
     override fun getTextureResource(renderState: GeoRenderState): Identifier {
@@ -25,6 +25,6 @@ abstract class BaseJellyfishEntityModel<T : BaseJellyfishEntity>(
     override fun getAnimationResource(animatable: T): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "animations/entity/jellyfish/$id/$id.animation.json")
+            "entity/jellyfish/$id/$id")
     }
 }

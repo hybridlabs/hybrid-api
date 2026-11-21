@@ -13,7 +13,7 @@ abstract class BaseCrustaceanEntityModel<T : BaseCrustaceanEntity>(
     override fun getModelResource(renderState: GeoRenderState): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "geo/crustacean/$id/$id.geo.json")
+            "crustacean/$id/$id")
     }
 
     override fun getTextureResource(renderState: GeoRenderState): Identifier {
@@ -25,7 +25,7 @@ abstract class BaseCrustaceanEntityModel<T : BaseCrustaceanEntity>(
     override fun getAnimationResource(animatable: T): Identifier {
         return Identifier.fromNamespaceAndPath(
             namespace,
-            "animations/entity/crustacean/$id/$id.animation.json")
+            "entity/crustacean/$id/$id")
     }
 
     fun getLayerTextureResource(layer: String): Identifier {
