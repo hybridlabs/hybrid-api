@@ -72,3 +72,7 @@ object HAPIDataTickets {
         }
     }
 }
+
+/** Resolves the captured [HAPIDataTickets.VARIANT] ordinal back into an enum constant. */
+fun <T : Enum<T>> GeoRenderState.getVariant(entries: List<T>): T? =
+    getGeckolibData(HAPIDataTickets.VARIANT)?.let(entries::getOrNull)

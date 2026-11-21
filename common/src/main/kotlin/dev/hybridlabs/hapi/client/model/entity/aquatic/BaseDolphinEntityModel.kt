@@ -41,8 +41,8 @@ abstract class BaseDolphinEntityModel<T : BaseDolphinEntity>(
             "animations/entity/mammal/$id/$id.animation.json")
     }
 
-    fun getLayerTextureResource(animatable: T, layer: String): Identifier {
-        return if (animatable.isBaby) {
+    fun getLayerTextureResource(renderState: GeoRenderState, layer: String): Identifier {
+        return if (renderState.getGeckolibData(HAPIDataTickets.IS_BABY) == true) {
             Identifier.fromNamespaceAndPath(
             namespace,
             "textures/entity/mammal/$id/layers/baby_${id}_$layer.png")
