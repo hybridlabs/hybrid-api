@@ -3,6 +3,7 @@ package dev.hybridlabs.hapi.entity.base.aquatic
 import dev.hybridlabs.hapi.entity.ai.goal.aquatic.boids.StayInWaterGoal
 import dev.hybridlabs.hapi.world.WorldHelper
 import net.minecraft.core.BlockPos
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
@@ -57,6 +58,17 @@ open class BaseJellyfishEntity(
     private var swimZ = 0f
 
     init {
+        // The server assigns the entity id in the Entity constructor; the client receives it with the
+        // add-entity packet, so seed there to keep both sides' animation and movement in sync.
+        if (!world.isClientSide) {
+            random.setSeed(id.toLong())
+        }
+
+        this.thrustTimerSpeed = 1.0f / (random.nextFloat() + 1.0f) * 0.2f
+    }
+
+    override fun recreateFromPacket(packet: ClientboundAddEntityPacket) {
+        super.recreateFromPacket(packet)
         random.setSeed(id.toLong())
         this.thrustTimerSpeed = 1.0f / (random.nextFloat() + 1.0f) * 0.2f
     }
