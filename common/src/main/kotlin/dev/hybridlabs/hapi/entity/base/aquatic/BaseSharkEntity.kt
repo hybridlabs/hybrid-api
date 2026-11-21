@@ -231,9 +231,12 @@ open class BaseSharkEntity(
     companion object {
         val ANGER_TIME_RANGE: UniformInt = TimeUtil.rangeOfSeconds(10, 30)
 
-        val BREEDING_INGREDIENT: Ingredient = Ingredient.of(
-            BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM).getOrThrow(ItemTags.FISHES)
-        )
+        val BREEDING_INGREDIENT: Ingredient by lazy {
+            // Resolved on first use: NeoForge freezes the registries before mod construction, so
+            // acquiring a bootstrap registration lookup from a class initializer throws
+            // "Registry is already frozen". Tag contents are only available at runtime anyway.
+            Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(ItemTags.FISHES))
+        }
 
         //#region Spawning
         fun canShallowSpawn(

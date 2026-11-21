@@ -155,9 +155,10 @@ open class BaseRatiteEntity(
     companion object {
         @Suppress("UNUSED_PARAMETER")
 
-        val BREEDING_INGREDIENT: Ingredient = Ingredient.of(
-            BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM)
-                .getOrThrow(ItemTags.VILLAGER_PLANTABLE_SEEDS)
-        )
+        val BREEDING_INGREDIENT: Ingredient by lazy {
+            // See BaseSharkEntity: bootstrap registry lookups cannot be acquired after the
+            // registries freeze, which already happened by the time NeoForge constructs mods.
+            Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(ItemTags.VILLAGER_PLANTABLE_SEEDS))
+        }
     }
 }
