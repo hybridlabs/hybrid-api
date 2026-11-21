@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Birds spawn during world generation like vanilla animals (registered in the CREATURE spawn group) and then stay there
-- Leashed, tamed, bred and creature-net birds are no longer despawned by distance check
-  (leashed birds now count as persistent)
+- Updated to Minecraft 1.21.11
+
+<details>
+<summary>Developer notes</summary>
+
+- GeckoLib 5 support in the base models and renderers, using render-state data tickets instead of
+  reading the animatable during rendering
+- Models can adjust bones through the new `HABoneAdjustingModel` hook
+- Entity variant, UUID and water-animal moistness are exposed to models through data tickets
+- Instruments were removed, since vanilla no longer has a built-in instrument registry
+
+</details>
 
 ## [1.1.3] 2026-10-04
 
