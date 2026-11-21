@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "hapi:creature_net"
+        "recipes": "hapi:creature_net"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
