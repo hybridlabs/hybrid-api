@@ -5,13 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] Unreleased
+
+- Updated to Minecraft 26.1.2
+
+<details>
+<summary>Developer notes</summary>
+
+- GeckoLib 5.5 uses the `com.geckolib` package
+- Held-item layers follow the new item render-state API, so models are resolved into
+  `ItemStackRenderState`s instead of raw stacks
+- Random patch worldgen was reimplemented, since vanilla 26.1 removed the feature in favour of
+  placement modifiers
+
+</details>
+
 ## [1.3.0] Unreleased
 
 - Updated to Minecraft 1.21.11
-- Aquatic and flying animals keep their animations and variants
-- Birds spawn during world generation like vanilla animals, and leashed, tamed, bred and
-  creature-net birds no longer despawn from the distance check
-- Animals that breathe underwater no longer drown
 
 <details>
 <summary>Developer notes</summary>
