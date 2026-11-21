@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Updated to Minecraft 1.21.11
+- Expanded the list of creatures the creature net can catch
 
 <details>
 <summary>Developer notes</summary>
