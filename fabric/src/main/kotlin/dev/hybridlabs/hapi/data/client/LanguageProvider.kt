@@ -8,30 +8,35 @@ import java.util.concurrent.CompletableFuture
 
 class LanguageProvider( output: FabricPackOutput, lookupProvider: CompletableFuture<HolderLookup.Provider>) : FabricLanguageProvider(output,lookupProvider) {
     override fun generateTranslations(lookupProvider: HolderLookup.Provider, builder: TranslationBuilder) {
-        // item group
-        mapOf(
-            HAPIItems.CREATURE_NET.get() to "Creature Net",
-        ).forEach { (item, translation) ->
-            builder.add(item, translation)
-        }
+        val creatureNetKey = HAPIItems.CREATURE_NET.get().descriptionId
 
-        mapOf(
-            HAPIItems.CREATURE_NET.get().descriptionId to "Stored Entity: %s",
-        ).forEach { (itemTranslationKey, translation) ->
-            builder.add(itemTranslationKey.plus(".description"), translation)
-        }
+        // Item group and item functions
+        builder.addAll(
+            mapOf(
+                creatureNetKey to "Creature Net",
+                "$creatureNetKey.description" to "Stored Entity: %s",
+                "$creatureNetKey.function" to "Lets you catch and move aquatic creatures",
+                "$creatureNetKey.properties" to "Placed creatures become passive and don't despawn",
+            )
+        )
 
-        // Item Functions
-        mapOf(
-            HAPIItems.CREATURE_NET.get().descriptionId to "Lets you catch and move aquatic creatures",
-        ).forEach { (itemTranslationKey, translation) ->
-            builder.add(itemTranslationKey.plus(".function"), translation)
-        }
+        // Item tags are shown by recipe viewers, so translate them the same way as items.
+        builder.addAll(
+            mapOf(
+                "tag.item.hapi.coral_chunk" to "Coral Chunks",
+                "tag.item.hapi.shark_tooth" to "Shark Teeth",
+                "tag.item.hapi.glowslime" to "Glowslime",
+                "tag.item.hapi.seashell_tool_materials" to "Seashell Tool Materials",
+                "tag.item.hapi.repairs_seashell_armor" to "Repairs Seashell Armor",
+                "tag.item.hapi.repairs_moon_jelly_armor" to "Repairs Moon Jelly Armor",
+                "tag.item.hapi.driftwood_log" to "Driftwood Logs",
+                "tag.item.hapi.driftwood_planks" to "Driftwood Planks",
+                "tag.item.hapi.driftwood_slab" to "Driftwood Slabs",
+            )
+        )
+    }
 
-        mapOf(
-            HAPIItems.CREATURE_NET.get().descriptionId to "Placed creatures become passive and don't despawn",
-        ).forEach { (itemTranslationKey, translation) ->
-            builder.add(itemTranslationKey.plus(".properties"), translation)
-        }
+    private fun TranslationBuilder.addAll(translations: Map<String, String>) {
+        translations.forEach { (key, translation) -> add(key, translation) }
     }
 }

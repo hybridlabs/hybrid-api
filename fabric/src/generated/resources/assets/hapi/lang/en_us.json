@@ -2,5 +2,14 @@
   "item.hapi.creature_net": "Creature Net",
   "item.hapi.creature_net.description": "Stored Entity: %s",
   "item.hapi.creature_net.function": "Lets you catch and move aquatic creatures",
-  "item.hapi.creature_net.properties": "Placed creatures become passive and don't despawn"
+  "item.hapi.creature_net.properties": "Placed creatures become passive and don't despawn",
+  "tag.item.hapi.coral_chunk": "Coral Chunks",
+  "tag.item.hapi.driftwood_log": "Driftwood Logs",
+  "tag.item.hapi.driftwood_planks": "Driftwood Planks",
+  "tag.item.hapi.driftwood_slab": "Driftwood Slabs",
+  "tag.item.hapi.glowslime": "Glowslime",
+  "tag.item.hapi.repairs_moon_jelly_armor": "Repairs Moon Jelly Armor",
+  "tag.item.hapi.repairs_seashell_armor": "Repairs Seashell Armor",
+  "tag.item.hapi.seashell_tool_materials": "Seashell Tool Materials",
+  "tag.item.hapi.shark_tooth": "Shark Teeth"
 }
