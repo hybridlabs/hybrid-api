@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySelector
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.InterpolationHandler
 import net.minecraft.world.entity.Leashable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
@@ -51,6 +52,7 @@ abstract class BaseBoatEntity(
     Entity(type, world), Leashable,
     GeoEntity {
     private val animCache = GeckoLibUtil.createInstanceCache(this)
+    private val interpolation = InterpolationHandler(this, 3)
 
     private var isAboveBubbleColumn = false
     private var bubbleColumnDirectionIsDown = false
@@ -84,7 +86,15 @@ abstract class BaseBoatEntity(
     }
 
     public override fun getLeashOffset(): Vec3 {
-        return Vec3(0.0, (0.88f * this.eyeHeight).toDouble(), (this.bbWidth * 0.64f).toDouble())
+        return Vec3(0.0, (0.88f * this.bbHeight).toDouble(), (this.bbWidth * 0.64f).toDouble())
+    }
+
+    override fun supportQuadLeash(): Boolean {
+        return true
+    }
+
+    override fun getQuadLeashOffsets(): Array<Vec3> {
+        return Leashable.createQuadLeashOffsets(this, 0.0, 0.64, 0.382, 0.88)
     }
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
@@ -209,6 +219,8 @@ abstract class BaseBoatEntity(
     override fun tick() {
         super.tick()
 
+        this.interpolation.interpolate()
+
         this.oldStatus = this.status
         this.status = this.getCurrentStatus()
 
@@ -232,9 +244,11 @@ abstract class BaseBoatEntity(
 
         if (this.isLocalInstanceAuthoritative()) {
             this.floatWaterVehicle()
+            this.controlBoat()
             this.move(MoverType.SELF, this.getDeltaMovement())
         } else {
             this.setDeltaMovement(Vec3.ZERO)
+            this.deltaRotation = 0f
         }
 
         this.tickBubbleColumn()
@@ -262,6 +276,18 @@ abstract class BaseBoatEntity(
 
     fun hasEnoughSpaceFor(entity: Entity): Boolean {
         return entity.bbWidth < this.bbWidth
+    }
+
+    /**
+     * Applies vehicle-specific steering/acceleration input on the authoritative side, between the
+     * buoyancy update ([floatWaterVehicle]) and the movement ([Entity.move]). Subclasses that react
+     * to player input override this instead of re-implementing [tick].
+     */
+    protected open fun controlBoat() {
+    }
+
+    override fun getInterpolation(): InterpolationHandler {
+        return this.interpolation
     }
 
     protected open val maxPassengers: Int
