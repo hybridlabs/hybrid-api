@@ -53,16 +53,13 @@ abstract class BaseFishEntityModel<T : BaseFishEntity>(
         val deltaTime = animationState.partialTick
         val body = animationProcessor.getBone(PartNames.BODY)
         val torso = animationProcessor.getBone("torso")
-        val torso2 = animationProcessor.getBone("torso_2")
-        val tail = animationProcessor.getBone(PartNames.TAIL)
-        val tailFin = animationProcessor.getBone(PartNames.TAIL_FIN)
 
         val tilt = Mth.clamp(
             Mth.lerp(deltaTime, animatable.xRotO, animatable.xRot),
             -35f, 35f
         )
 
-        val yawDiff = animatable.yRot - animatable.yRotO
+        val yawDiff = Mth.wrapDegrees(animatable.yRot - animatable.yRotO)
         val targetRoll = Mth.clamp(yawDiff * 3f, -30f, 30f)
 
         val turnSpeed = abs(yawDiff)
@@ -71,10 +68,9 @@ abstract class BaseFishEntityModel<T : BaseFishEntity>(
 
         val roll = Mth.lerp(deltaTime, animatable.prevRoll, animatable.currentRoll)
 
+        // Use absolute values only. Adding to the animated rotation every frame accumulates on bones that the
+        // swim animation does not key, which makes heads and tails spin continuously.
         body?.rotX = tilt * -Mth.DEG_TO_RAD
         torso?.rotZ = roll * -Mth.DEG_TO_RAD
-        torso2?.rotY = torso2.rotY + roll * Mth.DEG_TO_RAD
-        tail?.rotY = tail.rotY + roll * Mth.DEG_TO_RAD
-        tailFin?.rotY = tailFin.rotY + roll * Mth.DEG_TO_RAD
     }
 }
