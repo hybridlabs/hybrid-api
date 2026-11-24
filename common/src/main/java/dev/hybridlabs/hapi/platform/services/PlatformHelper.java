@@ -32,6 +32,13 @@ public interface PlatformHelper {
     boolean isDevelopmentEnvironment();
 
     /**
+     * Gets the directory mod config files are stored in.
+     *
+     * @return The platform config directory.
+     */
+    Path getConfigDir();
+
+    /**
      * Gets the name of the environment type as a string.
      *
      * @return The name of the environment type.
