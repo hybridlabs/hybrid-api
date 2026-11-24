@@ -2,6 +2,8 @@ package dev.hybridlabs.hapi.platform.services;
 
 import net.fabricmc.loader.api.FabricLoader;
 
+import java.nio.file.Path;
+
 public class FabricPlatformHelper implements PlatformHelper {
 
     @Override
@@ -19,5 +21,11 @@ public class FabricPlatformHelper implements PlatformHelper {
     public boolean isDevelopmentEnvironment() {
 
         return FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
+
+    @Override
+    public Path getConfigDir() {
+
+        return FabricLoader.getInstance().getConfigDir();
     }
 }
